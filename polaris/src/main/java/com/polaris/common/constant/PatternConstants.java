@@ -25,6 +25,6 @@ public interface PatternConstants {
 	/**
 	 * yyyy-MM-dd HH:mm:ss.SSS
 	 */
-	String NORM_DATETIME_MS_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+	String DATE_FORMAT_PATTERN_4 = "yyyy-MM-dd HH:mm:ss.SSS";
 	
 }

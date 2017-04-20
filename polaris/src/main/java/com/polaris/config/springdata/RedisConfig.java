@@ -1,4 +1,4 @@
-package com.yxt.config.special;
+package com.polaris.config.springdata;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
