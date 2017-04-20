@@ -1,4 +1,4 @@
-package com.yxt.config.special;
+package com.polaris.config.springdata;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -17,61 +17,44 @@ import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
+import com.polaris.common.constant.RabbitmqConstants;
+
 /**
- * RabbitMQConfig
+ * Spring-data-RabbitMQ
  */
 @Configuration
 @PropertySource("classpath:config.properties")
 @EnableRabbit
 public class RabbitmqConfig {
+	
     @Value("${rabbitmq.url}")
     private String rabbitmqUrl;
+    
     @Value("${rabbitmq.port}")
     private int rabbitmqPort;
+    
     @Value("${rabbitmq.username}")
     private String userName;
+    
     @Value("${rabbitmq.password}")
     private String passWord;
 
+    @Value("${rabbitmq.channelCacheSize}")
+    private int channelCacheSize;
+    
     @Bean
     public ConnectionFactory rabbitConnectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory(rabbitmqUrl, rabbitmqPort);
         factory.setUsername(userName);
         factory.setPassword(passWord);
-        factory.setChannelCacheSize(25);
+        factory.setChannelCacheSize(channelCacheSize);
         return factory;
     }
 
     @Bean
     public AmqpAdmin amqpAdmin() {
         AmqpAdmin admin = new RabbitAdmin(rabbitConnectionFactory());
-        admin.declareQueue(new Queue(Constants.QUEUE_SMS));
-        admin.declareQueue(new Queue(Constants.QUEUE_QIDASMS));
-        admin.declareQueue(new Queue(Constants.QUEUE_EMAIL));        
-        admin.declareQueue(new Queue(Constants.QUEUE_EMAIL_ATTACHMENT));
-        admin.declareQueue(new Queue(Constants.QUEUE_QIDAEMAIL));
-        admin.declareQueue(new Queue(Constants.QUEUE_TESTEMAIL));
-        admin.declareQueue(new Queue(Constants.QUEUE_SALARYEMAIL));
-        admin.declareQueue(new Queue(Constants.QUEUE_MESSAGE));
-        admin.declareQueue(new Queue(Constants.QUEUE_STUDY));
-        admin.declareQueue(new Queue(Constants.QUEUE_USER_STUDY));
-        admin.declareQueue(new Queue(Constants.QUEUE_DEPARTMENT_USER_COUNT));
-        admin.declareQueue(new Queue(Constants.QUEUE_ADCALLBACK));
-        admin.declareQueue(new Queue(Constants.QUEUE_BOUGHTKNOWLEDGE));
-        admin.declareQueue(new Queue(Constants.QUEUE_REDPACKET));
-        admin.declareQueue(new Queue(Constants.QUEUE_REDPACKETRECEIVED));
-        admin.declareQueue(new Queue(Constants.QUEUE_USERACTIONPOINT));
-        admin.declareQueue(new Queue(Constants.QUEUE_SYNCUSERACCOUNT));
-        admin.declareQueue(new Queue(Constants.QUEUE_SYNCORGACCOUNT));
-        admin.declareQueue(new Queue(Constants.QUEUE_SOLRCOURSE));
-        admin.declareQueue(new Queue(Constants.QUEUE_STATPROCESSOR));
-        admin.declareQueue(new Queue(Constants.QUEUE_TRAINING_ARRANGE_EXAM));
-        admin.declareQueue(new Queue(Constants.QUEUE_KNOWLEDGE_QD_TEST));
-        admin.declareQueue(new Queue(Constants.QUEUE_SHEQUNSMS));
-        admin.declareQueue(new Queue(Constants.QUEUE_SHEQUN_COUNT_UPDATA));
-        admin.declareQueue(new Queue(Constants.QUEUE_MALLEMAIL));
-        admin.declareQueue(new Queue(Constants.QUEUE_PARTNERSMS));
-        admin.declareQueue(new Queue(Constants.QUEUE_USERCENTER_SYNCUSER));
+        admin.declareQueue(new Queue(RabbitmqConstants.QUEUE_CMS_ORDER));
         return admin;
     }
 

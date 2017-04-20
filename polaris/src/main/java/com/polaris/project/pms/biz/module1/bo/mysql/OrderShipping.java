@@ -1,4 +1,4 @@
-package com.polaris.project.pms.module1.bo.mysql;
+package com.polaris.project.pms.biz.module1.bo.mysql;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

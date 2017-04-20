@@ -23,8 +23,14 @@ public interface PatternConstants {
 	String DATE_FORMAT_PATTERN_3 = "yyyy-MM-dd";
 	
 	/**
+	 * yyyyMMdd
+	 */
+	String DATE_FORMAT_PATTERN_4 = "yyyyMMdd";
+	
+	/**
 	 * yyyy-MM-dd HH:mm:ss.SSS
 	 */
-	String NORM_DATETIME_MS_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+	String DATE_FORMAT_PATTERN_5 = "yyyy-MM-dd HH:mm:ss.SSS";
+	
 	
 }
