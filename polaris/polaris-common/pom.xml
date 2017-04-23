@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.polaris</groupId>
 	<artifactId>polaris-common</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>polaris-common</name>
 	<url>http://maven.apache.org</url>
 	<packaging>jar</packaging>
@@ -20,6 +19,12 @@
 	</properties>
 
 	<dependencies>
+
+		<!-- 时间处理工具 -->
+		<dependency>
+		  <groupId>joda-time</groupId>
+		  <artifactId>joda-time</artifactId>
+		</dependency>
 
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
@@ -194,20 +199,62 @@
 
 		<!-- apache common工具包 -->
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-configuration2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-email</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-dbutils</groupId>
+		    <artifactId>commons-dbutils</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-exec</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-pool2</artifactId>
+		</dependency>
+		
+		<!-- httpClient -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpmime</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpmime</artifactId>
 		</dependency>
 
 		<!-- log4j2 -->
