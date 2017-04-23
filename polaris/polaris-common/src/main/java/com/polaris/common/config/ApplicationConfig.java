@@ -8,6 +8,7 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,10 +19,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -121,8 +124,10 @@ public class ApplicationConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter());
-		factory.setPackagesToScan("com.polaris.model..mysql");
+		factory.setPersistenceProvider(new HibernatePersistenceProvider());
+		factory.setPackagesToScan("com.polaris.manage.model.*.mysql");
 		factory.setDataSource(dataSource());
+		factory.setJpaDialect(new HibernateJpaDialect());
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		properties.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
@@ -148,7 +153,17 @@ public class ApplicationConfig {
 		transactionManager.setEntityManagerFactory(entityManagerFactory());
 		return transactionManager;
 	}
-
+	
+	/**
+	 * 通过一层Sping代理包装，是数据库连接具有感知事务上下文的能力，dbhelper这些非Spring插件可以使用包装过的包
+	 * @return
+	 */
+    @Bean
+    @Primary
+    public TransactionAwareDataSourceProxy transactionAwareDataSourceProxy() {
+        return new TransactionAwareDataSourceProxy(dataSource());
+    }
+	
 	/**
 	 * dbHelper 封装了jdbctemplate的相关操作
 	 * 
@@ -156,7 +171,7 @@ public class ApplicationConfig {
 	 */
 	@Bean
 	public DbHelper dbHelper() {
-		DbHelper appLogDbHelper = new DbHelper(dataSource());
+		DbHelper appLogDbHelper = new DbHelper(transactionAwareDataSourceProxy());
 		return appLogDbHelper;
 	}
 
