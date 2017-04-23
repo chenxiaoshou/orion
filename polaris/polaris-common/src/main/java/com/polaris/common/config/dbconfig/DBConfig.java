@@ -35,7 +35,7 @@ import com.opensource.dbhelp.DbHelper;
  */
 @Configuration
 @EnableJpaRepositories(basePackages = {
-		"org.polaris.project.*.dao" }, entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager") // 支持JPA持久化解决方案
+		"com.polaris.project.*.dao" }, entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager") // 支持JPA持久化解决方案
 @EnableTransactionManagement // 开启事务
 public class DBConfig {
 

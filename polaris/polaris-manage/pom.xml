@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.polaris</groupId>
+		<artifactId>polaris</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.polaris</groupId>
+	<artifactId>polaris-manage</artifactId>
+	<name>polaris-manage</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>polaris-model</module>
+		<module>polaris-persist</module>
+		<module>polaris-service</module>
+		<module>polaris-web</module>
+		<module>polaris-web-front</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+	
+		<!-- polaris-common -->
+		<dependency>
+			<groupId>com.polaris</groupId>
+			<artifactId>polaris-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
