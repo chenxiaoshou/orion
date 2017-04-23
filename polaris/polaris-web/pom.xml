@@ -342,41 +342,32 @@
 	</dependencies>
 
 	<build>
-		<finalName>polaris</finalName>
+		<finalName>polaris-web</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
-			<!-- 资源文件拷贝插件，实际依赖 -->
+			<!-- 打成war包 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
+				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<encoding>UTF-8</encoding>
+					<webResources>
+						<resouce>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resouce>
+					</webResources>
 				</configuration>
 			</plugin>
+			
+			<!-- 配置Tomcat插件 -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-					<compilerArguments>
-						<extdirs>src\main\webapp\WEB-INF\lib</extdirs>
-					</compilerArguments>
-				</configuration>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!-- 配置Tomcat插件 -->
-				<plugin>
-					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
-					<version>2.2</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 </project>

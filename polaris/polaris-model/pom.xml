@@ -274,7 +274,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>polaris-common</finalName>
+		<finalName>polaris-model</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<!-- 资源文件拷贝插件，实际依赖 -->
