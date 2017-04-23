@@ -6,5 +6,9 @@ package com.polaris.common.constant;
  *
  */
 public interface PolarisConstants {
+	
+	String CHAESET_UTF_8 = "UTF-8";
+	
+	String CHAESET_GBK = "UTF-8";
 
 }

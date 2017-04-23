@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.apache.commons.compress.utils.Charsets;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -42,7 +44,8 @@ import com.polaris.common.utils.JsonUtil;
  * 
  *              <pre class="brush:java;">
  *  * 　　不使用 {@link EnableWebMvc} 注解而是直接继承于 {@link WebMvcConfigurationSupport} 或者
- * {@link DelegatingWebMvcConfiguration}，之后通过覆盖方法可以实现更多可选功能
+ * {@link DelegatingWebMvcConfiguration}，之后通过覆盖方法可以实现更多可选功能。
+ * 如果使用EnableWebMvc注解就可以解决需求的话，那直接继承WebMvcConfigurationAdapter就可以了。
  *              </pre>
  *
  */
@@ -50,8 +53,7 @@ import com.polaris.common.utils.JsonUtil;
 @ComponentScan(basePackages = { "org.polaris.project.*.web" }, useDefaultFilters = false, includeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Aspect.class, Controller.class,
 				ControllerAdvice.class }) })
-@EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,
-													// 并指定使用CGLIB代理
+@EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
 public class PolarisServletConfig extends WebMvcConfigurationSupport {
 
 	private static final String VIEW_JSP_PREFIX = "/WEB-INF/jsp/";
@@ -69,6 +71,8 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	private static final String VIEW_FREEMARKER_TEMPLATE_LOADER_PATH = "/WEB-INF/freemarker/";
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
+	
+	private static final String MESSAGE_SOURCE = "message_zh";
 
 	/**
 	 * JSP视图解析器
@@ -117,10 +121,7 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	 */
 	private List<HttpMessageConverter<?>> createMessageConverters() {
 		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
-		// 字节数组消息转换器
 		converters.add(new ByteArrayHttpMessageConverter());
-
-		// 文本消息转换器
 		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 		stringConverter.setWriteAcceptCharset(false);
 		stringConverter.setDefaultCharset(Charsets.UTF_8);
@@ -134,16 +135,13 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		textTypes.add(MediaType.TEXT_XML);
 		// 以指定字符集编码XML内容
 		textTypes.add(MediaType.APPLICATION_XML);
-
 		stringConverter.setSupportedMediaTypes(textTypes);
 		converters.add(stringConverter);
-
 		// XML消息转换器，两种方式:Jaxb 和 Marshalling，任选其一
 		// converters.add(new Jaxb2RootElementHttpMessageConverter());
 		converters.add(new MarshallingHttpMessageConverter(new CastorMarshaller(), new CastorMarshaller()));
 		// 待测 converters.add(new MarshallingHttpMessageConverter(new
 		// Jaxb2Marshaller(), new Jaxb2Marshaller()));
-
 		// Json消息转换器
 		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 		jsonConverter.setObjectMapper(JsonUtil.createMapper());
@@ -154,7 +152,6 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		jsonTypes.add(MediaType.TEXT_HTML);// 避免IE出现下载JSON文件的情况
 		jsonConverter.setSupportedMediaTypes(jsonTypes);
 		converters.add(jsonConverter);
-
 		return converters;
 	}
 
@@ -170,6 +167,18 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		return requestMappingHandlerAdapter;
 	}
 
+	/**
+	 * 消息国际化
+	 * @return
+	 */
+	@Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename(MESSAGE_SOURCE);
+        messageSource.setCacheSeconds(5);
+        return messageSource;
+    }
+	
 	/**
 	 * 添加静态资源映射
 	 */

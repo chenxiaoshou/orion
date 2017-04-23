@@ -9,19 +9,27 @@ import javax.servlet.ServletException;
 
 import org.apache.logging.log4j.web.Log4jServletContextListener;
 import org.apache.logging.log4j.web.Log4jServletFilter;
+import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.util.IntrospectorCleanupListener;
 
+import com.polaris.common.constant.PolarisConstants;
+
+@Order(1) // 指定配置文件的启动顺序
 public class WebConfig implements WebApplicationInitializer {
 
-	private static final String DEFAULT_ENCONDING = "UTF-8";
-	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		
 		// log4j2 监听器
-		servletContext.setInitParameter("log4jConfigLocation", "classpath:log4j.xml");
+		servletContext.setInitParameter("log4jConfigLocation", "classpath:log4j2.xml");
+		servletContext.setInitParameter("log4jRefreshInterval", "5000");
 		servletContext.addListener(Log4jServletContextListener.class);
+		
+		// Spring资源清理监听器
+		servletContext.addListener(IntrospectorCleanupListener.class);
 		
 		// log4j2 过滤器
 		Log4jServletFilter log4jServletFilter = new Log4jServletFilter();
@@ -34,12 +42,12 @@ public class WebConfig implements WebApplicationInitializer {
 				"/*");
 		
 		// CharacterEncodingFilter 过滤器
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(DEFAULT_ENCONDING, true);
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8, true);
 		FilterRegistration.Dynamic characterEncodingConfig = servletContext.addFilter("characterEncodingFilter",
 				characterEncodingFilter);
 		// 这里限定所有客户端请求、服务器forward、服务器include, 服务器ASYNC的请求全都需要经过filter处理
 		characterEncodingConfig.addMappingForUrlPatterns(
-				EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ASYNC),
+				EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ASYNC, DispatcherType.ERROR),
 				false, // 在所有当前已经被声明的 Filter 的前面先匹配 URL
 				"/*");
 

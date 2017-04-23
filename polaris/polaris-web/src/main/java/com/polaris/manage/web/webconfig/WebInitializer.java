@@ -1,9 +1,15 @@
 package com.polaris.manage.web.webconfig;
 
+import javax.servlet.Filter;
+
+import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.polaris.common.config.ApplicationConfig;
+import com.polaris.common.constant.PolarisConstants;
 
+@Order(2)
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	/**
@@ -29,6 +35,14 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		return new Class<?>[] { PolarisServletConfig.class };
+	}
+
+	@Override
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding(PolarisConstants.CHAESET_UTF_8);
+		characterEncodingFilter.setForceEncoding(true);
+		return new Filter[] { characterEncodingFilter };
 	}
 
 }
