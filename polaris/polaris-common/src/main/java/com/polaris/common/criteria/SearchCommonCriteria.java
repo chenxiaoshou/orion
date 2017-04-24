@@ -1,5 +1,5 @@
 package com.polaris.common.criteria;
 
-public class SearchCriteria {
+public class SearchCommonCriteria {
 
 }

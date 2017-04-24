@@ -1,7 +1,7 @@
 package com.polaris.manage.persist.logistics.dto;
 
-import com.polaris.common.criteria.SearchCriteria;
+import com.polaris.common.criteria.SearchCommonCriteria;
 
-public class SearchShippingOrderCriteria extends SearchCriteria {
+public class SearchShippingOrderCriteria extends SearchCommonCriteria {
 
 }

@@ -35,6 +35,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
+import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.JsonUtil;
 
 /**
@@ -43,11 +44,11 @@ import com.polaris.common.utils.JsonUtil;
  * @author John
  * @description :
  * 
- * <pre class="brush:java;">
+ *              <pre class="brush:java;">
  * 不使用 {@link EnableWebMvc} 注解而是直接继承于 {@link WebMvcConfigurationSupport} 或者
  * {@link DelegatingWebMvcConfiguration}，之后通过覆盖方法可以实现更多可选功能。
  * 如果使用EnableWebMvc注解就可以解决需求的话，那直接继承WebMvcConfigurationAdapter就可以了。
- * </pre>
+ *              </pre>
  *
  */
 @Configuration
@@ -57,24 +58,6 @@ import com.polaris.common.utils.JsonUtil;
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
 public class PolarisServletConfig extends WebMvcConfigurationSupport {
 
-	private static final String VIEW_JSP_PREFIX = "/WEB-INF/jsp/";
-
-	private static final String VIEW_JSP_SUFFIX = ".jsp";
-
-	private static final String CONTENT_TYPE = "text/html; charset=UTF-8";
-
-	private static final String RESOURCE_HANDLER = "/static/**";
-
-	private static final String RESOURCE_LOCATION = "/static/";
-
-	private static final String VIEW_FREEMARKER_SUFFIX = ".ftl";
-
-	private static final String VIEW_FREEMARKER_TEMPLATE_LOADER_PATH = "/WEB-INF/freemarker/";
-
-	private static final String DEFAULT_ENCODING = "UTF-8";
-	
-	private static final String MESSAGE_SOURCE = "message_zh_CN";
-
 	/**
 	 * JSP视图解析器
 	 * 
@@ -83,10 +66,10 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	@Bean(name = "viewResolver")
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix(VIEW_JSP_PREFIX);
-		viewResolver.setSuffix(VIEW_JSP_SUFFIX);
+		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
+		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
 		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setContentType(CONTENT_TYPE);
+		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
 		viewResolver.setOrder(0); // 设置视图优先级
 		return viewResolver;
 	}
@@ -98,10 +81,10 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	public FreeMarkerViewResolver freeMarkerViewResolver() {
 		FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver();
 		freeMarkerViewResolver.setViewClass(FreeMarkerView.class);
-		freeMarkerViewResolver.setContentType(CONTENT_TYPE);
+		freeMarkerViewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
 		freeMarkerViewResolver.setCache(true);
 		freeMarkerViewResolver.setRequestContextAttribute("basePath");
-		freeMarkerViewResolver.setSuffix(VIEW_FREEMARKER_SUFFIX);
+		freeMarkerViewResolver.setSuffix(PolarisConstants.VIEW_FREEMARKER_SUFFIX);
 		freeMarkerViewResolver.setOrder(1); // 设置视图优先级
 		return freeMarkerViewResolver;
 	}
@@ -112,8 +95,8 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	@Bean
 	public FreeMarkerConfigurer freeMarkerConfigurer() {
 		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-		freeMarkerConfigurer.setTemplateLoaderPath(VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
-		freeMarkerConfigurer.setDefaultEncoding(DEFAULT_ENCODING);
+		freeMarkerConfigurer.setTemplateLoaderPath(PolarisConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
+		freeMarkerConfigurer.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
 		return freeMarkerConfigurer;
 	}
 
@@ -180,21 +163,23 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 
 	/**
 	 * 消息国际化
+	 * 
 	 * @return
 	 */
 	@Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename(MESSAGE_SOURCE);
-        messageSource.setCacheSeconds(5);
-        return messageSource;
-    }
-	
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename(PolarisConstants.MESSAGE_SOURCE);
+		messageSource.setCacheSeconds(5);
+		return messageSource;
+	}
+
 	/**
 	 * 添加静态资源映射
 	 */
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(RESOURCE_HANDLER).addResourceLocations(RESOURCE_LOCATION);
+		registry.addResourceHandler(PolarisConstants.RESOURCE_HANDLER)
+				.addResourceLocations(PolarisConstants.RESOURCE_LOCATION);
 	}
 
 	/**

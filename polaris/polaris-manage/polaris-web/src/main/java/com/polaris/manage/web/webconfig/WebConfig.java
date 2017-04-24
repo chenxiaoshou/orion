@@ -24,9 +24,10 @@ public class WebConfig implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		
+		// log4j2初始化参数，关闭自动初始化，这样可以在下面自动配置
+		servletContext.setInitParameter("isLog4jAutoInitializationDisabled", "false");
+		
 		// log4j2 监听器
-		servletContext.setInitParameter("log4jConfigLocation", "classpath:log4j2.xml");
-		servletContext.setInitParameter("log4jRefreshInterval", "5000");
 		servletContext.addListener(Log4jServletContextListener.class);
 		
 		// Spring资源清理监听器

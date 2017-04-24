@@ -41,7 +41,7 @@ public class RedisConfig {
 		poolConfig.setMaxTotal(env.getRequiredProperty("redis.maxTotal", Integer.class));
 		poolConfig.setMaxIdle(env.getRequiredProperty("redis.maxIdle", Integer.class));
 		poolConfig.setMaxWaitMillis(env.getRequiredProperty("redis.maxWaitMillis", Long.class));
-		poolConfig.setTestOnBorrow(env.getRequiredProperty("redis.maxRedirects", Boolean.class));
+		poolConfig.setTestOnBorrow(env.getRequiredProperty("redis.testOnBorrow", Boolean.class));
 		return poolConfig;
 	}
 

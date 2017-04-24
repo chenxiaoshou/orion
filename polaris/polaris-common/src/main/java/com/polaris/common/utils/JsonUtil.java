@@ -1,8 +1,8 @@
 package com.polaris.common.utils;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
@@ -13,20 +13,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
  */
 public final class JsonUtil<T> {
 
-	private final Class<T> beanClass;
-
-	private final Class<?>[] elementClasses;
-
-	private JsonUtil(Class<T> beanClass, Class<?>... elementClasses) {
-		this.beanClass = beanClass;
-		this.elementClasses = elementClasses;
-	}
-
 	public static final String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
-
-	public static <T> JsonUtil<T> binder(Class<T> beanClass, Class<?>... elementClasses) {
-		return new JsonUtil<T>(beanClass, elementClasses);
-	}
 
 	public static ObjectMapper createMapper() {
 		ObjectMapper mapper = new ObjectMapper();
@@ -39,31 +26,36 @@ public final class JsonUtil<T> {
 		// 另一种方式配置jaxb注解
 		// mapper.setAnnotationIntrospector(new
 		// JaxbAnnotationIntrospector(mapper.getTypeFactory()));
-
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		return mapper;
 	}
 
-	public T fromJSON(String json) throws Exception {
+	/**
+	 * 
+	 * @param json ： json源文件
+	 * @param beanClass ： 转换目标类
+	 * @param elementClasses ： 复杂对象的转换
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> T fromJSON(String json, Class<T> beanClass, Class<?>... elementClasses) throws Exception {
 		ObjectMapper mapper = createMapper();
 		try {
 			return elementClasses == null || elementClasses.length == 0 ? mapper.readValue(json, beanClass)
-					: fromJSONToGeneric(json);
+					: mapper.readValue(json,
+							mapper.getTypeFactory().constructParametricType(beanClass, elementClasses));
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
-	private T fromJSONToGeneric(String json) throws IOException {
-		ObjectMapper mapper = createMapper();
-		return mapper.readValue(json, mapper.getTypeFactory().constructParametricType(beanClass, elementClasses));
-	}
-
-	public String toJSON(T object) throws Exception {
+	public static <T> String toJSON(T t) throws Exception {
 		ObjectMapper mapper = createMapper();
 		try {
-			return mapper.writeValueAsString(object);
+			return mapper.writeValueAsString(t);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
+
 }
