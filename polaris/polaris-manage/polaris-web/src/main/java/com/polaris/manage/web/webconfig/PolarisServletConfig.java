@@ -73,7 +73,7 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
 	
-	private static final String MESSAGE_SOURCE = "message_zh";
+	private static final String MESSAGE_SOURCE = "message_zh_CN";
 
 	/**
 	 * JSP视图解析器

@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
 import com.polaris.common.constant.PolarisConstants;
@@ -61,6 +62,13 @@ public class WebConfig implements WebApplicationInitializer {
 				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
 				"/*");
 		
+		// HiddenHttpMethodFilter过滤器，使java支持restful风格中http的put和delete方法
+		HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
+		FilterRegistration.Dynamic hiddenHttpMethodConfig = servletContext.addFilter("hiddenHttpMethodFilter", hiddenHttpMethodFilter);
+		hiddenHttpMethodConfig.addMappingForUrlPatterns(
+				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC), 
+				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
+				"/*");
 		
 	}
 
