@@ -10,6 +10,7 @@
 	</parent>
 	<groupId>com.polaris</groupId>
 	<artifactId>polaris-manage</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>polaris-manage</name>
 	<packaging>pom</packaging>
 
@@ -26,6 +27,7 @@
 	</properties>
 
 	<dependencies>
+	
 		<!-- polaris-common -->
 		<dependency>
 			<groupId>com.polaris</groupId>
@@ -52,11 +54,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		
-	</dependencies>
 
-	<dependencyManagement>
-		<!-- 时间处理工具 -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -282,11 +280,7 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-		</dependency>
-	</dependencyManagement>
+	</dependencies>
 
 	<build>
 		<finalName>polaris-manage</finalName>
@@ -296,15 +290,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>

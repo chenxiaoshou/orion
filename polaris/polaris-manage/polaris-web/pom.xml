@@ -5,26 +5,38 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.polaris</groupId>
-		<artifactId>polaris</artifactId>
+		<artifactId>polaris-manage</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.polaris</groupId>
-	<artifactId>polaris-common</artifactId>
+	<artifactId>polaris-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>polaris-common</name>
-	<url>http://maven.apache.org</url>
-	<packaging>jar</packaging>
-	
+	<packaging>war</packaging>
+	<name>polaris-web Maven Webapp</name>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
 
+		<!-- polaris-srv-->
+		<dependency>
+			<groupId>com.polaris</groupId>
+			<artifactId>polaris-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- 时间处理工具 -->
 		<dependency>
 		  <groupId>joda-time</groupId>
 		  <artifactId>joda-time</artifactId>
+		</dependency>
+
+		<!-- freemarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
 		</dependency>
 
 		<!-- dbhelper 自定义jar包 -->
@@ -37,6 +49,12 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+
+		<!-- servlet api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 
 		<!-- spring -->
@@ -254,6 +272,29 @@
 		    <artifactId>httpmime</artifactId>
 		</dependency>
 
+		<!-- dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+
+		<!-- html解析器 -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.17</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>apache-log4j-extras</artifactId> -->
+		<!-- <version>1.2.17</version> -->
+		<!-- </dependency> -->
+
 		<!-- log4j2 -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -268,35 +309,62 @@
 			<artifactId>log4j-web</artifactId>
 		</dependency>
 
+		<!-- 中文分词 -->
+		<dependency>
+			<groupId>org.ansj</groupId>
+			<artifactId>tree_split</artifactId>
+		</dependency>
+
+		<!-- 极光推送 -->
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+		</dependency>
+
+		<!-- 远程调用 -->
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+		</dependency>
+
+		<!-- 二维码 -->
+		<dependency>
+			<groupId>net.glxn</groupId>
+			<artifactId>qrgen</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>polaris-common</finalName>
+		<finalName>polaris-web</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
-			<!-- 资源文件拷贝插件，实际依赖 -->
+			<!-- 打成war包 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
+				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<encoding>UTF-8</encoding>
+					<webResources>
+						<resouce>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resouce>
+					</webResources>
 				</configuration>
 			</plugin>
+			
+			<!-- 配置Tomcat插件 -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-					<compilerArguments>
-						<extdirs>src\main\webapp\WEB-INF\lib</extdirs>
-					</compilerArguments>
-				</configuration>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
