@@ -60,6 +60,8 @@ public class WebConfig implements WebApplicationInitializer {
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC), 
 				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
 				"/*");
+		
+		
 	}
 
 }

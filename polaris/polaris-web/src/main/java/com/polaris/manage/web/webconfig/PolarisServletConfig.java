@@ -28,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -153,6 +154,16 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		jsonConverter.setSupportedMediaTypes(jsonTypes);
 		converters.add(jsonConverter);
 		return converters;
+	}
+
+	/**
+	 * 为映射请求处理器配置消息映射器
+	 * 
+	 * @return
+	 */
+	@Bean
+	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+		return super.requestMappingHandlerMapping();
 	}
 
 	/**
