@@ -7,8 +7,9 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.web.Log4jServletContextListener;
-import org.apache.logging.log4j.web.Log4jServletFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
@@ -21,6 +22,8 @@ import com.polaris.common.constant.PolarisConstants;
 @Order(1) // 指定配置文件的启动顺序
 public class WebConfig implements WebApplicationInitializer {
 
+	private static final Logger LOGGER = LogManager.getLogger(WebConfig.class);
+	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		
@@ -34,14 +37,15 @@ public class WebConfig implements WebApplicationInitializer {
 		servletContext.addListener(IntrospectorCleanupListener.class);
 		
 		// log4j2 过滤器
-		Log4jServletFilter log4jServletFilter = new Log4jServletFilter();
-		FilterRegistration.Dynamic log4jConfig = servletContext
-				.addFilter("log4jServletFilter", log4jServletFilter);
-		log4jConfig.addMappingForUrlPatterns(
-				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,
-						DispatcherType.ERROR), 
-				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
-				"/*");
+//		Log4jServletFilter log4jServletFilter = new Log4jServletFilter();
+//		FilterRegistration.Dynamic log4jConfig = servletContext
+//				.addFilter("log4jServletFilter", log4jServletFilter);
+//		LOGGER.debug("log4jConfig [" + log4jConfig + "]");
+//		log4jConfig.addMappingForUrlPatterns(
+//				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,
+//						DispatcherType.ERROR), 
+//				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
+//				"/*");
 		
 		// CharacterEncodingFilter 过滤器
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8, true);

@@ -12,7 +12,7 @@
 	<artifactId>polaris-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>polaris-service</name>
-	<packaging>jar</packaging>
+<!-- 	<packaging>jar</packaging> -->
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

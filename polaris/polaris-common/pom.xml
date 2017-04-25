@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>polaris-common</name>
 	<url>http://maven.apache.org</url>
-	<packaging>jar</packaging>
+<!-- 	<packaging>jar</packaging> -->
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -281,6 +281,7 @@
 				<version>2.7</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
+					
 				</configuration>
 			</plugin>
 			<plugin>

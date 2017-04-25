@@ -1,4 +1,4 @@
-package com.polaris.common.config;
+package com.polaris.manage.web.appconfig;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -153,17 +153,18 @@ public class ApplicationConfig {
 		transactionManager.setEntityManagerFactory(entityManagerFactory());
 		return transactionManager;
 	}
-	
+
 	/**
 	 * 通过一层Sping代理包装，是数据库连接具有感知事务上下文的能力，dbhelper这些非Spring插件可以使用包装过的包
+	 * 
 	 * @return
 	 */
-    @Bean
-    @Primary
-    public TransactionAwareDataSourceProxy transactionAwareDataSourceProxy() {
-        return new TransactionAwareDataSourceProxy(dataSource());
-    }
-	
+	@Bean
+	@Primary
+	public TransactionAwareDataSourceProxy transactionAwareDataSourceProxy() {
+		return new TransactionAwareDataSourceProxy(dataSource());
+	}
+
 	/**
 	 * dbHelper 封装了jdbctemplate的相关操作
 	 * 

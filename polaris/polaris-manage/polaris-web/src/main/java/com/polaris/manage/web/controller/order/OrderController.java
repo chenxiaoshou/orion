@@ -2,13 +2,13 @@ package com.polaris.manage.web.controller.order;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.exception.ErrorCode;
+import com.polaris.common.exception.ExceptionMessage;
 import com.polaris.common.exception.ExceptionType;
 import com.polaris.manage.model.order.mysql.Order;
 import com.polaris.manage.service.srv.order.IOrderService;
@@ -31,7 +32,7 @@ public class OrderController {
 
 	private static final Logger LOGGER = LogManager.getLogger(OrderController.class);
 
-	@Autowired
+	@Resource(name= "orderService")
 	private IOrderService orderService;
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -43,8 +44,9 @@ public class OrderController {
 			BeanUtils.copyProperties(order, dataBean);
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new ApiException(HttpStatus.BAD_REQUEST, ExceptionType.ERROR, ErrorCode.CODE_10001.getErrCode(),
-					e.getMessage(), "", e.getCause());
+			ExceptionMessage em = new ExceptionMessage(HttpStatus.BAD_REQUEST.value(), ExceptionType.ERROR.getDesc(),
+					ErrorCode.CODE_10001.getErrCode(), e.getMessage(), "", e.getCause());
+			throw new ApiException(HttpStatus.BAD_REQUEST, em);
 		}
 		this.orderService.saveOrder(order);
 	}
