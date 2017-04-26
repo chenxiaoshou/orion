@@ -1,15 +1,12 @@
 package com.polaris.manage.web.webconfig;
 
-import javax.servlet.Filter;
 import javax.servlet.ServletRegistration;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.polaris.common.config.ApplicationConfig;
-import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.BeanUtil;
 
 @Order(2)
