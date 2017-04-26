@@ -8,13 +8,13 @@
 	<appenders>
 	
 		<!-- trace控制台 -->
-		<Console name="console_trace_log" target="SYSTEM_ERR">
+		<Console name="console_trace_log" target="SYSTEM_OUT">
 			<PatternLayout pattern="${PATTERN}" />
 			<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
 		</Console>
 		
 		<!-- debug控制台 -->
-		<Console name="console_debug_log" target="SYSTEM_ERR">
+		<Console name="console_debug_log" target="SYSTEM_OUT">
 			<PatternLayout pattern="${PATTERN}" />
 			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
 		</Console>
@@ -125,6 +125,7 @@
 	
 		<!-- 配置日志的根节点 -->
         <root level="ALL">
+        	<appender-ref ref="console_debug_log"/>
 			<appender-ref ref="test_log"/>
 			<appender-ref ref="total_log"/>
 			<appender-ref ref="trace_log"/>
