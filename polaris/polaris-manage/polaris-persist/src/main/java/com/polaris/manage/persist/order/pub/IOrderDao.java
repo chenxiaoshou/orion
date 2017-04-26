@@ -1,7 +1,6 @@
 package com.polaris.manage.persist.order.pub;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import com.polaris.manage.model.order.mysql.Order;
 import com.polaris.manage.persist.order.custom.IOrderCustomDao;
@@ -11,7 +10,7 @@ import com.polaris.manage.persist.order.custom.IOrderCustomDao;
  * @author John
  *
  */
-@Repository
+
 public interface IOrderDao extends JpaRepository<Order, String>, IOrderCustomDao {
 
 }

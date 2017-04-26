@@ -48,5 +48,12 @@ public class OrderController {
 		}
 		this.orderService.saveOrder(order);
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public void test(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
+			HttpServletRequest request) {
+		LOGGER.error("for testing");
+	}
 
 }

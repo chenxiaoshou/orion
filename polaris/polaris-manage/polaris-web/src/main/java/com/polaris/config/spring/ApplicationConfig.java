@@ -1,4 +1,4 @@
-package com.polaris.common.config;
+package com.polaris.config.spring;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

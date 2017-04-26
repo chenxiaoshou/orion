@@ -1,4 +1,4 @@
-package com.polaris.manage.web.webconfig;
+package com.polaris.config.springmvc;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.polaris.common.config;
+package com.polaris.config.springdata;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -68,6 +68,8 @@ public class RedisConfig {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration(),
 				jedisPoolConfig());
 		jedisConnectionFactory.setUsePool(true);
+		jedisConnectionFactory.setTimeout(0);
+		jedisConnectionFactory.afterPropertiesSet();
 		return jedisConnectionFactory;
 	}
 

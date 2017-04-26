@@ -1,4 +1,4 @@
-package com.polaris.common.config;
+package com.polaris.config.springdata;
 
 /**
  * Spring-data-RabbitMQ 先暂时注销
