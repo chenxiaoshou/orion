@@ -30,6 +30,7 @@ public class ExceptionHandleAdvice {
 	public ResponseEntity<ExceptionMessage> handleApiException(ApiException e) {
 		return new ResponseEntity<ExceptionMessage>(e.getExceptionMessage(), e.getHttpStatus());
 	}
+	
 
 	// TODO 暂时还没有想好要怎么设计，先要看看BindingResult中的数据到底是什么样子之后才能决定怎么写。。。
 	/*

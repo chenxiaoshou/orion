@@ -1,4 +1,4 @@
-package com.polaris.manage.web.webconfig;
+package com.polaris.config.web;
 
 import javax.servlet.ServletRegistration;
 
@@ -7,7 +7,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.polaris.common.utils.BeanUtil;
-import com.polaris.manage.web.appconfig.ApplicationConfig;
+import com.polaris.config.spring.ApplicationConfig;
+import com.polaris.config.springdata.RedisConfig;
+import com.polaris.config.springmvc.PolarisServletConfig;
 
 @Order(2)
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -26,7 +28,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class };
+		return new Class<?>[] { ApplicationConfig.class, RedisConfig.class };
 	}
 
 	/**

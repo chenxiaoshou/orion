@@ -1,4 +1,4 @@
-package com.polaris.manage.web.webconfig;
+package com.polaris.config.springmvc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.castor.CastorMarshaller;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -171,20 +170,10 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename(PolarisConstants.MESSAGE_SOURCE);
-		messageSource.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
-		messageSource.setUseCodeAsDefaultMessage(true); // 没有找到相应键值对的时候，使用key作为错误信息
 		messageSource.setCacheSeconds(5);
 		return messageSource;
 	}
 
-	// Spring验证器
-	@Bean
-	public LocalValidatorFactoryBean localValidatorFactoryBean() {
-		LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
-		validatorFactoryBean.setValidationMessageSource(messageSource());
-		return validatorFactoryBean;
-	}
-	
 	/**
 	 * 添加静态资源映射
 	 */

@@ -1,4 +1,4 @@
-package com.polaris.manage.web.appconfig;
+package com.polaris.config.springdata;
 
 /**
  * Spring-data-solr

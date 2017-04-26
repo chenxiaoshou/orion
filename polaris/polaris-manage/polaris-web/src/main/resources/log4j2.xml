@@ -1,151 +1,139 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE xml>
-<Configuration status="WARN">
+<Configuration status="error" monitorInterval="600" >
 	<properties>
-		<property name="LOG_HOME">E:/logs</property>
-		<property name="FILE_NAME">polaris</property>
+		<property name="LOG_HOME">C:/logs</property>
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %t %-5p [%F:%L] - %m%n</property>
 	</properties>
 	<appenders>
-
-		<!--这个输出控制台的配置，这里输出除了warn和error级别的信息到System.out -->
-		<Console name="console_out_appender" target="SYSTEM_OUT">
-			<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
-			<PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n" />
+	
+		<!-- trace控制台 -->
+		<Console name="console_trace_log" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN}" />
+			<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
 		</Console>
-
-		<!--这个输出控制台的配置，这里输出warn和error级别的信息到System.err，在eclipse控制台上看到的是红色文字 -->
-		<Console name="console_err_appender" target="SYSTEM_ERR">
-			<!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+		
+		<!-- debug控制台 -->
+		<Console name="console_debug_log" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN}" />
+			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
+		</Console>
+	
+		<!-- errror控制台 -->	
+		<Console name="console_error_log" target="SYSTEM_ERR">
+			<PatternLayout pattern="${PATTERN}" />
 			<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
-			<PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n" />
 		</Console>
-
-		<!-- TRACE级别日志 -->
-		<!-- 设置日志格式并配置日志压缩格式，压缩文件独立放在一个文件夹内， 日期格式不能为冒号，否则无法生成，因为文件名不允许有冒号，此appender只输出trace级别的数据到trace.log -->
-		<RollingRandomAccessFile name="trace_appender"
-			immediateFlush="true" fileName="${LOG_HOME}/trace.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/trace/trace - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
+		
+		<!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
+        <!--append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->
+        <File name="test_log" fileName="${LOG_HOME}/polaris_test.log" append="false">
+            <PatternLayout pattern="${PATTERN}"/>
+        </File>
+		
+		<!-- total log -->
+		<RollingRandomAccessFile name="total_log"
+			fileName="${LOG_HOME}/polaris_total.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/total/total-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
-				<!-- 每个日志文件最大2MB -->
-				<SizeBasedTriggeringPolicy size="20MB" />
+				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
-			<Filters><!-- 此Filter意思是，只输出trace级别的数据 -->
-				<!-- DENY，日志将立即被抛弃不再经过其他过滤器； NEUTRAL，有序列表里的下个过滤器过接着处理日志； ACCEPT，日志会被立即处理，不再经过剩余过滤器。 -->
-				<ThresholdFilter level="debug" onMatch="DENY" onMismatch="NEUTRAL" />
-				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
-			</Filters>
 		</RollingRandomAccessFile>
-
-		<!-- DEBUG级别日志 -->
-		<RollingRandomAccessFile name="debug_appender"
-			immediateFlush="true" fileName="${LOG_HOME}/debug.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/debug/debug - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
+		
+		<!-- trace log -->
+		<RollingRandomAccessFile name="trace_log"
+			fileName="${LOG_HOME}/polaris_trace.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/trace/trace-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
-				<SizeBasedTriggeringPolicy size="20MB" />
-				<!-- 如果启用此配置，则日志会按文件名生成新压缩文件， 即如果filePattern配置的日期格式为 %d{yyyy-MM-dd HH} 
-					，则每小时生成一个压缩文件， 如果filePattern配置的日期格式为 %d{yyyy-MM-dd} ，则天生成一个压缩文件 -->
-				<!-- <TimeBasedTriggeringPolicy interval="1" modulate="true" /> -->
-
-			</Policies>
-			<Filters><!-- 此Filter意思是，只输出debug级别的数据 -->
-				<!-- DENY，日志将立即被抛弃不再经过其他过滤器； NEUTRAL，有序列表里的下个过滤器过接着处理日志； ACCEPT，日志会被立即处理，不再经过剩余过滤器。 -->
-				<ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL" />
-				<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
-			</Filters>
-		</RollingRandomAccessFile>
-
-		<!-- INFO级别日志 -->
-		<RollingRandomAccessFile name="info_appender"
-			immediateFlush="true" fileName="${LOG_HOME}/info.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/info/info - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
-			<Policies>
-				<SizeBasedTriggeringPolicy size="20MB" />
+				<SizeBasedTriggeringPolicy size="50 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
 			<Filters>
-				<ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
-				<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+				<!-- 过滤debug及以上的日志信息 -->
+				<ThresholdFilter level="debug" onMatch="DENY" onMismatch="NEUTRAL"/>
+				<!-- 保留trace级别的日志 -->
+				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
 		</RollingRandomAccessFile>
-
-		<!-- WARN级别日志 -->
-		<RollingRandomAccessFile name="warn_appender"
-			immediateFlush="true" fileName="${LOG_HOME}/warn.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn/warn - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
+		
+		<!-- debug log -->
+		<RollingRandomAccessFile name="debug_log"
+			fileName="${LOG_HOME}/polaris_debug.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/debug/debug-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
-				<SizeBasedTriggeringPolicy size="20MB" />
+				<SizeBasedTriggeringPolicy size="50 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
 			<Filters>
-				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
-				<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+				<ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+				<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
 		</RollingRandomAccessFile>
-
-		<!-- ERROR级别日志 -->
-		<RollingRandomAccessFile name="error_appender"
-			immediateFlush="true" fileName="${LOG_HOME}/error.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/error/error - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
+		
+		<!-- info log -->
+		<RollingRandomAccessFile name="info_log"
+			fileName="${LOG_HOME}/polaris_info.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/info/info-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
-				<SizeBasedTriggeringPolicy size="20MB" />
+				<SizeBasedTriggeringPolicy size="50 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
 			<Filters>
-				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+				<ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+				<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
 		</RollingRandomAccessFile>
-
-		<!-- 总的混合的日志记录 -->
-		<RollingRandomAccessFile name="total_appender" 
-			immediateFlush="true" fileName="${LOG_HOME}/total.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/total - %d{yyyy-MM-dd HH_mm_ss}.log.gz">
-			<PatternLayout>
-				<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%F:%L] - %m%n</pattern>
-			</PatternLayout>
+		
+		<!-- warn log -->
+		<RollingRandomAccessFile name="warn_log"
+			fileName="${LOG_HOME}/polaris_warn.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/warn/warn-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
-				<SizeBasedTriggeringPolicy size="50 MB" />
+				<SizeBasedTriggeringPolicy size="50 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
 			<Filters>
-				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+				<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
-<!-- 			<DefaultRolloverStrategy max="20" />最多保存的文件数 -->
 		</RollingRandomAccessFile>
+		
+		<!-- error log -->
+		<RollingRandomAccessFile name="error_log"
+			fileName="${LOG_HOME}/polaris_error.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/error/error-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="50 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
+			</Policies>
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingRandomAccessFile>
+		
 	</appenders>
 	<Loggers>
+		
+		<!-- 设置第三方日志系统 -->
+        <logger name="org.springframework" level="DEBUG" />
+	
+		<!-- 设置polaris日志显示在控制台 -->
+		<logger name="com.polaris" level="ALL">
+			<appender-ref ref="console_debug_log"/>
+		</logger>
 	
 		<!-- 配置日志的根节点 -->
-        <root level="trace">
-            <appender-ref ref="console_out_appender"/>
-            <appender-ref ref="console_err_appender"/>
-            <appender-ref ref="trace_appender"/>
-            <appender-ref ref="debug_appender"/>
-            <appender-ref ref="info_appender"/>
-            <appender-ref ref="warn_appender"/>
-            <appender-ref ref="error_appender"/>
-            <appender-ref ref="total_appender"/>
+        <root level="ALL">
+        	<appender-ref ref="console_debug_log"/>
+			<appender-ref ref="test_log"/>
+			<appender-ref ref="total_log"/>
+			<appender-ref ref="trace_log"/>
+            <appender-ref ref="debug_log"/>
+            <appender-ref ref="info_log"/>
+            <appender-ref ref="warn_log"/>
+            <appender-ref ref="error_log"/>
         </root>
-
-        <!-- 第三方日志系统 -->
-        <logger name="org.springframework.core" level="info"/>
-        <logger name="org.springframework.beans" level="info"/>
-        <logger name="org.springframework.context" level="info"/>
-        <logger name="org.springframework.web" level="info"/>
-        <logger name="org.jboss.netty" level="warn"/>
-        <logger name="org.apache.http" level="warn"/>
-        
-        <!-- TODO 还可以针对某一个具体的类来设置日志 -->
-        
+	
 	</Loggers>
 </Configuration> 

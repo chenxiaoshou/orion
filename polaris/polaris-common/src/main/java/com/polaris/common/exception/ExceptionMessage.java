@@ -63,5 +63,6 @@ public class ExceptionMessage implements Serializable {
 	public int getHttpStatus() {
 		return httpStatus;
 	}
+	
 
 }

@@ -1,4 +1,4 @@
-package com.polaris.manage.web.appconfig;
+package com.polaris.config.springdata;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -70,7 +70,6 @@ public class RedisConfig {
 		jedisConnectionFactory.setUsePool(true);
 		jedisConnectionFactory.setTimeout(0);
 		jedisConnectionFactory.afterPropertiesSet();
-		jedisConnectionFactory.setDatabase(0); // 设置0号数据库
 		return jedisConnectionFactory;
 	}
 
