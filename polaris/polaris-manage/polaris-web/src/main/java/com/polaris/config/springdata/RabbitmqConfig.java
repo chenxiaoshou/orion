@@ -3,7 +3,6 @@ package com.polaris.config.springdata;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -11,7 +10,6 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
@@ -20,8 +18,8 @@ import org.springframework.retry.support.RetryTemplate;
 
 import com.polaris.common.constant.RabbitmqConstants;
 
-@Configuration
-@EnableRabbit
+//@Configuration
+//@EnableRabbit
 @PropertySource("classpath:config.properties")
 public class RabbitmqConfig {
 
@@ -74,4 +72,5 @@ public class RabbitmqConfig {
 		factory.setMaxConcurrentConsumers(3);
 		return factory;
 	}
+	
 }

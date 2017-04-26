@@ -44,7 +44,7 @@ import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.JsonUtil;
 
 /**
- * SpringMVC 相关配置
+ * SpringMVC 相关配置, 相当于xml时代的polaris-servlet.xml配置文件
  * 
  * @author John
  * @description :
@@ -61,7 +61,7 @@ import com.polaris.common.utils.JsonUtil;
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Aspect.class, Controller.class,
 				ControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
-public class PolarisServletConfig extends WebMvcConfigurationSupport {
+public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 
 	/**
 	 * JSP视图解析器
@@ -74,7 +74,7 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
 		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
 		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
+		viewResolver.setContentType(PolarisConstants.VIEW_RESOLVER_CONTENT_TYPE);
 		viewResolver.setOrder(0); // 设置视图优先级
 		return viewResolver;
 	}

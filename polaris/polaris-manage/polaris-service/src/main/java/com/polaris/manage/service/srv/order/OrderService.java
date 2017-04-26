@@ -1,6 +1,9 @@
 package com.polaris.manage.service.srv.order;
 
+import java.util.List;
+
 import com.polaris.manage.model.order.mysql.Order;
+import com.polaris.manage.persist.order.dto.SearchOrderCriteria;
 
 public interface OrderService {
 
@@ -10,6 +13,6 @@ public interface OrderService {
 	
 	Order findOne(String orderId);
 
-//	List<Order> searchOrders(SearchOrderCriteria criteria);
+	List<Order> searchOrders(SearchOrderCriteria criteria);
 	
 }

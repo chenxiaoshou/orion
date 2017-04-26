@@ -1,9 +1,13 @@
 package com.polaris.common.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 public class BeanUtil {
 
+	private static final Logger LOGGER = LogManager.getLogger(BeanUtil.class);
+	
 	private static ApplicationContext applicationContext;
 
 	private BeanUtil() {
@@ -22,6 +26,7 @@ public class BeanUtil {
 	}
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
+		LOGGER.debug("注入applicationContext上下文 [" + applicationContext + "]");
 		BeanUtil.applicationContext = applicationContext;
 	}
 

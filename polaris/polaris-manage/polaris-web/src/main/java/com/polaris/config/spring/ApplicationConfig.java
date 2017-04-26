@@ -6,8 +6,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,17 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.logging.Log4j2Filter;
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.opensource.dbhelp.DbHelper;
 
+/**
+ * 该配置文件和其他几个springdata文件夹下的配置类，
+ * 就相当于xml配置中的 ApplicationContext.xml，
+ * 只不过分开为不同的配置类中
+ * @author John
+ *
+ */
 @Configuration
 @ComponentScan(basePackages = { "com.polaris" }, excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, ControllerAdvice.class }) })
@@ -37,8 +46,10 @@ import com.opensource.dbhelp.DbHelper;
 @EnableTransactionManagement // 支持事务,使用@Transational注解
 @EnableScheduling // 支持定时任务,使用@Scheduled注解
 @EnableAsync // 支持异步,使用@Async注解
-@EnableCaching
+//@EnableCaching
 public class ApplicationConfig {
+	
+	private static final Logger LOGGER = LogManager.getLogger(ApplicationConfig.class);
 
 	@Autowired
 	private Environment env;
@@ -76,19 +87,33 @@ public class ApplicationConfig {
 		dataSource.setTestOnBorrow(false);
 		dataSource.setTestOnReturn(false);
 		try {
-			dataSource.setFilters("stat,log4j");
+			// stat-sql统计，log4j2-日志记录，wall-sql防注入攻击
+			dataSource.setFilters("stat,log4j2,wall");
 		} catch (SQLException e) {
-			// do nothing
+			LOGGER.error("Druid设置过滤器失败", e);
 		}
 		List<Filter> filters = new ArrayList<Filter>();
 		filters.add(log4j2Filter());
+		filters.add(statFilter());
 		dataSource.setProxyFilters(filters);
 		return dataSource;
+	}
+	
+	private StatFilter statFilter() {
+		StatFilter statFilter = new StatFilter();
+		statFilter.setLogSlowSql(true); // 记录慢查询语句
+		statFilter.setMergeSql(true); // 自动合并非参数化的sql
+		statFilter.setSlowSqlMillis(2000); // 设置慢查询标准
+		return statFilter;
 	}
 
 	private Log4j2Filter log4j2Filter() {
 		Log4j2Filter Log4j2Filter = new Log4j2Filter();
-		Log4j2Filter.setResultSetLogEnabled(false);
+		// 下面的四个参数调试环境下可以打开，生产环境要关闭掉，打印日志很耗资源。
+		// 关闭之后，log4j2.xml中定义的日志druid相关的appender不会再接收到sql日志记录
+		Log4j2Filter.setDataSourceLogEnabled(true);
+		Log4j2Filter.setConnectionLogEnabled(true);
+		Log4j2Filter.setResultSetLogEnabled(true);
 		Log4j2Filter.setStatementExecutableSqlLogEnable(true);
 		return Log4j2Filter;
 	}

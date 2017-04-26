@@ -20,7 +20,7 @@
 
 	<dependencies>
 
-		<!-- polaris-srv-->
+		<!-- polaris-srv -->
 		<dependency>
 			<groupId>com.polaris</groupId>
 			<artifactId>polaris-service</artifactId>
@@ -29,16 +29,16 @@
 
 		<!-- valid验证 -->
 		<dependency>
-		    <groupId>javax.validation</groupId>
-		    <artifactId>validation-api</artifactId>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
 		</dependency>
-		
+
 		<!-- valid验证实现 -->
 		<dependency>
-	        <groupId>org.hibernate</groupId>
-	        <artifactId>hibernate-validator</artifactId>
-	    </dependency>
-			
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+
 		<!-- google.guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -56,7 +56,7 @@
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 		</dependency>
-			
+
 		<!-- freemarker -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -285,39 +285,68 @@
 			<groupId>net.glxn</groupId>
 			<artifactId>qrgen</artifactId>
 		</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.apache.tomcat</groupId> -->
-<!-- 		    <artifactId>tomcat</artifactId> -->
-<!-- 		    <scope>provided</scope> -->
-<!-- 		</dependency> -->
-		
+
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>home</id>
+			<properties>
+				<profile.name>home</profile.name>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>company</id>
+			<properties>
+				<profile.name>company</profile.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<profile.name>production</profile.name>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<finalName>polaris</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
-			<!-- 打成war包 -->
+			<!-- 配置资源文件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
-<!-- 					<webResources> -->
-<!-- 						<resouce> -->
-<!-- 							<filtering>true</filtering> -->
-<!-- 							<directory>src/main/webapp</directory> -->
-<!-- 							<includes> -->
-<!-- 								<include>**/*.xml</include> -->
-<!-- 								<include>**/*.properties</include> -->
-<!-- 							</includes> -->
-<!-- 						</resouce> -->
-<!-- 					</webResources> -->
+					<warName>polaris</warName>
+					<webResources>
+						<resouce>
+							<directory>src/main/resources/${profile.name}</directory><!-- 根据不同的环境变量打包不同的配置文件 -->
+							<targetPath>WEB-INF/classes</targetPath><!-- 复制的目标路径 -->
+							<filtering>true</filtering>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resouce>
+						<resouce>
+							<directory>src/main/resources</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<filtering>true</filtering>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resouce>
+					</webResources>
 				</configuration>
 			</plugin>
-			
 			<!-- 配置Tomcat插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>

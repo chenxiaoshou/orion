@@ -1,7 +1,6 @@
 package com.polaris.common.utils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +20,8 @@ import com.polaris.common.constant.PatternConstants;
 
 public class IdGenerator implements Configurable, IdentifierGenerator {
 
-	private final Logger LOGGER = LogManager.getLogger(IdGenerator.class);
-	
+	private final static Logger LOGGER = LogManager.getLogger(IdGenerator.class);
+
 	private int idLength;
 
 	private String perfix;
@@ -31,8 +30,8 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 
 	private long getNextSeqFromRedis() {
 		// 每天都从1开始获取新的SEQ
-		timestamp = DateUtil.date2str(new Date(), PatternConstants.DATE_FORMAT_PATTERN_4);
-		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(timestamp,
+		String idKey = StringUtil.joinWith("_", perfix, timestamp);
+		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(idKey,
 				(RedisConnectionFactory) BeanUtil.getBean("jedisConnectionFactory"));
 		long seqNum = redisAtomicLong.incrementAndGet();
 		if (seqNum == 1) { // 当第一次取出索引的时候，设置过期时间
@@ -58,6 +57,7 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 	public void configure(Type type, Properties params, ServiceRegistry arg2) throws MappingException {
 		this.idLength = Integer.parseInt(params.getProperty("idLength"));
 		this.perfix = params.getProperty("perfix");
+		this.timestamp = DateUtil.date2str(DateUtil.now(), PatternConstants.DATE_FORMAT_PATTERN_4);
 	}
 
 	// for testing
@@ -95,5 +95,4 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 	 * }).start(); } }
 	 */
 
-	
 }

@@ -282,7 +282,7 @@
 				<version>${springVersion}</version>
 			</dependency>
 			<!-- SPRING END -->
-			
+
 			<!-- spring data -->
 			<dependency>
 				<groupId>org.springframework.data</groupId>
@@ -533,11 +533,6 @@
 
 	<build>
 		<finalName>polaris</finalName>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<!--过滤文件：Maven提供的一种过滤机制，可以在资源文件被复制到目标目录的同时，替换其中的placeholders -->
-		<!-- <filters> -->
-		<!-- <filter>src/main/resources/config-${deploy.mode}.properties</filter> -->
-		<!-- </filters> -->
 		<plugins> <!-- 没有放在pluginManagement中的插件是所有模块通用的插件，此时可以直接配置到父pom，子pom可以直接继承 -->
 			<!-- 资源文件拷贝插件，实际依赖 -->
 			<plugin>

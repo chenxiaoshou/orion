@@ -1,86 +1,61 @@
 package com.polaris.config.web;
 
-import javax.servlet.ServletRegistration;
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.util.IntrospectorCleanupListener;
 
 import com.polaris.common.constant.PolarisConstants;
-import com.polaris.common.utils.BeanUtil;
-import com.polaris.config.spring.ApplicationConfig;
-import com.polaris.config.springdata.JpaConfig;
-import com.polaris.config.springdata.MongodbConfig;
-import com.polaris.config.springdata.RabbitmqConfig;
-import com.polaris.config.springdata.RedisConfig;
-import com.polaris.config.springdata.SolrConfig;
-import com.polaris.config.springmvc.PolarisServletConfig;
 
-@Order(2)
-public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+/**
+ * 原web.xml中的配置信息(不包括web Servlet的配置)
+ * 
+ * @author John
+ *
+ */
+@Order(0) // 指定配置文件的启动顺序
+public class WebInitializer implements WebApplicationInitializer {
 
-	/**
-	 * 配置 Spring 的 org.springframework.web.servlet.DispatcherServlet 的
-	 * url-pattern
-	 */
 	@Override
-	protected String[] getServletMappings() {
-		return new String[] { "/" };
-	}
+	public void onStartup(ServletContext servletContext) throws ServletException {
 
-	/**
-	 * 配置应用的上下文，即所有不包括 SpringMVC 等 Web 配置之外的其他Spring上下文配置， 比如：Spring、Hibernate、AOP 等的配置类
-	 */
-	@Override
-	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class, JpaConfig.class, RedisConfig.class, MongodbConfig.class,
-				RabbitmqConfig.class, SolrConfig.class };
-	}
+		/**
+		 * Spring资源清理监听器
+		 */
+		servletContext.addListener(IntrospectorCleanupListener.class);
 
-	/**
-	 * 配置 SpringMVC 等 Web 上下文
-	 */
-	@Override
-	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { PolarisServletConfig.class };
-	}
+		/**
+		 * CharacterEncodingFilter 过滤器
+		 */
+		servletContext
+			.addFilter("characterEncodingFilter",new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8, true))
+				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, 
+						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR),false,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 
-	/**
-	 * 设置DispatcherServlet的name
-	 */
-	@Override
-	protected String getServletName() {
-		return PolarisConstants.DEFAULT_SERVLET_NAME;
-	}
-	
-	/**
-	 * 配置请求路径和DispatcherServlet一致的过滤器, 不一致的可以在WebConfig中配置
-	 */
-	/*@Override
-	protected Filter[] getServletFilters() {
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setEncoding(PolarisConstants.CHAESET_UTF_8);
-		characterEncodingFilter.setForceEncoding(true);
-		return new Filter[] { characterEncodingFilter };
-	}*/
-	
-	/**
-     * 可以注册DispatcherServlet的初始化参数，等等
-     */
-   @Override
-   protected void customizeRegistration(ServletRegistration.Dynamic registration) {        
-       //registration.setInitParameter("spring.profiles.active", "default");
-   	
-   }
+		/**
+		 * OpenEntityManagerInViewFilter
+		 * 过滤器，避免在页面上出现懒加载异常，如果我们全部使用json作为传输的话则可以不配置, 这里如果使用的是hibernate的话，
+		 * 需要配置的是openSessionInViewFilter
+		 */
+		servletContext.addFilter("openEntityManagerInViewFilter", new OpenEntityManagerInViewFilter())
+				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST,
+						DispatcherType.ASYNC, DispatcherType.ERROR),true,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 
-   /*
-    * 创建一个可以在非spring管理bean中获得spring管理的相关bean的对象: BeanUtil.getBean(beanName);
-    */
-	@Override
-	protected WebApplicationContext createRootApplicationContext() {
-		WebApplicationContext ctx = super.createRootApplicationContext();
-		BeanUtil.getInstance().setApplicationContext(ctx);
-		return ctx;
+		/**
+		 * HiddenHttpMethodFilter过滤器，使java支持restful风格中http的put和delete方法
+		 */
+		servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter()).addMappingForUrlPatterns(
+				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
+						true,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+
 	}
 
 }

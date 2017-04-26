@@ -6,13 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
-@Table(name="pms_order")
+@Table(name="pms_order", indexes = {
+        @Index(columnList = "total_price", name = "idx_total_price")} )
 public class Order {
 	
 	private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
@@ -41,6 +43,7 @@ public class Order {
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "OD")})
+	@Column(name = "id", nullable = false, columnDefinition = "varchar(128) default '' comment '订单唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -58,7 +61,7 @@ public class Order {
 		this.status = status;
 	}
 
-	@Column(name = "total_price", nullable = false, columnDefinition = "double(11,2) default 0 comment '订单总金额'")
+	@Column(name = "total_price", nullable = false, precision=2, columnDefinition = "double(11,2) default 0.00 comment '订单总金额'")
 	public double getTotalPrice() {
 		return totalPrice;
 	}
@@ -67,7 +70,7 @@ public class Order {
 		this.totalPrice = totalPrice;
 	}
 
-	@Column(name = "payment_amount", nullable = false, columnDefinition = "double(11,2) default 0 comment '实际已支付金额'")
+	@Column(name = "payment_amount", nullable = false, precision=2, columnDefinition = "double(11,2) default 0.00 comment '实际已支付金额'")
 	public double getPaymentAmount() {
 		return paymentAmount;
 	}
@@ -76,7 +79,7 @@ public class Order {
 		this.paymentAmount = paymentAmount;
 	}
 
-	@Column(name = "sale_channel", nullable = false, columnDefinition = "varchar(10) default '' comment '订单来源渠道'")
+	@Column(name = "sale_channel", nullable = false, length=10, columnDefinition = "varchar(10) default '' comment '订单来源渠道'")
 	public String getSaleChannel() {
 		return saleChannel;
 	}
@@ -85,7 +88,7 @@ public class Order {
 		this.saleChannel = saleChannel;
 	}
 
-	@Column(name = "create_time", nullable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
+	@Column(name = "create_time", nullable = false, updatable=false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -94,7 +97,7 @@ public class Order {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "updat_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
+	@Column(name = "update_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}

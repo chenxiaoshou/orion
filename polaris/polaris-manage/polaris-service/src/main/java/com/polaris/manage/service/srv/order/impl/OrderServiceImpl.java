@@ -1,9 +1,12 @@
 package com.polaris.manage.service.srv.order.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.polaris.manage.model.order.mysql.Order;
+import com.polaris.manage.persist.order.dto.SearchOrderCriteria;
 import com.polaris.manage.persist.order.pub.OrderDao;
 import com.polaris.manage.service.srv.order.OrderService;
 
@@ -12,7 +15,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
-	
+
 	@Override
 	public void saveOrder(Order order) {
 		this.orderDao.save(order);
@@ -27,10 +30,10 @@ public class OrderServiceImpl implements OrderService {
 	public Order findOne(String orderId) {
 		return this.orderDao.findOne(orderId);
 	}
-	
-	/*@Override
+
+	@Override
 	public List<Order> searchOrders(SearchOrderCriteria criteria) {
 		return this.orderDao.searchOrders(criteria);
-	}*/
-	
+	}
+
 }

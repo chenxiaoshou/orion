@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE xml>
-<Configuration status="error" monitorInterval="600" >
+<Configuration status="TRACE" monitorInterval="30">
 	<properties>
-		<property name="LOG_HOME">C:/logs</property>
+		<property name="LOG_HOME">C:/logs/polaris</property>
         <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %t %-5p [%F:%L] - %m%n</property>
 	</properties>
 	<appenders>
@@ -27,23 +27,30 @@
 		
 		<!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
         <!--append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->
-        <File name="test_log" fileName="${LOG_HOME}/polaris_test.log" append="false">
+        <File name="test_log" fileName="${LOG_HOME}/dev_test.log" append="false">
             <PatternLayout pattern="${PATTERN}"/>
         </File>
 		
 		<!-- total log -->
 		<RollingRandomAccessFile name="total_log"
-			fileName="${LOG_HOME}/polaris_total.log"
+			fileName="${LOG_HOME}/total.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/total/total-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
 				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
 			</Policies>
+			<!-- 删除30天之前的日志 -->
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/total-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 		<!-- trace log -->
 		<RollingRandomAccessFile name="trace_log"
-			fileName="${LOG_HOME}/polaris_trace.log"
+			fileName="${LOG_HOME}/trace.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/trace/trace-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
@@ -55,11 +62,17 @@
 				<!-- 保留trace级别的日志 -->
 				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/trace-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 		<!-- debug log -->
 		<RollingRandomAccessFile name="debug_log"
-			fileName="${LOG_HOME}/polaris_debug.log"
+			fileName="${LOG_HOME}/debug.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/debug/debug-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
@@ -69,11 +82,17 @@
 				<ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
 				<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/debug-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 		<!-- info log -->
 		<RollingRandomAccessFile name="info_log"
-			fileName="${LOG_HOME}/polaris_info.log"
+			fileName="${LOG_HOME}/info.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/info/info-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
@@ -83,11 +102,17 @@
 				<ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
 				<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/info-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 		<!-- warn log -->
 		<RollingRandomAccessFile name="warn_log"
-			fileName="${LOG_HOME}/polaris_warn.log"
+			fileName="${LOG_HOME}/warn.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/warn/warn-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
@@ -97,11 +122,17 @@
 				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
 				<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/warn-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 		<!-- error log -->
 		<RollingRandomAccessFile name="error_log"
-			fileName="${LOG_HOME}/polaris_error.log"
+			fileName="${LOG_HOME}/error.log"
 			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/error/error-%d{yyyy-MM-dd HH-mm}-%i.log">
 			<PatternLayout pattern="${PATTERN}" />
 			<Policies>
@@ -110,22 +141,102 @@
 			<Filters>
 				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
 			</Filters>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/error-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile>
+		
+		<!-- polaris servlet 应用数据 -->
+		<RollingRandomAccessFile name="polaris_log"
+			fileName="${LOG_HOME}/polaris.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/polaris/polaris-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/polaris-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile>
+		
+		<!-- druid servlet 应用数据 -->
+		<RollingRandomAccessFile name="druid_log"
+			fileName="${LOG_HOME}/druid.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/druid/druid-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/druid-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingRandomAccessFile>
+		
+		<!-- druid servlet 应用数据 -->
+		<RollingRandomAccessFile name="druid1_log"
+			fileName="${LOG_HOME}/druid1.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/druid1/druid-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout pattern="${PATTERN}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${LOG_HOME}" maxDepth="3">
+					<IfFileName glob="*/*/druid-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
 	</appenders>
 	<Loggers>
 		
 		<!-- 设置第三方日志系统 -->
-        <logger name="org.springframework" level="DEBUG" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.hibernate" level="INFO" />
+        <logger name="com.opensource.dbhelp" level="INFO" />
+        <logger name="com.google" level="INFO" />
+        <logger name="org.mybatis" level="INFO" />
+        <logger name="org.apache.ibatis" level="INFO" />
 	
 		<!-- 设置polaris日志显示在控制台 -->
-		<logger name="com.polaris" level="ALL">
+		<logger name="com.polaris" level="DEBUG">
 			<appender-ref ref="console_debug_log"/>
+			<appender-ref ref="polaris_log"/>
 		</logger>
+		
+		<!-- druid 日志配置 -->
+		<logger name="druid.sql.DataSource" level="DEBUG">
+            <appender-ref ref="druid_log"/>
+        </logger>
+		
+		<logger name="druid.sql.Connection" level="DEBUG">
+            <appender-ref ref="druid_log"/>
+        </logger>
+		
+        <logger name="druid.sql.Statement" level="DEBUG">
+            <appender-ref ref="druid_log"/>
+        </logger>
+        
+        <logger name="druid.sql.ResultSet" level="DEBUG">
+            <appender-ref ref="druid_log"/>
+        </logger>
+
+		<logger name="com.alibaba.druid" level="DEBUG">
+            <appender-ref ref="druid1_log"/>
+        </logger>
 	
 		<!-- 配置日志的根节点 -->
-        <root level="ALL">
-        	<appender-ref ref="console_debug_log"/>
+        <root level="INFO">
 			<appender-ref ref="test_log"/>
 			<appender-ref ref="total_log"/>
 			<appender-ref ref="trace_log"/>

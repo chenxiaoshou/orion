@@ -7,4 +7,8 @@ package com.polaris.common.constant;
  */
 public interface RedisConstants {
 
+	static String PING = "PING";
+	
+	static String PONG = "PONG";
+	
 }
