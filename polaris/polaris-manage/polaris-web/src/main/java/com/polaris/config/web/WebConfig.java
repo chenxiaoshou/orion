@@ -7,8 +7,6 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.web.Log4jServletFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
@@ -22,12 +20,8 @@ import com.polaris.common.constant.PolarisConstants;
 @Order(0) // 指定配置文件的启动顺序
 public class WebConfig implements WebApplicationInitializer {
 	
-	private static final Logger LOGGER = LogManager.getLogger(WebConfig.class);
-
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		
-		LOGGER.warn("init...");
 		
 		// log4j2初始化参数，关闭自动初始化，这样可以在下面自动配置
 //		servletContext.setInitParameter(Log4jWebSupport.IS_LOG4J_AUTO_INITIALIZATION_DISABLED, "true");
