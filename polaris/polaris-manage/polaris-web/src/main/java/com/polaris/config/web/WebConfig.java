@@ -35,7 +35,7 @@ public class WebConfig implements WebApplicationInitializer {
 //		servletContext.setInitParameter(Log4jWebSupport.LOG4J_CONFIG_LOCATION, "classpath:log4j2.xml");
 
 		// log4j2 监听器
-		servletContext.addListener(Log4jServletContextListener.class);
+//		servletContext.addListener(Log4jServletContextListener.class);
 
 		// Spring资源清理监听器
 		servletContext.addListener(IntrospectorCleanupListener.class);
@@ -86,16 +86,6 @@ public class WebConfig implements WebApplicationInitializer {
 				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
 				"/*");
 
-	}
-	
-	public static void main(String[] args) {
-		for (int i=0; i<999999999; i++) {
-			LOGGER.trace("trace大胃口大货物的哈电话卡活动口号 大陆架挖大家来玩大派送额富婆二手房空间跑‘2的发生纠纷萨达；看的娃娃款");
-			LOGGER.debug("debug大胃口大货物的哈电话卡活动口号 大陆架挖大家来玩大派送额富婆二手房空间跑‘2的发生纠纷萨达；看的娃娃款");
-			LOGGER.info("info大胃口大货物的哈电话卡活动口号 大陆架挖大家来玩大派送额富婆二手房空间跑‘2的发生纠纷萨达；看的娃娃款");
-			LOGGER.warn("warn大胃口大货物的哈电话卡活动口号 大陆架挖大家来玩大派送额富婆二手房空间跑‘2的发生纠纷萨达；看的娃娃款");
-			LOGGER.error("error大胃口大货物的哈电话卡活动口号 大陆架挖大家来玩大派送额富婆二手房空间跑‘2的发生纠纷萨达；看的娃娃款");
-		}
 	}
 
 }
