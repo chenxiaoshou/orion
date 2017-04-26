@@ -6,9 +6,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.config.spring.ApplicationConfig;
+import com.polaris.config.springdata.JpaConfig;
+import com.polaris.config.springdata.MongodbConfig;
+import com.polaris.config.springdata.RabbitmqConfig;
 import com.polaris.config.springdata.RedisConfig;
+import com.polaris.config.springdata.SolrConfig;
 import com.polaris.config.springmvc.PolarisServletConfig;
 
 @Order(2)
@@ -28,7 +33,8 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class, RedisConfig.class };
+		return new Class<?>[] { ApplicationConfig.class, JpaConfig.class, RedisConfig.class, MongodbConfig.class,
+				RabbitmqConfig.class, SolrConfig.class };
 	}
 
 	/**
@@ -39,6 +45,14 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return new Class<?>[] { PolarisServletConfig.class };
 	}
 
+	/**
+	 * 设置DispatcherServlet的name
+	 */
+	@Override
+	protected String getServletName() {
+		return PolarisConstants.DEFAULT_SERVLET_NAME;
+	}
+	
 	/**
 	 * 配置请求路径和DispatcherServlet一致的过滤器, 不一致的可以在WebConfig中配置
 	 */

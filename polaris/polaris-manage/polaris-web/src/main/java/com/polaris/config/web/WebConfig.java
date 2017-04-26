@@ -7,7 +7,6 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.logging.log4j.web.Log4jServletFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
@@ -19,13 +18,17 @@ import com.polaris.common.constant.PolarisConstants;
 
 @Order(0) // 指定配置文件的启动顺序
 public class WebConfig implements WebApplicationInitializer {
-	
+
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		
-		// log4j2初始化参数，关闭自动初始化，这样可以在下面自动配置
-//		servletContext.setInitParameter(Log4jWebSupport.IS_LOG4J_AUTO_INITIALIZATION_DISABLED, "true");
-//		servletContext.setInitParameter(Log4jWebSupport.LOG4J_CONFIG_LOCATION, "classpath:log4j2.xml");
+
+		/**
+		 * log4j2会在web容器初始化的时候自动创建添加监听器和过滤器，具体可以参见Log4jServletContainerInitializer。
+		 * 默认查找classpath下面log4j2.xml配置文件，过滤器默认名字log4jServletFilter。
+		 * 如果要自定义的话，需要在web.xml中先将isLog4jAutoInitializationDisabled设置为true
+		 */
+		// servletContext.setInitParameter(Log4jWebSupport.LOG4J_CONFIG_LOCATION,
+		// "classpath:log4j2.xml");
 
 		// log4j2 监听器
 //		servletContext.addListener(Log4jServletContextListener.class);
@@ -37,13 +40,15 @@ public class WebConfig implements WebApplicationInitializer {
 		 * log4j2 过滤器 log4j2默认会在容器启动的时候启动一个默认的log4jServletFilter，
 		 * 并且名字就叫做‘log4jServletFilter’，这里如果再重新申明一个的话，会导致返回一个null，出现空指针问题
 		 */
-		Log4jServletFilter log4jServletFilter = new Log4jServletFilter();
-		FilterRegistration.Dynamic log4jConfig = servletContext.addFilter("log4jServletFilter", log4jServletFilter);
-		log4jConfig.addMappingForUrlPatterns(
-				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,
-						DispatcherType.ERROR),
-				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
-				"/*");
+		// Log4jServletFilter log4jServletFilter = new Log4jServletFilter();
+		// FilterRegistration.Dynamic log4jConfig =
+		// servletContext.addFilter("log4jServletFilter", log4jServletFilter);
+		// log4jConfig.addMappingForUrlPatterns(
+		// EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE,
+		// DispatcherType.REQUEST, DispatcherType.ASYNC,
+		// DispatcherType.ERROR),
+		// true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
+		// "/*");
 
 		// CharacterEncodingFilter 过滤器
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8,

@@ -17,16 +17,21 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.castor.CastorMarshaller;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.handler.SimpleServletHandlerAdapter;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -52,7 +57,7 @@ import com.polaris.common.utils.JsonUtil;
  *
  */
 @Configuration
-@ComponentScan(basePackages = { "org.polaris.project.*.web" }, useDefaultFilters = false, includeFilters = {
+@ComponentScan(basePackages = { "com.polaris.manage.web" }, useDefaultFilters = false, includeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Aspect.class, Controller.class,
 				ControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
@@ -122,8 +127,8 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 		stringConverter.setSupportedMediaTypes(textTypes);
 		converters.add(stringConverter);
 		// XML消息转换器，两种方式:Jaxb 和 Marshalling，任选其一
-		// converters.add(new Jaxb2RootElementHttpMessageConverter());
-		converters.add(new MarshallingHttpMessageConverter(new CastorMarshaller(), new CastorMarshaller()));
+		converters.add(new Jaxb2RootElementHttpMessageConverter());
+//		converters.add(new MarshallingHttpMessageConverter(new CastorMarshaller(), new CastorMarshaller()));
 		// 待测 converters.add(new MarshallingHttpMessageConverter(new
 		// Jaxb2Marshaller(), new Jaxb2Marshaller()));
 		// Json消息转换器
@@ -156,6 +161,7 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	 */
 	@Bean
 	public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
+		super.requestMappingHandlerAdapter();
 		RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
 		requestMappingHandlerAdapter.setMessageConverters(createMessageConverters());
 		return requestMappingHandlerAdapter;
@@ -188,5 +194,123 @@ public class PolarisServletConfig extends WebMvcConfigurationSupport {
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
+
+	/**
+	 * 描述 : <注册servlet适配器>. <br>
+	 * <p>
+	 * <只需要在自定义的servlet上用@Controller("映射路径")标注即可>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@Bean
+	public HandlerAdapter servletHandlerAdapter() {
+		return new SimpleServletHandlerAdapter();
+	}
+
+	/**
+	 * 描述 : <基于cookie的本地化资源处理器>. <br>
+	 * <p>
+	 * <使用方法说明>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@Bean
+	public CookieLocaleResolver cookieLocaleResolver() {
+		return new CookieLocaleResolver();
+	}
+
+	/**
+	 * 描述 : <本地化拦截器>. <br>
+	 * <p>
+	 * <使用方法说明>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		return new LocaleChangeInterceptor();
+	}
+
+	/**
+	 * 描述 : <注册自定义拦截器>. <br>
+	 * <p>
+	 * <使用方法说明>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	/*
+	 * @Bean public PolarisInitializingInterceptor
+	 * polarisInitializingInterceptor() { return new
+	 * PolarisInitializingInterceptor(); }
+	 */
+
+	/**
+	 * 描述 : <添加拦截器>. <br>
+	 * <p>
+	 * <使用方法说明>
+	 * </p>
+	 * 
+	 * @param registry
+	 */
+	@Override
+	protected void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localeChangeInterceptor()); // 本地化拦截器
+		// registry.addInterceptor(polarisInitializingInterceptor()); // 自定义拦截器
+	}
+
+	/**
+	 * 描述 : <文件上传处理器>. <br>
+	 * <p>
+	 * <使用方法说明>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@Bean(name = "multipartResolver")
+	public CommonsMultipartResolver commonsMultipartResolver() {
+		return new CommonsMultipartResolver();
+	}
+
+	/**
+	 * 描述 : <异常处理器>. <br>
+	 * <p>
+	 * <系统运行时遇到指定的异常将会跳转到指定的页面>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	/*
+	 * @Bean public PolarisExceptionResolver polarisExceptionResolver() {
+	 * PolarisExceptionResolver polarisExceptionResolver = new
+	 * PolarisExceptionResolver();
+	 * polarisExceptionResolver.setDefaultErrorView("common_error");
+	 * polarisExceptionResolver.setExceptionAttribute("exception"); Properties
+	 * properties = new Properties();
+	 * properties.setProperty("java.lang.RuntimeException", "common_error");
+	 * polarisExceptionResolver.setExceptionMappings(properties); return
+	 * polarisExceptionResolver; }
+	 */
+
+	/**
+	 * 描述 : <注册通用属性编辑器>. <br>
+	 * <p>
+	 * <这里只增加了字符串转日期和字符串两边去空格的处理>
+	 * </p>
+	 * 
+	 * @return
+	 */
+	/*
+	 * @Override protected ConfigurableWebBindingInitializer
+	 * getConfigurableWebBindingInitializer() {
+	 * ConfigurableWebBindingInitializer initializer =
+	 * super.getConfigurableWebBindingInitializer(); PolarisEditorRegistrar
+	 * register = new PolarisEditorRegistrar();
+	 * register.setFormat("yyyy-MM-dd");
+	 * initializer.setPropertyEditorRegistrar(register); return initializer; }
+	 */
 
 }

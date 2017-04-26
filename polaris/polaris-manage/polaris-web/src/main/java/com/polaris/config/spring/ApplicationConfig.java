@@ -3,13 +3,11 @@ package com.polaris.config.spring;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,16 +18,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
@@ -39,17 +30,21 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.opensource.dbhelp.DbHelper;
 
 @Configuration
-@ComponentScan(basePackages = { "com.polaris.*" }, excludeFilters = {
+@ComponentScan(basePackages = { "com.polaris" }, excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, ControllerAdvice.class }) })
 @PropertySource("classpath:config.properties") // 注入配置文件
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 支持切面,设置proxyTargetClass参数用来指定是使用CGLIB基于类的代理还是使用jdk基于接口的代理，使用@Aspect注解
 @EnableTransactionManagement // 支持事务,使用@Transational注解
 @EnableScheduling // 支持定时任务,使用@Scheduled注解
 @EnableAsync // 支持异步,使用@Async注解
+@EnableCaching
 public class ApplicationConfig {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private DataSource dataSource;
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
@@ -99,71 +94,14 @@ public class ApplicationConfig {
 	}
 
 	/**
-	 * JPA实体转换器
-	 * 
-	 * @return
-	 */
-	@Bean
-	@Primary
-	public JpaVendorAdapter vendorAdapter() {
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setDatabase(Database.MYSQL);
-		vendorAdapter.setShowSql(false);
-		vendorAdapter.setGenerateDdl(false);
-		vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
-		return vendorAdapter;
-	}
-
-	/**
-	 * JPA实体管理器工厂
-	 * 
-	 * @return
-	 */
-	@Bean
-	@Primary
-	public EntityManagerFactory entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-		factory.setJpaVendorAdapter(vendorAdapter());
-		factory.setPersistenceProvider(new HibernatePersistenceProvider());
-		factory.setPackagesToScan("com.polaris.manage.model.*.mysql");
-		factory.setDataSource(dataSource());
-		factory.setJpaDialect(new HibernateJpaDialect());
-		Properties properties = new Properties();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		properties.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
-		properties.put("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
-		properties.put("hibernate.show_sql", false);
-		properties.put("hibernate.format_sql", false);
-		properties.put("hibernate.ejb.entitymanager_factory_name", "entityManagerFactory");
-		properties.put("hibernate.hbm2ddl.auto", "update"); // 自动建表
-		factory.setJpaProperties(properties);
-		factory.afterPropertiesSet();
-		return factory.getObject();
-	}
-
-	/**
-	 * 配置JPA事务管理器
-	 * 
-	 * @return
-	 */
-	@Bean
-	@Primary
-	public PlatformTransactionManager transactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory());
-		return transactionManager;
-	}
-	
-	/**
 	 * 通过一层Sping代理包装，是数据库连接具有感知事务上下文的能力，dbhelper这些非Spring插件可以使用包装过的包
+	 * 
 	 * @return
 	 */
-    @Bean
-    @Primary
-    public TransactionAwareDataSourceProxy transactionAwareDataSourceProxy() {
-        return new TransactionAwareDataSourceProxy(dataSource());
-    }
-	
+	private TransactionAwareDataSourceProxy transactionAwareDataSourceProxy() {
+		return new TransactionAwareDataSourceProxy(dataSource);
+	}
+
 	/**
 	 * dbHelper 封装了jdbctemplate的相关操作
 	 * 

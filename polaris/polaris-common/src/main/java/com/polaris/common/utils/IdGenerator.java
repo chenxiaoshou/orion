@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
@@ -19,22 +21,25 @@ import com.polaris.common.constant.PatternConstants;
 
 public class IdGenerator implements Configurable, IdentifierGenerator {
 
+	private final Logger LOGGER = LogManager.getLogger(IdGenerator.class);
+	
 	private int idLength;
 
 	private String perfix;
 
 	private String timestamp;
 
-	public long getNextSeqFromRedis() {
+	private long getNextSeqFromRedis() {
 		// 每天都从1开始获取新的SEQ
 		timestamp = DateUtil.date2str(new Date(), PatternConstants.DATE_FORMAT_PATTERN_4);
 		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(timestamp,
 				(RedisConnectionFactory) BeanUtil.getBean("jedisConnectionFactory"));
-		long reqNum = redisAtomicLong.incrementAndGet();
-		if (reqNum == 1) { // 当第一次取出索引的时候，设置过期时间
+		long seqNum = redisAtomicLong.incrementAndGet();
+		if (seqNum == 1) { // 当第一次取出索引的时候，设置过期时间
 			redisAtomicLong.expire(1, TimeUnit.DAYS); // 1天之后过期
 		}
-		return reqNum;
+		LOGGER.debug("Obtain seqNum from redis [" + seqNum + "]");
+		return seqNum;
 	}
 
 	@Override

@@ -2,13 +2,13 @@ package com.polaris.manage.web.controller.order;
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
@@ -23,7 +23,7 @@ import com.polaris.common.exception.ErrorCode;
 import com.polaris.common.exception.ExceptionMessage;
 import com.polaris.common.exception.ExceptionType;
 import com.polaris.manage.model.order.mysql.Order;
-import com.polaris.manage.service.srv.order.IOrderService;
+import com.polaris.manage.service.srv.order.OrderService;
 import com.polaris.manage.web.databean.order.Order4SaveOrUpdate;
 
 @RestController
@@ -32,8 +32,8 @@ public class OrderController {
 
 	private static final Logger LOGGER = LogManager.getLogger(OrderController.class);
 
-	@Resource(name= "orderService")
-	private IOrderService orderService;
+	@Autowired
+	private OrderService orderService;
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
@@ -52,7 +52,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void test(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
 			HttpServletRequest request) {
 		LOGGER.error("for testing");

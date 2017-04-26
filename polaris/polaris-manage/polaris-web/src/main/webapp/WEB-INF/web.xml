@@ -7,9 +7,9 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	<display-name>Archetype Created Web Application</display-name>
 	
 	<!-- 禁止log4j2自动初始化，而是通过自定义的webconfig类中初始化 -->
-	<context-param>
-		<param-name>isLog4jAutoInitializationDisabled</param-name>
-		<param-value>true</param-value>
-	</context-param>
+<!-- 	<context-param> -->
+<!-- 		<param-name>isLog4jAutoInitializationDisabled</param-name> -->
+<!-- 		<param-value>true</param-value> -->
+<!-- 	</context-param> -->
 	
 </web-app>

@@ -33,7 +33,7 @@ public class OrderItem {
 	
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.saving.ecm.resource.entity.IdGenerator", parameters = {
+	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "ODS")})
 	public String getId() {
 		return id;

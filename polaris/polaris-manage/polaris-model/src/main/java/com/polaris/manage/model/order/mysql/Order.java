@@ -1,7 +1,6 @@
 package com.polaris.manage.model.order.mysql;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +29,7 @@ public class Order {
 	
 	private Timestamp updateTime; // 更新时间
 	
-	private Date completeTime; // 完成时间
+	private Timestamp completeTime; // 完成时间
 	
 	// 处于后期效率的考虑，这里不适用级联
 	// 这里的一对多，默认是由多的一方来维护关系，这里mappedBy指向的是多的一方中的order字段，不加这个的话，jpa会自动生成一个中间表
@@ -40,7 +39,7 @@ public class Order {
 	
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.saving.ecm.resource.entity.IdGenerator", parameters = {
+	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "OD")})
 	public String getId() {
 		return id;
@@ -95,7 +94,7 @@ public class Order {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "updat_time", nullable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '更新时间'")
+	@Column(name = "updat_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
@@ -104,12 +103,12 @@ public class Order {
 		this.updateTime = updateTime;
 	}
 
-	@Column(name = "complete_time", nullable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '完成时间'")
-	public Date getCompleteTime() {
+	@Column(name = "complete_time", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
+	public Timestamp getCompleteTime() {
 		return completeTime;
 	}
 
-	public void setCompleteTime(Date completeTime) {
+	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
 	}
 	

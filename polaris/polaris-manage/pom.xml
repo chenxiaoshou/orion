@@ -27,20 +27,20 @@
 	</properties>
 
 	<dependencies>
-	
+
 		<!-- polaris-common -->
 		<dependency>
 			<groupId>com.polaris</groupId>
 			<artifactId>polaris-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
 			<groupId>self</groupId>
 			<artifactId>dbhelper</artifactId>
 		</dependency>
-		
+
 		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
