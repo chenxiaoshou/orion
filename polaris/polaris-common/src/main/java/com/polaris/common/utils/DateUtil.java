@@ -1,5 +1,6 @@
 package com.polaris.common.utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -825,6 +826,21 @@ public final class DateUtil {
 		return Integer.valueOf((int) diff.doubleValue());
 	}
 
+	/**
+	 * 获取当前的时间戳
+	 * @return
+	 */
+	public static Timestamp timestamp() {
+		return new Timestamp(new Date().getTime());
+	}
+	
+	/**
+	 * 获取指定日期的时间戳
+	 */
+	public static Timestamp timestamp(Date date) {
+		return new Timestamp(date.getTime());
+	}
+	
 	/**
 	 * 今天：当前时间
 	 * 

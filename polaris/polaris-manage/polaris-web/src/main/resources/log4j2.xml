@@ -181,22 +181,6 @@
 			</DefaultRolloverStrategy>
 		</RollingRandomAccessFile>
 		
-		<!-- druid servlet 应用数据 -->
-		<RollingRandomAccessFile name="druid1_log"
-			fileName="${LOG_HOME}/druid1.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/druid1/druid-%d{yyyy-MM-dd HH-mm}-%i.log">
-			<PatternLayout pattern="${PATTERN}" />
-			<Policies>
-				<SizeBasedTriggeringPolicy size="100 MB" /><!-- 文件达到50m时，会创建新的日志文件 -->
-			</Policies>
-			<DefaultRolloverStrategy>
-				<Delete basePath="${LOG_HOME}" maxDepth="3">
-					<IfFileName glob="*/*/druid-*.log" />
-					<IfLastModified age="30d" />
-				</Delete>
-			</DefaultRolloverStrategy>
-		</RollingRandomAccessFile>
-		
 	</appenders>
 	<Loggers>
 		
@@ -210,7 +194,6 @@
 	
 		<!-- 设置polaris日志显示在控制台 -->
 		<logger name="com.polaris" level="DEBUG">
-			<appender-ref ref="console_debug_log"/>
 			<appender-ref ref="polaris_log"/>
 		</logger>
 		
@@ -230,13 +213,10 @@
         <logger name="druid.sql.ResultSet" level="DEBUG">
             <appender-ref ref="druid_log"/>
         </logger>
-
-		<logger name="com.alibaba.druid" level="DEBUG">
-            <appender-ref ref="druid1_log"/>
-        </logger>
 	
 		<!-- 配置日志的根节点 -->
-        <root level="INFO">
+        <root level="DEBUG">
+       		<appender-ref ref="console_debug_log"/>
 			<appender-ref ref="test_log"/>
 			<appender-ref ref="total_log"/>
 			<appender-ref ref="trace_log"/>

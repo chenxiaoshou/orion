@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
@@ -15,6 +16,7 @@ import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -31,8 +33,8 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * Spring-data-redis
  */
-//@Configuration
-//@EnableRedisRepositories
+@Configuration
+@EnableRedisRepositories
 @PropertySource("classpath:config.properties")
 public class RedisConfig {
 

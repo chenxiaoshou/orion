@@ -5,8 +5,6 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +30,6 @@ import com.sun.research.ws.wadl.Application;
 				entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 public class JpaConfig {
 
-	private static final Logger LOGGER = LogManager.getLogger(JpaConfig.class);
-	
 	@Autowired
 	private DataSource dataSource;
 
@@ -94,12 +90,4 @@ public class JpaConfig {
 		return transactionManager;
 	}
 
-	public static void main(String[] args) {
-		LOGGER.trace("123");
-		LOGGER.debug("123");
-		LOGGER.info("123");
-		LOGGER.warn("123");
-		LOGGER.error("123");
-	}
-	
 }

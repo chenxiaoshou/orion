@@ -20,6 +20,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.ViewResolver;
@@ -58,8 +60,8 @@ import com.polaris.common.utils.JsonUtil;
  */
 @Configuration
 @ComponentScan(basePackages = { "com.polaris.manage.web" }, useDefaultFilters = false, includeFilters = {
-		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Aspect.class, Controller.class,
-				ControllerAdvice.class }) })
+		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, RestController.class,
+				Aspect.class, ControllerAdvice.class, RestControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
 public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 

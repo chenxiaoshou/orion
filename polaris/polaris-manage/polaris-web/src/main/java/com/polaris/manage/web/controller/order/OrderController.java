@@ -55,7 +55,7 @@ public class OrderController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void test(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
 			HttpServletRequest request) {
-		LOGGER.error("for testing");
+		LOGGER.warn("for testing");
 	}
 
 }

@@ -8,9 +8,14 @@ public enum OrderStatus {
 	STEP_COMPLETED_ORDER(4), // 已发货
 	STEP_ISSUE_ORDER(5); // 问题订单
 	
+	private int status;
+	
 	private OrderStatus(int status) {
+		this.status = status;
 	}
 	
-	// TODO
+	public int getStatus() {
+		return this.status;
+	}
 	
 }
