@@ -2,8 +2,8 @@ package com.polaris.manage.service.srv.order;
 
 import java.util.List;
 
-import com.polaris.manage.model.order.mysql.Order;
-import com.polaris.manage.persist.order.dto.SearchOrderCriteria;
+import com.polaris.manage.model.mysql.order.Order;
+import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 
 public interface OrderService {
 

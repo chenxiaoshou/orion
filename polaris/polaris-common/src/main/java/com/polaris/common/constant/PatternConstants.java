@@ -32,5 +32,10 @@ public interface PatternConstants {
 	 */
 	String DATE_FORMAT_PATTERN_5 = "yyyy-MM-dd HH:mm:ss.SSS";
 	
+	/**
+	 * yyyyMMddHHmmss
+	 */
+	String DATE_FORMAT_PATTERN_6 = "yyyyMMddHHmmss";
+	
 	
 }

@@ -5,8 +5,6 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,17 +21,15 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.sun.research.ws.wadl.Application;
+import com.polaris.config.datasource.DataSourceConfig;
 
 @Configuration
-@Import(value = { Application.class })
+@Import(value = { DataSourceConfig.class })
 @EnableJpaRepositories(basePackages = {
-		"com.polaris.manage.persist" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
+		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
 				entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 public class JpaConfig {
 
-	private static final Logger LOGGER = LogManager.getLogger(JpaConfig.class);
-	
 	@Autowired
 	private DataSource dataSource;
 
@@ -64,7 +60,7 @@ public class JpaConfig {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter());
 		factory.setPersistenceProvider(new HibernatePersistenceProvider());
-		factory.setPackagesToScan("com.polaris.manage.model.*.mysql");
+		factory.setPackagesToScan("com.polaris.manage.model.mysql");
 		factory.setDataSource(dataSource);
 		factory.setJpaDialect(new HibernateJpaDialect());
 		Properties properties = new Properties();
@@ -94,12 +90,4 @@ public class JpaConfig {
 		return transactionManager;
 	}
 
-	public static void main(String[] args) {
-		LOGGER.trace("123");
-		LOGGER.debug("123");
-		LOGGER.info("123");
-		LOGGER.warn("123");
-		LOGGER.error("123");
-	}
-	
 }

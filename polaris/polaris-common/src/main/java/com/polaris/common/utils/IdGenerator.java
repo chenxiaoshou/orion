@@ -27,10 +27,11 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 	private String perfix;
 
 	private String timestamp;
+	
+	private String idKey;
 
 	private long getNextSeqFromRedis() {
 		// 每天都从1开始获取新的SEQ
-		String idKey = StringUtil.joinWith("_", perfix, timestamp);
 		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(idKey,
 				(RedisConnectionFactory) BeanUtil.getBean("jedisConnectionFactory"));
 		long seqNum = redisAtomicLong.incrementAndGet();
@@ -50,7 +51,8 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 		for (int i = 0; i < zeroLength; i++) {
 			buf.append("0");
 		}
-		return perfix + timestamp + buf + seqNum;
+		String time = DateUtil.date2str(DateUtil.now(), PatternConstants.DATE_FORMAT_PATTERN_6);
+		return perfix + time + buf + seqNum;
 	}
 
 	@Override
@@ -58,41 +60,70 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 		this.idLength = Integer.parseInt(params.getProperty("idLength"));
 		this.perfix = params.getProperty("perfix");
 		this.timestamp = DateUtil.date2str(DateUtil.now(), PatternConstants.DATE_FORMAT_PATTERN_4);
+		this.idKey = StringUtil.joinWith("_", perfix, timestamp);
 	}
 
 	// for testing
-	/*
-	 * public static RedisClusterConfiguration redisClusterConfiguration() {
-	 * RedisClusterConfiguration clusterConfiguration = new
-	 * RedisClusterConfiguration(Arrays.asList( "192.168.199.105:6379",
-	 * "192.168.199.105:6380", "192.168.199.105:6381", "192.168.199.105:6382",
-	 * "192.168.199.105:6383", "192.168.199.105:6384"));
-	 * clusterConfiguration.setMaxRedirects(5); return clusterConfiguration; }
-	 * 
-	 * // for testing public static JedisConnectionFactory
-	 * jedisConnectionFactory() { JedisConnectionFactory jedisConnectionFactory
-	 * = new JedisConnectionFactory(redisClusterConfiguration(),
-	 * jedisPoolConfig()); jedisConnectionFactory.setUsePool(true);
-	 * jedisConnectionFactory.setTimeout(0);
-	 * jedisConnectionFactory.afterPropertiesSet(); return
-	 * jedisConnectionFactory; }
-	 * 
-	 * // for testing public static JedisPoolConfig jedisPoolConfig() {
-	 * JedisPoolConfig poolConfig = new JedisPoolConfig();
-	 * poolConfig.setMaxTotal(10); poolConfig.setMaxIdle(5);
-	 * poolConfig.setMaxWaitMillis(30000); poolConfig.setTestOnBorrow(true);
-	 * return poolConfig; }
-	 * 
-	 * // for testing public static void main(String[] args) { String timestamp
-	 * = DateUtil.date2str(new Date(), PatternConstants.DATE_FORMAT_PATTERN_4);
-	 * RedisAtomicLong redisAtomicLong = new RedisAtomicLong(timestamp,
-	 * jedisConnectionFactory()); for (int i = 0; i < 1000; i++) { new
-	 * Thread(new Runnable(){
-	 * 
-	 * @Override public void run() { long id =
-	 * redisAtomicLong.incrementAndGet(); if (id == 1) {
-	 * redisAtomicLong.expire(30, TimeUnit.SECONDS); } System.out.println(id); }
-	 * }).start(); } }
-	 */
+//	public static RedisClusterConfiguration redisClusterConfiguration() {
+//		RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration(
+//				Arrays.asList("192.168.199.105:6379", "192.168.199.105:6380", "192.168.199.105:6381",
+//						"192.168.199.105:6382", "192.168.199.105:6383", "192.168.199.105:6384"));
+//		clusterConfiguration.setMaxRedirects(5);
+//		return clusterConfiguration;
+//	}
+//
+//	// for testing
+//	public static JedisConnectionFactory jedisConnectionFactory() {
+//		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration(),
+//				jedisPoolConfig());
+//		jedisConnectionFactory.setUsePool(true);
+//		jedisConnectionFactory.setTimeout(0);
+//		jedisConnectionFactory.afterPropertiesSet();
+//		return jedisConnectionFactory;
+//	}
+//
+//	// for testing
+//	public static JedisPoolConfig jedisPoolConfig() {
+//		JedisPoolConfig poolConfig = new JedisPoolConfig();
+//		poolConfig.setMaxTotal(10);
+//		poolConfig.setMaxIdle(5);
+//		poolConfig.setMaxWaitMillis(30000);
+//		poolConfig.setTestOnBorrow(true);
+//		return poolConfig;
+//	}
+//
+//	// for testing
+//	public static void main(String[] args) {
+//		int idLength = 24;
+//		String perfix = "OSID";
+//		String timestamp = DateUtil.date2str(new Date(), PatternConstants.DATE_FORMAT_PATTERN_4);
+//		String idKey = perfix + "_" + timestamp;
+//		for (int i = 0; i < 2000; i++) {
+//			new Thread(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					generate(idLength, perfix, timestamp, idKey);
+//				}
+//			}).start();
+//		}
+//	}
+//
+//	 protected synchronized static void generate(int idLength, String perfix, String timestamp, String idKey) {
+//		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(idKey, jedisConnectionFactory());
+//		long seqNum = redisAtomicLong.incrementAndGet();
+//		if (seqNum == 1) {
+//			redisAtomicLong.expire(30, TimeUnit.DAYS);
+//		}
+//		int zeroLength = idLength - perfix.length() - timestamp.length()
+//				- String.valueOf(seqNum).length();
+//		String time = DateUtil.date2str(DateUtil.now(), PatternConstants.DATE_FORMAT_PATTERN_6);
+//		StringBuffer buf = new StringBuffer();
+//		for (int i = 0; i < zeroLength; i++) {
+//			buf.append("0");
+//		}
+//		String id = perfix + time + buf + seqNum;
+//		System.out.println(id);
+//	}
 
 }
