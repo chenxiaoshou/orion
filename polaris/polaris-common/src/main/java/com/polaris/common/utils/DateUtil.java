@@ -28,6 +28,10 @@ public final class DateUtil {
 
 	public static final long MILLIS_PER_WEEK = 7 * MILLIS_PER_DAY;
 
+	private DateUtil() {
+		
+	}
+	
 	/**
 	 * 日期转换为字符串.
 	 * <p>
@@ -827,21 +831,6 @@ public final class DateUtil {
 	}
 
 	/**
-	 * 获取当前的时间戳
-	 * @return
-	 */
-	public static Timestamp timestamp() {
-		return new Timestamp(new Date().getTime());
-	}
-	
-	/**
-	 * 获取指定日期的时间戳
-	 */
-	public static Timestamp timestamp(Date date) {
-		return new Timestamp(date.getTime());
-	}
-	
-	/**
 	 * 今天：当前时间
 	 * 
 	 * @return
@@ -872,6 +861,26 @@ public final class DateUtil {
 		return date;
 	}
 
+	/**
+	 * 获取当前的时间戳
+	 * @return
+	 */
+	public static Timestamp timestamp() {
+		return new Timestamp(new Date().getTime());
+	}
+	
+	/**
+	 * 获取指定日期的时间戳
+	 */
+	public static Timestamp timestamp(Date date) {
+		return new Timestamp(date.getTime());
+	}
+	
+	/**
+	 * 时间戳格式化
+	 * @param args
+	 */
+	
 	public static void main(String[] args) {
 		Date date1 = str2date("1990-09-08 12:00:00");
 		Date date2 = str2date("1990-09-08 11:00:00");

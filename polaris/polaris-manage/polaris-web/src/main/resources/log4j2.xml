@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE xml>
-<Configuration status="TRACE" monitorInterval="30">
+<Configuration status="WARN" monitorInterval="30">
 	<properties>
 		<property name="LOG_HOME">C:/logs/polaris</property>
         <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %t %-5p [%F:%L] - %m%n</property>

@@ -7,4 +7,8 @@ package com.polaris.common.utils;
  */
 public final class CodecUtil {
 
+	private CodecUtil() {
+		
+	}
+	
 }

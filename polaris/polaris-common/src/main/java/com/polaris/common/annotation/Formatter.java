@@ -15,6 +15,18 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Formatter {
 
-	Class<? extends Formatter>[] formatter() default {};
-	
+	/**
+	 * 为该参数指定一个名称，默认不指定的话，使用参数名
+	 * 
+	 * @return
+	 */
+	String value();
+
+	/**
+	 * 为参数指定一个格式化工具类，没有指定的话，默认采用ToStringBuilder.toJson()方法来格式化
+	 * 
+	 * @return
+	 */
+	Class<?> formatter();
+
 }

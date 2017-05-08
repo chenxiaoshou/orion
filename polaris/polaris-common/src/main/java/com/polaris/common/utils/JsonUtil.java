@@ -17,6 +17,10 @@ public final class JsonUtil {
 
 	public static final String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
+	private JsonUtil () {
+		
+	}
+	
 	public static ObjectMapper createMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_DATETIME);

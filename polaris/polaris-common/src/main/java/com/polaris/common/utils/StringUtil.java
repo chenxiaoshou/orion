@@ -7,6 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class StringUtil {
 
+	private StringUtil() {
+		
+	}
+	
 	public static String joinWith(String separator, String... strings) {
 		if (strings == null) {
             throw new IllegalArgumentException("String varargs must not be null");

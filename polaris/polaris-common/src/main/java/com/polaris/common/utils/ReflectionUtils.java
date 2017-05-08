@@ -12,6 +12,10 @@ import java.util.Set;
  */
 public final class ReflectionUtils {
 
+	private ReflectionUtils() {
+		
+	}
+	
 	/**
 	 * 判断当前类是否是基本类型或者基本类型的包装类
 	 * 
@@ -67,6 +71,10 @@ public final class ReflectionUtils {
 		return clazz == java.sql.Timestamp.class;
 	}
 
+	public static boolean isArray(Class<?> clazz) {
+		return clazz.isArray();
+	}
+	
 	public static boolean isCollection(Class<?> clazz) {
 		return isList(clazz) || isSet(clazz);
 	}

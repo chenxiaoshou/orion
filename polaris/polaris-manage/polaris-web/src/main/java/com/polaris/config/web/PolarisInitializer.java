@@ -9,7 +9,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.polaris.common.constant.PolarisConstants;
-import com.polaris.common.utils.BeanUtil;
+import com.polaris.common.utils.SpringUtil;
 import com.polaris.config.spring.ApplicationConfig;
 import com.polaris.config.springmvc.PolarisMvcConfig;
 
@@ -88,7 +88,7 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 		if (ctx != null && LOGGER.isDebugEnabled()) {
 			LOGGER.debug("spring webapplicationcontext applicationName [" + ctx.getApplicationName() + "]");
 		}
-		BeanUtil.getInstance().setApplicationContext(ctx);
+		SpringUtil.getInstance().setApplicationContext(ctx);
 		return ctx;
 	}
 
