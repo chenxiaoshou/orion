@@ -114,5 +114,5 @@ public class Order {
 	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
 	}
-	
+
 }

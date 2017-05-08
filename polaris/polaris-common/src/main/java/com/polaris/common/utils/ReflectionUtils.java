@@ -1,5 +1,7 @@
 package com.polaris.common.utils;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,6 +69,10 @@ public final class ReflectionUtils {
 		return clazz == java.sql.Timestamp.class;
 	}
 
+	public static boolean isArray(Class<?> clazz) {
+		return clazz.isArray();
+	}
+	
 	public static boolean isCollection(Class<?> clazz) {
 		return isList(clazz) || isSet(clazz);
 	}

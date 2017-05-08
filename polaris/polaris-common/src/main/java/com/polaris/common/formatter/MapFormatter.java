@@ -1,6 +1,6 @@
 package com.polaris.common.formatter;
 
-import java.util.Collection;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,13 +8,7 @@ import org.apache.logging.log4j.Logger;
 import com.polaris.common.constant.SymbolicConstants;
 import com.polaris.common.utils.ReflectionUtils;
 
-/**
- * 格式化集合
- * 
- * @author John
- *
- */
-public class CollectionFormatter implements IFormatter {
+public class MapFormatter implements IFormatter {
 
 	private final static Logger LOGGER = LogManager.getLogger(CollectionFormatter.class);
 
@@ -25,32 +19,34 @@ public class CollectionFormatter implements IFormatter {
 		if (obj == null) {
 			return "";
 		}
-		StringBuffer sb = new StringBuffer();
-		if (!ReflectionUtils.isCollection(obj.getClass())) {
-			String msg = "[" + obj.getClass().getName() + "] is not a collection";
+		if (!ReflectionUtils.isMap(obj.getClass())) {
+			String msg = "[" + obj.getClass().getName() + "] is not a map";
 			LOGGER.error(msg);
 			throw new RuntimeException(msg);
 		}
-		Collection<?> coll = (Collection<?>) obj;
-		int i = 0, size = coll.size();
-		sb.append(SymbolicConstants.LEFT_BRACKETS);
-		for (Object innerObj : coll) {
-			innerObj = innerObj == null ? "" : innerObj;
-			Class<?> innerClz = innerObj.getClass();
+		StringBuffer sb = new StringBuffer();
+		Map<?, ?> map = (Map<?, ?>) obj;
+		int i = 0, size = map.size();
+		sb.append(SymbolicConstants.LEFT_BRACES);
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			Object key = entry.getKey();
+			sb.append(key + SymbolicConstants.EQUAL);
+			Object value = entry.getValue();
+			Class<?> innerClz = value.getClass();
 			if (ReflectionUtils.isBaseClass(innerClz) || ReflectionUtils.isString(innerClz)) { // 基本类型
-				sb.append(String.valueOf(innerObj));
+				sb.append(String.valueOf(value));
 			} else if (innerClz.isArray()) { // 数组
-				sb.append(toString(innerObj));
+				sb.append(toString(value));
 			} else if (innerClz.isEnum()) { // 枚举类型
-				sb.append(innerObj);
+				sb.append(value);
 			} else { // 其他一般引用类型
-				sb.append(beanFormatter.toString(innerObj));
+				sb.append(beanFormatter.toString(value));
 			}
 			if (i++ < size - 1) {
 				sb.append(SymbolicConstants.HALF_WIDTH_COMMA).append(SymbolicConstants.HALF_WIDTH_BLANK);
 			}
 		}
-		sb.append(SymbolicConstants.RIGHT_BRACKETS);
+		sb.append(SymbolicConstants.RIGHT_BRACES);
 		return sb.toString();
 	}
 

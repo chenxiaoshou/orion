@@ -33,7 +33,7 @@ public class IdGenerator implements Configurable, IdentifierGenerator {
 	private long getNextSeqFromRedis() {
 		// 每天都从1开始获取新的SEQ
 		RedisAtomicLong redisAtomicLong = new RedisAtomicLong(idKey,
-				(RedisConnectionFactory) BeanUtil.getBean("jedisConnectionFactory"));
+				(RedisConnectionFactory) SpringUtil.getBean("jedisConnectionFactory"));
 		long seqNum = redisAtomicLong.incrementAndGet();
 		if (seqNum == 1) { // 当第一次取出索引的时候，设置过期时间
 			redisAtomicLong.expire(1, TimeUnit.DAYS); // 1天之后过期
