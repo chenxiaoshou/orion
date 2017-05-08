@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -34,12 +35,12 @@ import redis.clients.jedis.JedisPoolConfig;
  * Spring-data-redis
  */
 @Configuration
-@EnableRedisRepositories
+@EnableRedisRepositories(basePackages = { "com.polaris.manage.*.redis" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
 @PropertySource("classpath:config.properties")
 public class RedisConfig {
 
 	private static final Logger LOGGER = LogManager.getLogger(RedisConfig.class);
-	
+
 	@Autowired
 	private Environment env;
 
@@ -81,12 +82,12 @@ public class RedisConfig {
 		testConn(jedisConnectionFactory);
 		return jedisConnectionFactory;
 	}
-	
+
 	// 测试连接，有问题就抛错, 通知容器中止启动
 	private void testConn(JedisConnectionFactory jedisConnectionFactory) {
 		RedisClusterConnection conn = null;
 		try {
-			conn = jedisConnectionFactory.getClusterConnection(); 
+			conn = jedisConnectionFactory.getClusterConnection();
 			if (!RedisConstants.PONG.equalsIgnoreCase(conn.ping())) {
 				LOGGER.fatal("Redis服务器连接异常");
 				throw new RuntimeException("Redis服务器连接异常");
@@ -95,12 +96,11 @@ public class RedisConfig {
 			LOGGER.fatal("Redis服务器连接异常");
 			throw new RuntimeException("Redis服务器连接异常", e);
 		} finally {
-			if(conn != null) {
+			if (conn != null) {
 				conn.close();
 			}
 		}
 	}
-	
 
 	/**
 	 * 配置Spring-data的redisTemplate
@@ -153,5 +153,5 @@ public class RedisConfig {
 		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		return jackson2JsonRedisSerializer;
 	}
-	
+
 }

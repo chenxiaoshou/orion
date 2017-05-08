@@ -21,12 +21,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.sun.research.ws.wadl.Application;
+import com.polaris.config.datasource.DataSourceConfig;
 
 @Configuration
-@Import(value = { Application.class })
+@Import(value = { DataSourceConfig.class })
 @EnableJpaRepositories(basePackages = {
-		"com.polaris.manage.persist" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
+		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
 				entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 public class JpaConfig {
 
@@ -60,7 +60,7 @@ public class JpaConfig {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter());
 		factory.setPersistenceProvider(new HibernatePersistenceProvider());
-		factory.setPackagesToScan("com.polaris.manage.model.*.mysql");
+		factory.setPackagesToScan("com.polaris.manage.model.mysql");
 		factory.setDataSource(dataSource);
 		factory.setJpaDialect(new HibernateJpaDialect());
 		Properties properties = new Properties();

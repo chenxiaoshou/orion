@@ -10,6 +10,6 @@ public interface RabbitmqConstants {
 	/**
 	 * 供订单模块使用的消息队列
 	 */
-	String QUEUE_CMS_ORDER = "QUEUE_CMS_ORDER";
+	String QUEUE_PMS_ORDER = "QUEUE_PMS_ORDER";
 
 }

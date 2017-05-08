@@ -307,7 +307,7 @@
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-mongodb</artifactId>
-				<version>1.10.1.RELEASE</version>
+				<version>1.10.3.RELEASE</version>
 			</dependency>
 
 			<dependency>
@@ -373,6 +373,14 @@
 				<artifactId>activemq-core</artifactId>
 				<version>5.7.0</version>
 			</dependency>
+
+			<!-- mongodb -->
+			<dependency>
+			    <groupId>org.mongodb</groupId>
+			    <artifactId>mongo-java-driver</artifactId>
+			    <version>3.4.2</version>
+			</dependency>
+			
 
 			<!-- jedis -->
 			<dependency>

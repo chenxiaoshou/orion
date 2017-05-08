@@ -2,8 +2,8 @@ package com.polaris.manage.service.srv.logistics;
 
 import java.util.List;
 
-import com.polaris.manage.model.logistics.mysql.ShippingOrder;
-import com.polaris.manage.persist.logistics.dto.SearchShippingOrderCriteria;
+import com.polaris.manage.model.mysql.logistics.ShippingOrder;
+import com.polaris.manage.persist.mysql.logistics.dto.SearchShippingOrderCriteria;
 
 public interface ShippingService {
 

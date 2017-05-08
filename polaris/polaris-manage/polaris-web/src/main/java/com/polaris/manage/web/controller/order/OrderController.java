@@ -22,7 +22,7 @@ import com.polaris.common.exception.ApiException;
 import com.polaris.common.exception.ErrorCode;
 import com.polaris.common.exception.ExceptionMessage;
 import com.polaris.common.exception.ExceptionType;
-import com.polaris.manage.model.order.mysql.Order;
+import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.service.srv.order.OrderService;
 import com.polaris.manage.web.databean.order.Order4SaveOrUpdate;
 
