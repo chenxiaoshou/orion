@@ -5,10 +5,14 @@ package com.polaris.common.constant;
  * @author John
  *
  */
-public interface RedisConstants {
-
-	static String PING = "PING";
+public final class RedisConstants {
 	
-	static String PONG = "PONG";
+	private RedisConstants() {
+		
+	}
+
+	public static final String PING = "PING";
+	
+	public static final String PONG = "PONG";
 	
 }

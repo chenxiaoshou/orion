@@ -64,7 +64,7 @@ public class DataSourceConfig {
 		} catch (SQLException e) {
 			LOGGER.error("Druid设置过滤器失败", e);
 		}
-		List<Filter> filters = new ArrayList<Filter>();
+		List<Filter> filters = new ArrayList<>();
 		filters.add(log4j2Filter());
 		filters.add(statFilter());
 		dataSource.setProxyFilters(filters);
@@ -106,8 +106,7 @@ public class DataSourceConfig {
 	 */
 	@Bean
 	public DbHelper dbHelper() {
-		DbHelper appLogDbHelper = new DbHelper(transactionAwareDataSourceProxy());
-		return appLogDbHelper;
+		return new DbHelper(transactionAwareDataSourceProxy());
 	}
 
 }

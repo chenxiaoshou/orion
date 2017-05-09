@@ -5,11 +5,35 @@ package com.polaris.common.constant;
  * @author John
  *
  */
-public interface RabbitmqConstants {
+public final class RabbitmqConstants {
 
+	private RabbitmqConstants() {
+		
+	}
+	
+	/**
+	 * pms子系统统一使用的channel代号
+	 */
+	public static final String EXCHANGE_PMS = "pms";
+	
 	/**
 	 * 供订单模块使用的消息队列
 	 */
-	String QUEUE_PMS_ORDER = "QUEUE_PMS_ORDER";
+	public static final String QUEUE_PMS_ORDER = "order";
 
+	/**
+	 * 路由:pms - order
+	 */
+	public static final String ROUTINGKEY_PMS_ORDER = "pms.order";
+	
+	/**
+	 * 物流模块使用的消息队列
+	 */
+	public static final String QUEUE_PMS_LOGISTICS = "logistics";
+	
+	/**
+	 * 路由:polaris - pms
+	 */
+	public static final String ROUTINGKEY_PMS_LOGISTICS = "pms.logistics";
+	
 }

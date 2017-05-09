@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisClusterConnection;
@@ -36,7 +35,6 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 @EnableRedisRepositories(basePackages = { "com.polaris.manage.*.redis" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
-@PropertySource("classpath:config.properties")
 public class RedisConfig {
 
 	private static final Logger LOGGER = LogManager.getLogger(RedisConfig.class);

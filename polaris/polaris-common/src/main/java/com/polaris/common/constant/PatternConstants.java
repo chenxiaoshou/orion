@@ -5,37 +5,41 @@ package com.polaris.common.constant;
  * @author John
  *
  */
-public interface PatternConstants {
+public final class PatternConstants {
 
+	private PatternConstants() {
+		
+	}
+	
 	/**
 	 * yyyy-MM-dd HH:mm:ss
 	 */
-	String DATE_FORMAT_PATTERN_1 = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_FORMAT_PATTERN_1 = "yyyy-MM-dd HH:mm:ss";
 	
 	/**
 	 * yyyyMMddHHmmss
 	 */
-	String DATE_FORMAT_PATTERN_2 = "yyyyMMdd HHmmss";
+	public static final String DATE_FORMAT_PATTERN_2 = "yyyyMMdd HHmmss";
 
 	/**
 	 * yyyy-MM-dd
 	 */
-	String DATE_FORMAT_PATTERN_3 = "yyyy-MM-dd";
+	public static final String DATE_FORMAT_PATTERN_3 = "yyyy-MM-dd";
 	
 	/**
 	 * yyyyMMdd
 	 */
-	String DATE_FORMAT_PATTERN_4 = "yyyyMMdd";
+	public static final String DATE_FORMAT_PATTERN_4 = "yyyyMMdd";
 	
 	/**
 	 * yyyy-MM-dd HH:mm:ss.SSS
 	 */
-	String DATE_FORMAT_PATTERN_5 = "yyyy-MM-dd HH:mm:ss.SSS";
+	public static final String DATE_FORMAT_PATTERN_5 = "yyyy-MM-dd HH:mm:ss.SSS";
 	
 	/**
 	 * yyyyMMddHHmmss
 	 */
-	String DATE_FORMAT_PATTERN_6 = "yyyyMMddHHmmss";
+	public static final String DATE_FORMAT_PATTERN_6 = "yyyyMMddHHmmss";
 	
 	
 }

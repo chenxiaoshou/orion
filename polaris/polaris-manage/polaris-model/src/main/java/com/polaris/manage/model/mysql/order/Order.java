@@ -1,5 +1,6 @@
 package com.polaris.manage.model.mysql.order;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -9,14 +10,18 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name="pms_order", indexes = {
         @Index(columnList = "total_price", name = "idx_total_price")} )
-public class Order {
+public class Order implements Serializable {
 	
+	private static final long serialVersionUID = -8594808281318789626L;
+
 	private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
 	
 	private int status; // 订单状态
@@ -113,6 +118,11 @@ public class Order {
 
 	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 
 }

@@ -29,11 +29,10 @@ import com.polaris.config.springdata.SolrConfig;
  *
  */
 @Configuration
-@Import(value = { DataSourceConfig.class, JpaConfig.class, MongodbConfig.class, RabbitmqConfig.class, RedisConfig.class,
-		SolrConfig.class })
+@PropertySource("classpath:config.properties")
+@Import(value={DataSourceConfig.class, JpaConfig.class, MongodbConfig.class, RabbitmqConfig.class, RedisConfig.class, SolrConfig.class})
 @ComponentScan(basePackages = { "com.polaris" }, excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, ControllerAdvice.class }) })
-@PropertySource("classpath:config.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 支持切面,设置proxyTargetClass参数用来指定是使用CGLIB基于类的代理还是使用jdk基于接口的代理，使用@Aspect注解
 @EnableTransactionManagement // 支持事务,使用@Transational注解
 @EnableScheduling // 支持定时任务,使用@Scheduled注解

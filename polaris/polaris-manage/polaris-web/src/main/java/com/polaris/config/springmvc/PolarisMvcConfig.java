@@ -76,7 +76,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
 		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
 		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setContentType(PolarisConstants.VIEW_RESOLVER_CONTENT_TYPE);
+		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
 		viewResolver.setOrder(0); // 设置视图优先级
 		return viewResolver;
 	}

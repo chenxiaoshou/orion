@@ -6,251 +6,255 @@ package com.polaris.common.constant;
  * @author John
  * 
  */
-public interface SymbolicConstants {
+public final class SymbolicConstants {
+	
+	private SymbolicConstants() {
+		
+	}
 
 	/**
 	 * 右向箭头[->]
 	 */
-	String RIGHT_ARROW = "->";
+	public static final String RIGHT_ARROW = "->";
 	
 	/**
 	 * 左向箭头[->]
 	 */
-	String LEFT_ARROW = "<-";
+	public static final String LEFT_ARROW = "<-";
 	
 	/**
 	 * 等于[=]
 	 */
-	String EQUAL = "=";
+	public static final String EQUAL = "=";
 
 	/**
 	 * 双等号
 	 */
-	String DOUBLE_EQUAL = "==";
+	public static final String DOUBLE_EQUAL = "==";
 
 	/**
 	 * 空字符串[]
 	 */
-	String EMPTY = "";
+	public static final String EMPTY = "";
 
 	/**
 	 * 一个半角空格[ ]
 	 */
-	String HALF_WIDTH_BLANK = " ";
+	public static final String HALF_WIDTH_BLANK = " ";
 
 	/**
 	 * 一个全角空格[ ]
 	 */
-	String FULL_WIDTH_BLANK = "　";
+	public static final String FULL_WIDTH_BLANK = "　";
 
 	/**
 	 * 换行符[\n]
 	 */
-	String NEW_LINE = "\\n";
+	public static final String NEW_LINE = "\\n";
 
 	/**
 	 * 回车符[\r]
 	 */
-	String RETURN_SIGN = "\\r";
+	public static final String RETURN_SIGN = "\\r";
 
 	/**
 	 * 制表符[\t]
 	 */
-	String TABS_SIGN = "\\t";
+	public static final String TABS_SIGN = "\\t";
 
 	/**
 	 * 美元符号[$]
 	 */
-	String DOLLAR = "$";
+	public static final String DOLLAR = "$";
 
 	/**
 	 * 符号[@]
 	 */
-	String AT = "@";
+	public static final String AT = "@";
 
 	/**
 	 * 半角逗号 [,]
 	 */
-	String HALF_WIDTH_COMMA = ",";
+	public static final String HALF_WIDTH_COMMA = ",";
 
 	/**
 	 * 全角逗号[，]
 	 */
-	String FULL_WIDTH_COMMA = "，";
+	public static final String FULL_WIDTH_COMMA = "，";
 
 	/**
 	 * 实心句号[.]
 	 */
-	String SOLID_PERIOD = ".";
+	public static final String SOLID_PERIOD = ".";
 
 	/**
 	 * 空心句号[。]
 	 */
-	String EMPTY_PERIOD = "。";
+	public static final String EMPTY_PERIOD = "。";
 
 	/**
 	 * 半角叹号,即英文叹号，也可以理解为运算符'非'[!]
 	 */
-	String HALF_WIDTH_EXCLAMATION = "!";
+	public static final String HALF_WIDTH_EXCLAMATION = "!";
 
 	/**
 	 * 异或[^]
 	 */
-	String XOR = "^";
+	public static final String XOR = "^";
 
 	/**
 	 * 井号[#]
 	 */
-	String OCTOTHORPE = "#";
+	public static final String OCTOTHORPE = "#";
 
 	/**
 	 * 百分号[%]
 	 */
-	String PERCENT = "%";
+	public static final String PERCENT = "%";
 
 	/**
 	 * And符号，也可以理解为按位与[&]
 	 */
-	String AND = "&";
+	public static final String AND = "&";
 
 	/**
 	 * 星号[*]
 	 */
-	String STAR = "*";
+	public static final String STAR = "*";
 
 	/**
 	 * 正斜杠[/]
 	 */
-	String FORWARD_SLASH = "/";
+	public static final String FORWARD_SLASH = "/";
 
 	/**
 	 * 反斜杠[\]
 	 */
-	String BACK_SLASH = "\\";
+	public static final String BACK_SLASH = "\\";
 
 	/**
 	 * 单竖杠[|]
 	 */
-	String SINGLE_VERTICAL_LINE = "|";
+	public static final String SINGLE_VERTICAL_LINE = "|";
 
 	/**
 	 * 双竖杠[||]
 	 */
-	String DOUBLE_VERTICAL_LINE = "||";
+	public static final String DOUBLE_VERTICAL_LINE = "||";
 
 	/**
 	 * 短横线[-]
 	 */
-	String SHORT_BARS = "-";
+	public static final String SHORT_BARS = "-";
 
 	/**
 	 * 短下划线[_]
 	 */
-	String SHORT_UNDERLINE = "_";
+	public static final String SHORT_UNDERLINE = "_";
 
 	/**
 	 * 半角问号[?]
 	 */
-	String HALF_WIDTH_QUESTION = "?";
+	public static final String HALF_WIDTH_QUESTION = "?";
 
 	/**
 	 * 全角问号[？]
 	 */
-	String FULL_WIDTH_QUESTION = "？";
+	public static final String FULL_WIDTH_QUESTION = "？";
 
 	/**
 	 * 小于号，也可理解为左尖角号[<]
 	 */
-	String LESS_THAN = "<";
+	public static final String LESS_THAN = "<";
 
 	/**
 	 * 小于等于号[<=]
 	 */
-	String LESS_THAN_EQUAL = "<=";
+	public static final String LESS_THAN_EQUAL = "<=";
 
 	/**
 	 * 大于等于号[>=]
 	 */
-	String MORE_THAN_EQUAL = ">=";
+	public static final String MORE_THAN_EQUAL = ">=";
 
 	/**
 	 * 左大括号[{]
 	 */
-	String LEFT_BRACES = "{";
+	public static final String LEFT_BRACES = "{";
 
 	/**
 	 * 右大括号[}]
 	 */
-	String RIGHT_BRACES = "}";
+	public static final String RIGHT_BRACES = "}";
 
 	/**
 	 * 左中括号[[]
 	 */
-	String LEFT_BRACKETS = "[";
+	public static final String LEFT_BRACKETS = "[";
 
 	/**
 	 * 右中括号[]]
 	 */
-	String RIGHT_BRACKETS = "]";
+	public static final String RIGHT_BRACKETS = "]";
 
 	/**
 	 * 左小括号[(]
 	 */
-	String LEFT_PARENTHESES = "(";
+	public static final String LEFT_PARENTHESES = "(";
 
 	/**
 	 * 右小括号[)]
 	 */
-	String RIGHT_PARENTHESES = ")";
+	public static final String RIGHT_PARENTHESES = ")";
 
 	/**
 	 * 取反符号[~]
 	 */
-	String NEGATE = "~";
+	public static final String NEGATE = "~";
 
 	/**
 	 * 半角冒号[:]
 	 */
-	String HALF_WIDTH_COLON = ":";
+	public static final String HALF_WIDTH_COLON = ":";
 
 	/**
 	 * 半角单引号[']
 	 */
-	String HALF_WIDTH_APOSTROPHE = "'";
+	public static final String HALF_WIDTH_APOSTROPHE = "'";
 
 	/**
 	 * 全角单引号_左[‘]
 	 */
-	String FULL_WIDTH_LEFT_APOSTROPHE = "‘";
+	public static final String FULL_WIDTH_LEFT_APOSTROPHE = "‘";
 
 	/**
 	 * 全角单引号_右[’]
 	 */
-	String FULL_WIDTH_RIGHT_APOSTROPHE = "’";
+	public static final String FULL_WIDTH_RIGHT_APOSTROPHE = "’";
 
 	/**
 	 * 半角双引号["]
 	 */
-	String HALF_WIDTH_DOUBLE_QUOTES = "\"";
+	public static final String HALF_WIDTH_DOUBLE_QUOTES = "\"";
 
 	/**
 	 * 全角双引号_左[“]
 	 */
-	String FULL_WIDTH_LEFT_DOUBLE_QUOTES = "“";
+	public static final String FULL_WIDTH_LEFT_DOUBLE_QUOTES = "“";
 
 	/**
 	 * 全角双引号_右[”]
 	 */
-	String FULL_WIDTH_RIGHT_DOUBLE_QUOTES = "”";
+	public static final String FULL_WIDTH_RIGHT_DOUBLE_QUOTES = "”";
 
 	/**
 	 * PI[π]
 	 */
-	Double PI = Math.PI;
+	public static final Double PI = Math.PI;
 
 	/**
 	 * E[e]
 	 */
-	Double E = Math.E;
+	public static final Double E = Math.E;
 
 }

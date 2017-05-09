@@ -1,26 +1,60 @@
 package com.polaris.common.constant;
 
-public interface SqlConstants {
-
-	String COUNT_SQL = "SELECT COUNT(*) ";
+public final class SqlConstants {
 	
-    String KEYWORD_FROM = " FROM ";
+	private SqlConstants() {
+		
+	}
+
+	/**
+	 * [SELECT COUNT(*) ]
+	 */
+	public static final String COUNT_SQL = "SELECT COUNT(*) ";
+	
+	/**
+	 * [ FROM ]
+	 */
+    public static final String KEYWORD_FROM = " FROM ";
     
-    String KEYWORD_ORDER = " ORDER BY ";
+    /**
+     * [ ORDER BY ]
+     */
+    public static final String KEYWORD_ORDER = " ORDER BY ";
     
-    String KEYWORD_GROUP = " GROUP BY ";
+    /**
+     * [ GROUP BY ]
+     */
+    public static final String KEYWORD_GROUP = " GROUP BY ";
     
-    String KEYWORD_WHERE = " WHERE ";
+    /**
+     * [ WHERE ]
+     */
+    public static final String KEYWORD_WHERE = " WHERE ";
     
-    String KEYWORD_AND = " AND ";
+    /**
+     * [ AND ]
+     */
+    public static final String KEYWORD_AND = " AND ";
     
-    String KEYWORD_OR = " OR ";
+    /**
+     * [ OR ]
+     */
+    public static final String KEYWORD_OR = " OR ";
     
-    String KEYWORD_JOHN = " JOIN ";
+    /**
+     * [ JOIN ]
+     */
+    public static final String KEYWORD_JOHN = " JOIN ";
     
-    String KEYWORD_ON = " ON ";
+    /**
+     * [ ON ]
+     */
+    public static final String KEYWORD_ON = " ON ";
     
-    String IDENTITIES = " 1=1 ";
+    /**
+     * [ 1=1 ]
+     */
+    public static final String IDENTITIES = " 1=1 ";
     
 }
 

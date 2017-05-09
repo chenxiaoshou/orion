@@ -38,7 +38,6 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		/* return new Class<?>[] { ApplicationConfig.class}; */
 		return new Class<?>[] { ApplicationConfig.class };
 	}
 

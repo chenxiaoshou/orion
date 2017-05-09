@@ -5,6 +5,10 @@ package com.polaris.common.constant;
  * @author John
  *
  */
-public interface MongoConstants {
+public final class MongoConstants {
 
+	private MongoConstants() {
+		
+	}
+	
 }

@@ -2,9 +2,15 @@ package com.polaris.manage.model.mysql.oa;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name="pms_user", indexes = {
@@ -20,6 +26,11 @@ public class User implements Serializable {
 	
 	private String password;
 
+	@Id
+	@GeneratedValue(generator = "idGenerator")
+	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
+			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "USER")})
+	@Column(name = "id", nullable = false, columnDefinition = "varchar(128) default '' comment '订单唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -28,6 +39,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+	@Column(name = "username", nullable = false, length=255, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
 		return username;
 	}
@@ -36,6 +48,7 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
+	@Column(name = "password", nullable = false, length=255, columnDefinition = "varchar(255) default '' comment '密码'")
 	public String getPassword() {
 		return password;
 	}
