@@ -29,7 +29,7 @@ public interface SymbolicConstants {
 	String HALF_WIDTH_BLANK = " ";
 
 	/**
-	 * 一个全角空格[　]
+	 * 一个全角空格[ ]
 	 */
 	String FULL_WIDTH_BLANK = "　";
 
