@@ -28,10 +28,14 @@ public final class DateUtil {
 
 	public static final long MILLIS_PER_WEEK = 7 * MILLIS_PER_DAY;
 
+	public static final String ERROR_MSG_1 = "The date must not be null";
+
+	public static final String ERROR_MSG_2 = "The parameters must not be null or blank";
+
 	private DateUtil() {
-		
+
 	}
-	
+
 	/**
 	 * 日期转换为字符串.
 	 * <p>
@@ -44,7 +48,7 @@ public final class DateUtil {
 	 */
 	public static String date2str(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return new SimpleDateFormat(PatternConstants.DATE_FORMAT_PATTERN_1).format(date);
 	}
@@ -81,7 +85,7 @@ public final class DateUtil {
 	 */
 	public static String date2str(Date date, String pattern) {
 		if (date == null || StringUtils.isBlank(pattern)) {
-			throw new IllegalArgumentException("The parameters must not be null or blank");
+			throw new IllegalArgumentException(ERROR_MSG_2);
 		}
 		return new SimpleDateFormat(pattern).format(date);
 	}
@@ -95,7 +99,7 @@ public final class DateUtil {
 	 */
 	public static Date str2date(String str, String pattern) {
 		if (StringUtils.isBlank(str) || StringUtils.isBlank(pattern)) {
-			throw new IllegalArgumentException("The parameters must not be null or blank");
+			throw new IllegalArgumentException(ERROR_MSG_2);
 		}
 		Date date = null;
 		try {
@@ -111,7 +115,7 @@ public final class DateUtil {
 	 */
 	public static Calendar dateToCalendar(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -127,13 +131,9 @@ public final class DateUtil {
 	 */
 	public static String calendar2str(Calendar cal, String pattern) {
 		if (cal == null || StringUtils.isBlank(pattern)) {
-			throw new IllegalArgumentException("The parameters must not be null or blank");
+			throw new IllegalArgumentException(ERROR_MSG_2);
 		}
-		String result = "";
-		if (cal != null) {
-			result = DateUtil.date2str(cal.getTime(), pattern);
-		}
-		return result;
+		return DateUtil.date2str(cal.getTime(), pattern);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public final class DateUtil {
 	 */
 	public static Calendar str2Calendar(String str, String pattern) {
 		if (StringUtils.isBlank(str) || StringUtils.isBlank(pattern)) {
-			throw new IllegalArgumentException("The parameters must not be null or blank");
+			throw new IllegalArgumentException(ERROR_MSG_2);
 		}
 		Date date = DateUtil.str2date(str, pattern);
 		Calendar cal = Calendar.getInstance();
@@ -161,7 +161,7 @@ public final class DateUtil {
 	 */
 	public static int[] getYmd(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -179,7 +179,7 @@ public final class DateUtil {
 	 */
 	public static int[] getHms(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -209,7 +209,7 @@ public final class DateUtil {
 	 */
 	public static Date getStartOfYear(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -239,7 +239,7 @@ public final class DateUtil {
 	 */
 	public static Date getEndOfYear(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Date tempDate = getStartOfYear(date);
 		Calendar cal = Calendar.getInstance();
@@ -272,7 +272,7 @@ public final class DateUtil {
 	 */
 	public static Date getStartOfMonth(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -301,7 +301,7 @@ public final class DateUtil {
 	 */
 	public static Date getEndOfMonth(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Date tempDate = getStartOfMonth(date);
 		Calendar cal = Calendar.getInstance();
@@ -333,7 +333,7 @@ public final class DateUtil {
 	 */
 	public static Date getStartOfDay(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -365,7 +365,7 @@ public final class DateUtil {
 	 */
 	public static Date getEndOfDay(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Date tempDate = getStartOfDay(date);
 		Calendar cal = Calendar.getInstance();
@@ -396,7 +396,7 @@ public final class DateUtil {
 	 */
 	public static Date getStartOfHour(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -427,7 +427,7 @@ public final class DateUtil {
 	 */
 	public static Date getEndOfHour(Date date) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Date tempDate = getStartOfHour(date);
 		Calendar cal = Calendar.getInstance();
@@ -444,7 +444,7 @@ public final class DateUtil {
 	 */
 	public static Date addYears(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.YEAR, amount);
 	}
@@ -456,7 +456,7 @@ public final class DateUtil {
 	 */
 	public static Date addMonths(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.MONTH, amount);
 	}
@@ -470,7 +470,7 @@ public final class DateUtil {
 	 */
 	public static Date addWeeks(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.WEEK_OF_YEAR, amount);
 	}
@@ -482,7 +482,7 @@ public final class DateUtil {
 	 */
 	public static Date addDays(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.DAY_OF_MONTH, amount);
 	}
@@ -496,7 +496,7 @@ public final class DateUtil {
 	 */
 	public static Date addHours(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.HOUR_OF_DAY, amount);
 	}
@@ -510,7 +510,7 @@ public final class DateUtil {
 	 */
 	public static Date addMinutes(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.MINUTE, amount);
 	}
@@ -524,7 +524,7 @@ public final class DateUtil {
 	 */
 	public static Date addSeconds(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.SECOND, amount);
 	}
@@ -538,14 +538,14 @@ public final class DateUtil {
 	 */
 	public static Date addMilliseconds(Date date, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return add(date, Calendar.MILLISECOND, amount);
 	}
 
 	private static Date add(Date date, int calendarField, int amount) {
 		if (date == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -589,7 +589,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameYear(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -603,7 +603,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameYear(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR));
 	}
@@ -613,7 +613,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameMonth(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -627,7 +627,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameMonth(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
 				&& cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH));
@@ -638,7 +638,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameDay(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -652,7 +652,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameDay(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
 				&& cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
@@ -663,7 +663,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameWeek(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -677,7 +677,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameWeek(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
 				&& cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR));
@@ -688,7 +688,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameHour(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -702,7 +702,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameHour(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
 				&& cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
@@ -714,7 +714,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameMinute(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
@@ -728,12 +728,12 @@ public final class DateUtil {
 	 */
 	public static boolean isSameMinute(Calendar cal1, Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
-		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+		return cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
 				&& cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 				&& cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY)
-				&& cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE));
+				&& cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE);
 	}
 
 	/**
@@ -745,7 +745,7 @@ public final class DateUtil {
 	 */
 	public static boolean isSameInstant(Date date1, Date date2) {
 		if (date1 == null || date2 == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		return date1.getTime() == date2.getTime();
 	}
@@ -759,14 +759,14 @@ public final class DateUtil {
 	 */
 	public static int getDaysBetween(Date startDate, Date endDate) {
 		if (startDate == null || endDate == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		if (startDate.after(endDate)) {
 			Date tempDate = startDate;
 			startDate = endDate;
 			endDate = tempDate;
 		}
-		Double diff = Double.valueOf((endDate.getTime() - startDate.getTime()) / MILLIS_PER_DAY);
+		Double diff = Double.valueOf((endDate.getTime() - startDate.getTime()) / (double) MILLIS_PER_DAY);
 		return Integer.valueOf((int) diff.doubleValue());
 	}
 
@@ -779,7 +779,7 @@ public final class DateUtil {
 	 */
 	public static int getHoursBetween(Date startDate, Date endDate) {
 		if (startDate == null || endDate == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		if (startDate.after(endDate)) {
 			Date tempDate = startDate;
@@ -799,7 +799,7 @@ public final class DateUtil {
 	 */
 	public static int getMinutesBetween(Date startDate, Date endDate) {
 		if (startDate == null || endDate == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		if (startDate.after(endDate)) {
 			Date tempDate = startDate;
@@ -819,7 +819,7 @@ public final class DateUtil {
 	 */
 	public static int getSecondsBetween(Date startDate, Date endDate) {
 		if (startDate == null || endDate == null) {
-			throw new IllegalArgumentException("The date must not be null");
+			throw new IllegalArgumentException(ERROR_MSG_1);
 		}
 		if (startDate.after(endDate)) {
 			Date tempDate = startDate;
@@ -863,24 +863,26 @@ public final class DateUtil {
 
 	/**
 	 * 获取当前的时间戳
+	 * 
 	 * @return
 	 */
 	public static Timestamp timestamp() {
 		return new Timestamp(new Date().getTime());
 	}
-	
+
 	/**
 	 * 获取指定日期的时间戳
 	 */
 	public static Timestamp timestamp(Date date) {
 		return new Timestamp(date.getTime());
 	}
-	
+
 	/**
 	 * 时间戳格式化
+	 * 
 	 * @param args
 	 */
-	
+
 	public static void main(String[] args) {
 		Date date1 = str2date("1990-09-08 12:00:00");
 		Date date2 = str2date("1990-09-08 11:00:00");
