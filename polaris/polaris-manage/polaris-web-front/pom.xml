@@ -31,16 +31,16 @@
 				<configuration>
 					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
-<!-- 					<webResources> -->
-<!-- 						<resouce> -->
-<!-- 							<filtering>true</filtering> -->
-<!-- 							<directory>src/main/webapp</directory> -->
-<!-- 							<includes> -->
-<!-- 								<include>**/*.xml</include> -->
-<!-- 								<include>**/*.properties</include> -->
-<!-- 							</includes> -->
-<!-- 						</resouce> -->
-<!-- 					</webResources> -->
+					<webResources>
+						<resouce>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resouce>
+					</webResources>
 				</configuration>
 			</plugin>
 			

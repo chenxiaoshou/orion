@@ -13,7 +13,6 @@
 	</modules>
 
 	<repositories>
-
 		<repository>
 			<id>jcenter</id>
 			<url>http://jcenter.bintray.com/</url>
