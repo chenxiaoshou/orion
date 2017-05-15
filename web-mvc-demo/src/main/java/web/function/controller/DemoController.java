@@ -115,38 +115,27 @@ public class DemoController {
 	@ResponseStatus(HttpStatus.OK)
 	public Demo handleWriteJSON(@PathVariable("id") Long id, Model model) {
 		logger.info("handleWriteJSON  id==" + id);
-		Demo demo = demoService.getById(id);
-		return demo;
+		return demoService.getById(id);
 	}
 
 	@RequestMapping("/jsonmock")
-	public void handleJsonMock() {
+	public void handleJsonMock() throws Exception {
 		// 因为使用了属性拦截器对日期字符串yyyy-MM-dd自动转换为date类型
 		String requestBody = "{\"name\":\"王五\",\"age\":30,\"createDate\":\"2014-08-21\",\"modifyDate\":\"2014-08-30\"}";
-		try {
-			String result = HttpClientUtil.httpPost(
-					"http://localhost:8080/webmvc/demorest/save", requestBody,
-					MediaType.APPLICATION_JSON_VALUE);
-			logger.info("result======" + result);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String result = HttpClientUtil.httpPost(
+				"http://localhost:8080/webmvc/demorest/save", requestBody,
+				MediaType.APPLICATION_JSON_VALUE);
+		logger.info("result======" + result);
 	}
 
 	@RequestMapping("/xmlmock")
-	public void handleXmlMock() {
+	public void handleXmlMock() throws Exception {
 		// 因为使用了属性拦截器对日期字符串yyyy-MM-dd自动转换为date类型
 		String requestBody = "<demo><age>40</age><createDate>2014-08-20</createDate><modifyDate>2014-08-28</modifyDate><name>赵四</name></demo>";
-		try {
-			String result = HttpClientUtil.httpPost(
-					"http://localhost:8080/webmvc/demorest/savexml",
-					requestBody, MediaType.APPLICATION_XML_VALUE);
-			logger.info("result======" + result);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String result = HttpClientUtil.httpPost(
+				"http://localhost:8080/webmvc/demorest/savexml",
+				requestBody, MediaType.APPLICATION_XML_VALUE);
+		logger.info("result======" + result);
 	}
 
 	@RequestMapping("/flashcache")

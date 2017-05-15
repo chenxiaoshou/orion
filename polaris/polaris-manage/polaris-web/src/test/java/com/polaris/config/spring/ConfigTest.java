@@ -3,7 +3,6 @@ package com.polaris.config.spring;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -21,11 +20,6 @@ public class ConfigTest extends BaseTest {
 	
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	
-	@Before
-	public void setUp() {
-		
-	}
 	
 //	@Test
 	public void testConfig() {

@@ -25,6 +25,7 @@ import com.polaris.common.exception.ExceptionType;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.service.srv.order.OrderService;
 import com.polaris.manage.web.databean.order.Order4SaveOrUpdate;
+import com.polaris.manage.web.databean.test.Test4Get;
 
 @RestController
 @RequestMapping("/order")
@@ -37,7 +38,7 @@ public class OrderController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void saveOrder(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
+	public Order saveOrder(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
 			HttpServletRequest request) {
 		Order order = new Order();
 		try {
@@ -49,13 +50,17 @@ public class OrderController {
 			throw new ApiException(HttpStatus.BAD_REQUEST, em);
 		}
 		this.orderService.saveOrder(order);
+		return order;
 	}
 	
-	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void test(@RequestBody @Valid Order4SaveOrUpdate dataBean, BindingResult result,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public Test4Get test(HttpServletRequest request) {
 		LOGGER.warn("for testing");
+		Test4Get test4Get = new Test4Get();
+		test4Get.setCode("1");
+		test4Get.setResult("OK");
+		return test4Get;
 	}
 
 }
