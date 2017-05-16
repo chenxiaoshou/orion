@@ -1,7 +1,13 @@
 package com.polaris.manage.web.advice.advicebean;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import net.sf.json.JSONObject;
 
 /**
  * 用来记录访问日志的切面bean
@@ -15,13 +21,13 @@ public class AccessAdviceInfo implements Serializable {
 
 	private String visitorIp; // 访问者Ip
 
-	private String requestFullPath; // 请求的完整路径
+	private String requestURL; // 请求的完整路径
 
 	private String className; // 类名
 
 	private String methodName; // 方法名
 
-	private Map<?, ?> inputParamMap; // 入参
+	private Map<Object, Object> inputParamMap = new LinkedHashMap<>(); // 入参
 
 	private String hasResponse; // 方法是否有返回值
 
@@ -67,11 +73,11 @@ public class AccessAdviceInfo implements Serializable {
 		this.methodName = methodName;
 	}
 
-	public Map<?, ?> getInputParamMap() {
+	public Map<Object, Object> getInputParamMap() {
 		return inputParamMap;
 	}
 
-	public void setInputParamMap(Map<?, ?> inputParamMap) {
+	public void setInputParamMap(Map<Object, Object> inputParamMap) {
 		this.inputParamMap = inputParamMap;
 	}
 
@@ -123,12 +129,20 @@ public class AccessAdviceInfo implements Serializable {
 		this.hasResponse = hasResponse;
 	}
 
-	public String getRequestFullPath() {
-		return requestFullPath;
+	public String getRequestURL() {
+		return requestURL;
 	}
 
-	public void setRequestFullPath(String requestFullPath) {
-		this.requestFullPath = requestFullPath;
+	public void setRequestURL(String requestURL) {
+		this.requestURL = requestURL;
+	}
+	
+	@Override
+	public String toString() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.accumulate(this.getClass().getSimpleName(),
+				ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE));
+		return jsonObject.toString();
 	}
 
 }

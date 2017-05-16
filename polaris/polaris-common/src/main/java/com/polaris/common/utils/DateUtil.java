@@ -867,7 +867,7 @@ public final class DateUtil {
 	 * @return
 	 */
 	public static Timestamp timestamp() {
-		return new Timestamp(new Date().getTime());
+		return new Timestamp(now().getTime());
 	}
 
 	/**

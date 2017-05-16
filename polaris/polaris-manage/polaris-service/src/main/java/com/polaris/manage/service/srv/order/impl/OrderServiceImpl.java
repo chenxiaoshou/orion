@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
@@ -17,11 +19,13 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDao orderDao;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public void saveOrder(Order order) {
 		this.orderDao.save(order);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public void deleteOrder(Order order) {
 		this.orderDao.delete(order);
 	}

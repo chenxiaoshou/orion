@@ -131,6 +131,16 @@ public final class SymbolicConstants {
 	 * 反斜杠[\]
 	 */
 	public static final String BACK_SLASH = "\\";
+	
+	/**
+	 * 双正斜杠[\]
+	 */
+	public static final String DOUBLE_FORWARD_SLASH = "//";
+	
+	/**
+	 * 双反斜杠[\]
+	 */
+	public static final String DOUBLE_BACK_SLASH = "\\\\";
 
 	/**
 	 * 单竖杠[|]

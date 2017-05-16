@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.polaris.common.utils.SpringUtil;
 import com.polaris.config.spring.ApplicationConfig;
 import com.polaris.config.springmvc.PolarisMvcConfig;
 
@@ -21,7 +22,7 @@ import com.polaris.config.springmvc.PolarisMvcConfig;
 		@ContextConfiguration(name = "child", classes = PolarisMvcConfig.class) })
 @WebAppConfiguration(value = "src/main/webapp")
 @Transactional(transactionManager = "transactionManager")
-@Rollback(true)
+@Rollback(false)
 public abstract class BaseTest {
 
 	@Autowired
@@ -32,6 +33,7 @@ public abstract class BaseTest {
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+		SpringUtil.getInstance().setApplicationContext(context);
 	}
 
 }
