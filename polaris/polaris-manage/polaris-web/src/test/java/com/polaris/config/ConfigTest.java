@@ -1,4 +1,4 @@
-package com.polaris.config.spring;
+package com.polaris.config;
 
 import java.util.Set;
 

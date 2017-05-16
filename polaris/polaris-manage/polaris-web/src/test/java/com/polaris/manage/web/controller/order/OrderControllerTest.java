@@ -14,7 +14,7 @@ import com.polaris.BaseTest;
 public class OrderControllerTest extends BaseTest {
 
 	@Test
-	public void saveOrder() throws Exception {
+	public void test() throws Exception {
 		mockMvc.perform(get("/order/test").accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk())

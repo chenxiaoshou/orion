@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -36,11 +35,6 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.JsonUtil;
@@ -70,54 +64,54 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	 * 
 	 * @return
 	 */
-	@Bean(name = "viewResolver")
-	public ViewResolver viewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
-		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
-		viewResolver.setOrder(0); // 设置视图优先级
-		return viewResolver;
-	}
+//	@Bean(name = "viewResolver")
+//	public ViewResolver viewResolver() {
+//		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
+//		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
+//		viewResolver.setViewClass(JstlView.class);
+//		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
+//		viewResolver.setOrder(0); // 设置视图优先级
+//		return viewResolver;
+//	}
 
 	/**
 	 * FreeMarker视图解析器
 	 */
-	@Bean
-	public FreeMarkerViewResolver freeMarkerViewResolver() {
-		FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver();
-		freeMarkerViewResolver.setViewClass(FreeMarkerView.class);
-		freeMarkerViewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
-		freeMarkerViewResolver.setCache(true);
-		freeMarkerViewResolver.setRequestContextAttribute("basePath");
-		freeMarkerViewResolver.setSuffix(PolarisConstants.VIEW_FREEMARKER_SUFFIX);
-		freeMarkerViewResolver.setOrder(1); // 设置视图优先级
-		return freeMarkerViewResolver;
-	}
+//	@Bean
+//	public FreeMarkerViewResolver freeMarkerViewResolver() {
+//		FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver();
+//		freeMarkerViewResolver.setViewClass(FreeMarkerView.class);
+//		freeMarkerViewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
+//		freeMarkerViewResolver.setCache(true);
+//		freeMarkerViewResolver.setRequestContextAttribute("basePath");
+//		freeMarkerViewResolver.setSuffix(PolarisConstants.VIEW_FREEMARKER_SUFFIX);
+//		freeMarkerViewResolver.setOrder(1); // 设置视图优先级
+//		return freeMarkerViewResolver;
+//	}
 
 	/**
 	 * FreeMarker模板配置
 	 */
-	@Bean
-	public FreeMarkerConfigurer freeMarkerConfigurer() {
-		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-		freeMarkerConfigurer.setTemplateLoaderPath(PolarisConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
-		freeMarkerConfigurer.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
-		return freeMarkerConfigurer;
-	}
+//	@Bean
+//	public FreeMarkerConfigurer freeMarkerConfigurer() {
+//		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
+//		freeMarkerConfigurer.setTemplateLoaderPath(PolarisConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
+//		freeMarkerConfigurer.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
+//		return freeMarkerConfigurer;
+//	}
 
 	/**
 	 * 消息转换器,Spring默认是注册了以下转换器的，但是为了让json转换器使用我们自定义的日期格式，所以需要全部重新配置
 	 */
 	private List<HttpMessageConverter<?>> createMessageConverters() {
-		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
+		List<HttpMessageConverter<?>> converters = new ArrayList<>();
 		converters.add(new ByteArrayHttpMessageConverter());
 		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 		stringConverter.setWriteAcceptCharset(false);
 		stringConverter.setDefaultCharset(Charsets.UTF_8);
 		// 文本消息转换器所支持的文本类型
-		List<MediaType> textTypes = new ArrayList<MediaType>();
+		List<MediaType> textTypes = new ArrayList<>();
 		// 原生格式
 		textTypes.add(MediaType.TEXT_PLAIN);
 		// HTML格式
@@ -137,7 +131,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 		jsonConverter.setObjectMapper(JsonUtil.createMapper());
 		jsonConverter.setDefaultCharset(Charsets.UTF_8);
-		List<MediaType> jsonTypes = new ArrayList<MediaType>();
+		List<MediaType> jsonTypes = new ArrayList<>();
 		jsonTypes.add(MediaType.APPLICATION_JSON);
 		jsonTypes.add(MediaType.APPLICATION_JSON_UTF8);
 		jsonTypes.add(MediaType.TEXT_HTML);// 避免IE出现下载JSON文件的情况
@@ -152,6 +146,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	 * @return
 	 */
 	@Bean
+	@Override
 	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
 		return super.requestMappingHandlerMapping();
 	}
@@ -162,6 +157,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	 * @return
 	 */
 	@Bean
+	@Override
 	public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
 		super.requestMappingHandlerAdapter();
 		RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();

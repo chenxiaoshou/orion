@@ -85,7 +85,7 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	protected WebApplicationContext createRootApplicationContext() {
 		WebApplicationContext ctx = super.createRootApplicationContext();
 		if (ctx != null && LOGGER.isDebugEnabled()) {
-			LOGGER.debug("spring webapplicationcontext applicationName [" + ctx.getApplicationName() + "]");
+			LOGGER.info("inject spring webapplicationcontext to SpringUtil");
 		}
 		SpringUtil.getInstance().setApplicationContext(ctx);
 		return ctx;

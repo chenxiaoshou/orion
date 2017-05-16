@@ -37,7 +37,7 @@
 
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
-			<groupId>self</groupId>
+			<groupId>com.opensource</groupId>
 			<artifactId>dbhelper</artifactId>
 		</dependency>
 
@@ -199,31 +199,19 @@
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
 		</dependency>
+		
+		<!-- mongodb -->
+		<dependency>
+		    <groupId>org.mongodb</groupId>
+		    <artifactId>mongo-java-driver</artifactId>
+		</dependency>
 
 	</dependencies>
 
 	<build>
 		<finalName>polaris-manage</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
-		<plugins>
-			<!-- 资源文件拷贝插件，实际依赖 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-					<compilerArguments>
-						<extdirs>src\main\webapp\WEB-INF\lib</extdirs>
-					</compilerArguments>
-				</configuration>
-			</plugin>
-		</plugins>
+		<plugins></plugins>
 	</build>
 
 </project>

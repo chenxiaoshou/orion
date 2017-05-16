@@ -206,9 +206,9 @@
 
 			<!-- dbhelper 自定义jar包 -->
 			<dependency>
-				<groupId>self</groupId>
+				<groupId>com.opensource</groupId>
 				<artifactId>dbhelper</artifactId>
-				<version>1.0</version>
+				<version>1.0.0</version>
 			</dependency>
 
 			<!-- servlet api -->
@@ -307,6 +307,12 @@
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-mongodb</artifactId>
 				<version>1.10.3.RELEASE</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.mongodb</groupId>
+						<artifactId>mongo-java-driver</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -392,14 +398,14 @@
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjrt</artifactId>
-				<version>1.8.10</version>
+				<version>1.8.9</version>
 			</dependency>
 			
 			<!-- aspectjweaver -->
 			<dependency>
 			    <groupId>org.aspectj</groupId>
 			    <artifactId>aspectjweaver</artifactId>
-			    <version>1.8.10</version>
+			    <version>1.8.9</version>
 			</dependency>
 
 			<!-- hibernate -->
@@ -553,6 +559,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
+					<outputDirectory></outputDirectory>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

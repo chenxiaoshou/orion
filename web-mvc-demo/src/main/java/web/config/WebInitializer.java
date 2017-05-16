@@ -73,12 +73,5 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		CP_SpringContext.getInstance().setApplicationContext(ctx);
 		return ctx;
 	}
-	
-	
-	
-    
-    
-    
-
 
 }
