@@ -2,17 +2,20 @@ package com.polaris.manage.service.srv.order;
 
 import java.util.List;
 
+import com.polaris.common.exception.BeanCopyException;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 
 public interface OrderService {
 
-	void saveOrder(Order order);
+	Order saveOrder(Order order);
 	
 	void deleteOrder(Order order);
 	
 	Order findOne(String orderId);
 
 	List<Order> searchOrders(SearchOrderCriteria criteria);
+
+	void updateOrder(Order order) throws BeanCopyException;
 	
 }

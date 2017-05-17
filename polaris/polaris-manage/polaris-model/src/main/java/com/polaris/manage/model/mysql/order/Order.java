@@ -13,19 +13,19 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import com.polaris.common.base.SuperObject;
+import com.polaris.common.base.BaseObject;
 import com.polaris.common.utils.DateUtil;
 
 @Entity
 @Table(name="pms_order", indexes = {
         @Index(columnList = "total_price", name = "idx_total_price")} )
-public class Order extends SuperObject implements Serializable {
+public class Order extends BaseObject implements Serializable {
 	
 	private static final long serialVersionUID = -8594808281318789626L;
 
 	private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
 	
-	private int status = -1; // 订单状态(-1代表未指定，从业务逻辑上区别于0)
+	private int status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 	
 	private double totalPrice; // 订单总金额
 	

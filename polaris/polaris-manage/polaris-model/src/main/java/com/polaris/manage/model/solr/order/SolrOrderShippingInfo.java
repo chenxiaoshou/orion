@@ -1,5 +1,7 @@
 package com.polaris.manage.model.solr.order;
 
+import java.io.Serializable;
+
 import javax.persistence.GeneratedValue;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -8,11 +10,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
+import com.polaris.common.base.BaseObject;
 import com.polaris.common.constant.SolrConstants;
 
 @SolrDocument(solrCoreName = SolrConstants.solrCoreName)
-public class SolrOrderShippingInfo {
+public class SolrOrderShippingInfo extends BaseObject implements Serializable {
 	
+	private static final long serialVersionUID = -2201215121362250422L;
+
 	@Indexed
 	private String id;
 

@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -26,13 +25,12 @@ import com.polaris.config.springmvc.PolarisMvcConfig;
 public abstract class BaseTest {
 
 	@Autowired
-	private WebApplicationContext context;
+	protected WebApplicationContext context;
 
-	public MockMvc mockMvc;
+	protected MockMvc mockMvc;
 
 	@Before
 	public void setUp() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 		SpringUtil.getInstance().setApplicationContext(context);
 	}
 

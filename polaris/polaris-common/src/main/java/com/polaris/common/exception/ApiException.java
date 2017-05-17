@@ -1,38 +1,28 @@
 package com.polaris.common.exception;
 
-import org.springframework.http.HttpStatus;
-
 public class ApiException extends RuntimeException {
 
 	private static final long serialVersionUID = -2229965410258306619L;
 
-	private HttpStatus httpStatus;
-	
-	private ExceptionMessage exceptionMessage;
-	
-	public ApiException(){
-	}
-	
-	public ApiException(HttpStatus httpStatus, ExceptionMessage exceptionMessage) {
-		this.httpStatus = httpStatus;
-		this.exceptionMessage = exceptionMessage;
-	}
-	
-	public ExceptionMessage getExceptionMessage() {
-		return exceptionMessage;
+	private final String errorKey;
+
+	private final String[] args;
+
+	public ApiException(final String errorKey, final String... args) {
+		this.errorKey = errorKey;
+		this.args = args;
 	}
 
-	public void setExceptionMessage(ExceptionMessage exceptionMessage) {
-		this.exceptionMessage = exceptionMessage;
+	public ApiException(final String errorKey) {
+		this(errorKey, new String[0]);
 	}
 
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
+	public String getErrorKey() {
+		return errorKey;
 	}
 
-	public void setHttpStatus(HttpStatus httpStatus) {
-		this.httpStatus = httpStatus;
+	public Object[] getArgs() {
+		return args;
 	}
 
-	
 }

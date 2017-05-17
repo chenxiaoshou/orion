@@ -11,32 +11,22 @@ public class ExceptionMessage implements Serializable {
 
 	private static final long serialVersionUID = 8936744394607039058L;
 
-	private final int httpStatus; // Http状态码
+	private int httpStatus; // Http状态码
 
-	private final String type; // 异常类型(warnning, error)
+	private String type; // 异常类型(WARNNING, ERROR)
 
-	private final int code; // 应用内部自定义错误代码
+	private int code; // 应用内部自定义错误代码
 
-	private final String message; // 错误信息
-
-	private final String moreInfoUrl; // 错误详情页，该页面会以用户友好的页面显示完整的错误异常信息
+	private String message; // 错误信息
 
 	@JsonIgnore
-	private final Throwable throwable;
+	private Throwable throwable;
 
-	public ExceptionMessage(int httpStatus, String type, int code, String message, String moreInfoUrl,
-			Throwable throwable) {
-		if (httpStatus == 0) {
-			httpStatus = HttpStatus.BAD_REQUEST.value();
-		}
-		if (StringUtils.isBlank(type)) {
-			type = ExceptionType.ERROR.getDesc();
-		}
-		this.httpStatus = httpStatus;
+	public ExceptionMessage(int httpStatus, String type, int code, String message, Throwable throwable) {
 		this.code = code;
+		this.httpStatus = httpStatus;
 		this.type = type;
 		this.message = message;
-		this.moreInfoUrl = moreInfoUrl;
 		this.throwable = throwable;
 	}
 
@@ -48,21 +38,16 @@ public class ExceptionMessage implements Serializable {
 		return message;
 	}
 
-	public String getMoreInfoUrl() {
-		return moreInfoUrl;
-	}
-
 	public Throwable getThrowable() {
 		return throwable;
 	}
 
 	public String getType() {
-		return type;
+		return StringUtils.isBlank(type) ? ExceptionType.ERROR.getDesc() : type;
 	}
 
 	public int getHttpStatus() {
-		return httpStatus;
+		return httpStatus == 0 ? HttpStatus.BAD_REQUEST.value() : httpStatus;
 	}
-	
 
 }

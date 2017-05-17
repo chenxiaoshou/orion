@@ -1,5 +1,7 @@
 package com.polaris.manage.model.mysql.order;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,9 +11,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.polaris.common.base.BaseObject;
+
 @Entity
 @Table(name = "pms_order_item")
-public class OrderItem {
+public class OrderItem extends BaseObject implements Serializable {
+
+	private static final long serialVersionUID = 6531209452277919416L;
 
 	private String id;
 

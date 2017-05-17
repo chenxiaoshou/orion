@@ -1,7 +1,11 @@
 package com.polaris.manage.persist.mysql.logistics.dto;
 
-import com.polaris.common.criteria.SearchCommonCriteria;
+import java.io.Serializable;
 
-public class SearchShippingOrderCriteria extends SearchCommonCriteria {
+import com.polaris.common.base.BaseCriteria;
+
+public class SearchShippingOrderCriteria extends BaseCriteria implements Serializable {
+
+	private static final long serialVersionUID = -1618450433934967583L;
 
 }

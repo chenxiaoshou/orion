@@ -1,5 +1,6 @@
 package com.polaris.manage.model.mysql.logistics;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.polaris.common.base.BaseObject;
+
 /**
  * 物流订单
  * 
@@ -19,7 +22,9 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name = "pms_shipping_order")
-public class ShippingOrder {
+public class ShippingOrder extends BaseObject implements Serializable {
+
+	private static final long serialVersionUID = -294238168881496088L;
 
 	private String id;
 

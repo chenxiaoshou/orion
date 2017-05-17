@@ -12,11 +12,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.polaris.common.base.BaseObject;
+
 @Entity
 @Table(name="pms_user", indexes = {
         @Index(columnList = "username", name = "idx_username"),
         @Index(columnList = "password", name = "idx_password")} )
-public class User implements Serializable {
+public class User extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -7906916919904469152L;
 	

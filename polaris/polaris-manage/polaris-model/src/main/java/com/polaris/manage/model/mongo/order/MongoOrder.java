@@ -1,14 +1,19 @@
 package com.polaris.manage.model.mongo.order;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="pms_order")
-public class MongoOrder {
+import com.polaris.common.base.BaseObject;
 
-private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
+@Document(collection="pms_order")
+public class MongoOrder extends BaseObject implements Serializable {
+
+	private static final long serialVersionUID = -3212665630676024012L;
+
+	private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
 	
 	private int status; // 订单状态
 	

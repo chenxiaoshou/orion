@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import net.sf.json.JSONObject;
 
-public class SuperObject implements Serializable {
+public class BaseObject implements Serializable {
 
 	private static final long serialVersionUID = 5836536587070114007L;
 	

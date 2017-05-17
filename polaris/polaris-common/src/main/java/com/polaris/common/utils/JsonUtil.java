@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
+import net.sf.json.JSONObject;
+
 /**
  * 
  * Json与Object之间相互转换的工具方法，使用jackson
@@ -17,10 +19,10 @@ public final class JsonUtil {
 
 	public static final String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
-	private JsonUtil () {
-		
+	private JsonUtil() {
+
 	}
-	
+
 	public static ObjectMapper createMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_DATETIME);
@@ -63,6 +65,16 @@ public final class JsonUtil {
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	public static boolean isJsonStr(String content) {
+		boolean isJsonStr = true;
+		try {
+			JSONObject.fromObject(content);
+		} catch (Exception e) {
+			isJsonStr = false;
+		}
+		return isJsonStr;
 	}
 
 }

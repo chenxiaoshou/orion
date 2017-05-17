@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.polaris.common.base.BaseObject;
+
 /**
  * 订单的交货人信息
  * 
@@ -20,7 +22,7 @@ import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "pms_order_shipping_info")
-public class OrderShippingInfo implements Serializable {
+public class OrderShippingInfo extends BaseObject implements Serializable {
 	
 	private static final long serialVersionUID = -2180680201712063931L;
 

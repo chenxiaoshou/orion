@@ -26,7 +26,7 @@
 			<artifactId>polaris-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<!-- valid验证 -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -144,10 +144,6 @@
 			<artifactId>spring-data-mongodb</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-hadoop</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit</artifactId>
