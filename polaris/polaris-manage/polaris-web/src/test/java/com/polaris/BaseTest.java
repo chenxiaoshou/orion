@@ -22,17 +22,17 @@ import com.polaris.config.springmvc.PolarisMvcConfig;
 		@ContextConfiguration(name = "child", classes = PolarisMvcConfig.class) })
 @WebAppConfiguration(value = "src/main/webapp")
 @Transactional(transactionManager = "transactionManager")
-@Rollback(false)
+@Rollback(true)
 public abstract class BaseTest {
 
 	@Autowired
-	private WebApplicationContext context;
+	protected WebApplicationContext context;
 
-	public MockMvc mockMvc;
+	protected MockMvc mockMvc;
 
 	@Before
 	public void setUp() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+		mockMvc = MockMvcBuilders.webAppContextSetup(context).build(); // 不使用mock模拟注入具体某个controller的情况下，可以使用全局设置
 		SpringUtil.getInstance().setApplicationContext(context);
 	}
 

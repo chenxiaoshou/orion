@@ -40,6 +40,7 @@ public class RabbitmqConfig {
 		factory.setUsername(env.getProperty("rabbitmq.username"));
 		factory.setPassword(env.getProperty("rabbitmq.password"));
 		factory.setVirtualHost(env.getProperty("rabbitmq.virtualhost"));
+		factory.setConnectionTimeout(env.getProperty("rabbitmq.connectiontimeout", Integer.class));
 		factory.setCacheMode(CacheMode.CHANNEL);
 		factory.setChannelCacheSize(env.getRequiredProperty("rabbitmq.channelCacheSize", Integer.class));
 		// rabbitmq支持发布确认和发布返回，这里只配置发布确认，未配置发布返回

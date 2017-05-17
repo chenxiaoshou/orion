@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.compress.utils.Charsets;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -35,6 +38,11 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.JsonUtil;
@@ -59,47 +67,50 @@ import com.polaris.common.utils.JsonUtil;
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
 public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 
+	@Autowired
+	private Environment env;
+	
 	/**
 	 * JSP视图解析器
 	 * 
 	 * @return
 	 */
-//	@Bean(name = "viewResolver")
-//	public ViewResolver viewResolver() {
-//		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
-//		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
-//		viewResolver.setViewClass(JstlView.class);
-//		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
-//		viewResolver.setOrder(0); // 设置视图优先级
-//		return viewResolver;
-//	}
+	@Bean(name = "viewResolver")
+	public ViewResolver viewResolver() {
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix(PolarisConstants.VIEW_JSP_PREFIX);
+		viewResolver.setSuffix(PolarisConstants.VIEW_JSP_SUFFIX);
+		viewResolver.setViewClass(JstlView.class);
+		viewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
+		viewResolver.setOrder(0); // 设置视图优先级
+		return viewResolver;
+	}
 
 	/**
 	 * FreeMarker视图解析器
 	 */
-//	@Bean
-//	public FreeMarkerViewResolver freeMarkerViewResolver() {
-//		FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver();
-//		freeMarkerViewResolver.setViewClass(FreeMarkerView.class);
-//		freeMarkerViewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
-//		freeMarkerViewResolver.setCache(true);
-//		freeMarkerViewResolver.setRequestContextAttribute("basePath");
-//		freeMarkerViewResolver.setSuffix(PolarisConstants.VIEW_FREEMARKER_SUFFIX);
-//		freeMarkerViewResolver.setOrder(1); // 设置视图优先级
-//		return freeMarkerViewResolver;
-//	}
+	@Bean
+	public FreeMarkerViewResolver freeMarkerViewResolver() {
+		FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver();
+		freeMarkerViewResolver.setViewClass(FreeMarkerView.class);
+		freeMarkerViewResolver.setContentType(PolarisConstants.CONTENT_TYPE);
+		freeMarkerViewResolver.setCache(true);
+		freeMarkerViewResolver.setRequestContextAttribute("basePath");
+		freeMarkerViewResolver.setSuffix(PolarisConstants.VIEW_FREEMARKER_SUFFIX);
+		freeMarkerViewResolver.setOrder(1); // 设置视图优先级
+		return freeMarkerViewResolver;
+	}
 
 	/**
 	 * FreeMarker模板配置
 	 */
-//	@Bean
-//	public FreeMarkerConfigurer freeMarkerConfigurer() {
-//		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-//		freeMarkerConfigurer.setTemplateLoaderPath(PolarisConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
-//		freeMarkerConfigurer.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
-//		return freeMarkerConfigurer;
-//	}
+	@Bean
+	public FreeMarkerConfigurer freeMarkerConfigurer() {
+		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
+		freeMarkerConfigurer.setTemplateLoaderPath(PolarisConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
+		freeMarkerConfigurer.setDefaultEncoding(PolarisConstants.CHAESET_UTF_8);
+		return freeMarkerConfigurer;
+	}
 
 	/**
 	 * 消息转换器,Spring默认是注册了以下转换器的，但是为了让json转换器使用我们自定义的日期格式，所以需要全部重新配置
@@ -173,7 +184,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename(PolarisConstants.MESSAGE_SOURCE);
+		messageSource.setBasename(env.getProperty("message_source", PolarisConstants.MESSAGE_SOURCE));
 		messageSource.setCacheSeconds(5);
 		return messageSource;
 	}

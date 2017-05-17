@@ -16,26 +16,30 @@ import com.polaris.manage.web.databean.order.Order4SaveOrUpdate;
 
 public class OrderControllerTest extends BaseTest {
 
-	// @Test
+	@Test
 	public void test() throws Exception {
 		mockMvc.perform(get("/order/test").accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andDo(print())
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(jsonPath("$.result").value("OK"));
 	}
 
+	/**
+	 * 普通junit4测试风格
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void saveOrder() throws Exception {
 		Order4SaveOrUpdate order4SaveOrUpdate = new Order4SaveOrUpdate();
-		order4SaveOrUpdate.setPaymentAmount(19.9);
+		order4SaveOrUpdate.setPaymentAmount(19.9d);
 		order4SaveOrUpdate.setSaleChannel("SMT");
 		order4SaveOrUpdate.setStatus(0);
+		order4SaveOrUpdate.setTotalPrice(19.9d);
 		String requestJson = JsonUtil.toJSON(order4SaveOrUpdate);
 		mockMvc.perform(post("/order/add").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(requestJson)
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andDo(print())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)) // 验证响应contentType
 				.andExpect(jsonPath("$.saleChannel").value("SMT"));
 	}
-	
-	// TODO 查、改、删测试
 
 }

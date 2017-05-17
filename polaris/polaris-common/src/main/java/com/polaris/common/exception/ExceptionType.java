@@ -2,9 +2,9 @@ package com.polaris.common.exception;
 
 public enum ExceptionType {
 
-	WARNING("Warning"),
+	WARNING("WARNING"),
 	
-	ERROR("Error");
+	ERROR("ERROR");
 	
 	private final String desc;
 	
@@ -28,11 +28,6 @@ public enum ExceptionType {
 	@Override
 	public String toString() {
 		return this.desc;
-	}
-	
-	public static void main(String[] args) {
-		ExceptionType type = ExceptionType.getExceptionTypeBy("Warning");
-		System.out.println(type.toString());
 	}
 	
 }
