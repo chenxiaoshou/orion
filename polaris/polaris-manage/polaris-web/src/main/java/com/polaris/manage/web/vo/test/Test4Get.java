@@ -1,4 +1,4 @@
-package com.polaris.manage.web.databean.test;
+package com.polaris.manage.web.vo.test;
 
 import java.io.Serializable;
 

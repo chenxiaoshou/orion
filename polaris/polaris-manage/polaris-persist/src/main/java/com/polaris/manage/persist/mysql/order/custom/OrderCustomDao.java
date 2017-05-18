@@ -7,6 +7,6 @@ import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 
 public interface OrderCustomDao {
 
-	List<Order> searchOrders(SearchOrderCriteria criteria);
+	List<Order> search(SearchOrderCriteria criteria);
 	
 }

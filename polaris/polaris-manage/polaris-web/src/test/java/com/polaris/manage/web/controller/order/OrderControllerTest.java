@@ -35,41 +35,43 @@ public class OrderControllerTest extends NormalBaseTest {
 	}
 
 	@Test
-	public void updateOrder() throws Exception {
+	public void crudOrder() throws Exception {
 		// 增加
 		Order order = new Order();
-		order.setPaymentAmount(19.9d);
+		order.setPaymentAmount(18.88d);
 		order.setSaleChannel("SMT");
-		order.setTotalPrice(19.9d);
+		order.setTotalPrice(18.88d);
 		order.setStatus(0);
-		Order savedOrder = saveOrder(order);
+		Order savedOrder;
+		savedOrder = saveOrder(order);
 		assertNotNull(savedOrder);
-		System.out.println("save order >>>" + savedOrder);
+		System.err.println("save order >>>" + savedOrder);
 
 		// 查找
 		String orderId = savedOrder.getId();
 		assertNotNull(orderId);
 		assertNotSame(orderId, SymbolicConstants.EMPTY);
 		Order getOrder = getOrder(orderId);
-		System.out.println("get order 1 >>>" + getOrder);
+		System.err.println("get order 1 >>>" + getOrder);
 
-		// 修改  TODO --> create_time更新时间每次更新都会变化，bug !!!
+		// 修改
 		orderId = getOrder.getId();
 		assertNotNull(orderId);
 		assertNotEquals(orderId, SymbolicConstants.EMPTY);
 		getOrder.setUpdateTime(DateUtil.timestamp());
-		getOrder.setPaymentAmount(39.9d);
-		getOrder.setTotalPrice(39.9d);
-		getOrder.setStatus(2);
+		getOrder.setPaymentAmount(48.8d);
+		getOrder.setTotalPrice(48.8d);
+		getOrder.setStatus(3);
 		updateOrder(getOrder);
 
 		// 再次查找
 		Order getOrder2 = getOrder(orderId);
 		assertNotNull(getOrder2);
-		System.out.println("get order 2 >>>" + getOrder2);
+		System.err.println("get order 2 >>>" + getOrder2);
 
 		// 删除
 		deleteOrder(orderId);
+
 	}
 
 	private void deleteOrder(String orderId) throws Exception {

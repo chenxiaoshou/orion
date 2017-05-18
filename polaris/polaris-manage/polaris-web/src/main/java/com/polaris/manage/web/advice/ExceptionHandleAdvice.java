@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.polaris.common.constant.ExceptionConstants;
-import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.exception.ExceptionMessage;
+import com.polaris.common.exception.PolarisException;
 import com.polaris.common.utils.JsonUtil;
 
 /**
@@ -43,7 +43,7 @@ public class ExceptionHandleAdvice {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
-	// 处理更具体的异常
+	// 处理视图层抛出的API异常
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<ExceptionMessage> handleApiException(ApiException e) {
 		String message = messageSource.getMessage(e.getErrorKey(), e.getArgs(), null);
@@ -54,6 +54,14 @@ public class ExceptionHandleAdvice {
 		return new ResponseEntity<>(exceptionMessage, HttpStatus.valueOf(exceptionMessage.getHttpStatus()));
 	}
 
+	// 处理底层抛出的经过封装的应用内异常
+	@ExceptionHandler(PolarisException.class)
+	public ResponseEntity<ExceptionMessage> handlePolarisException(PolarisException e) {
+		String message = messageSource.getMessage(ExceptionConstants.APPLICATION_EXCEPTION, null, null);
+		ExceptionMessage exceptionMessage = JsonUtil.fromJSON(message, ExceptionMessage.class);
+		return new ResponseEntity<>(exceptionMessage, HttpStatus.valueOf(exceptionMessage.getHttpStatus()));
+	}
+	
 	// 处理通用异常
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionMessage> handleException(Exception e) {
