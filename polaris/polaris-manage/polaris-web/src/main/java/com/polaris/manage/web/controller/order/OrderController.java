@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polaris.common.exception.ApiException;
+import com.polaris.common.paging.PagingSupport;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
 import com.polaris.common.utils.JsonUtil;
@@ -28,6 +29,7 @@ import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.service.order.OrderService;
 import com.polaris.manage.web.vo.order.Order4Create;
 import com.polaris.manage.web.vo.order.Order4Put;
+import com.polaris.manage.web.vo.order.OrderQuery;
 import com.polaris.manage.web.vo.test.Test4Get;
 
 @RestController
@@ -79,7 +81,7 @@ public class OrderController {
 	 * @throws BeanCopyException
 	 */
 	@RequestMapping(value = "/{orderId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.OK)
 	public void updateOrder(@PathVariable String orderId, @RequestBody @Valid Order4Put order4Put,
 			HttpServletRequest request) {
 		if (StringUtils.isBlank(orderId)) {
@@ -105,6 +107,19 @@ public class OrderController {
 			throw new ApiException("order.is_null");
 		}
 		return order;
+	}
+	
+	/**
+	 * 搜索Order
+	 * 
+	 * @param orderId
+	 * @param request
+	 */
+	@RequestMapping(value = "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public PagingSupport<Order> search(@RequestBody @Valid OrderQuery orderQuery, HttpServletRequest request) {
+		// TODO 
+		return null;
 	}
 
 	/**

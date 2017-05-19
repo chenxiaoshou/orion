@@ -224,14 +224,14 @@
 				<version>21.0</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-guava -->
+			<!-- jackson-datatype-guava -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
 				<artifactId>jackson-datatype-guava</artifactId>
 				<version>2.8.8</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+			<!-- itextpdf -->
 			<dependency>
 				<groupId>com.itextpdf</groupId>
 				<artifactId>itextpdf</artifactId>
@@ -321,7 +321,6 @@
 				<artifactId>spring-oxm</artifactId>
 				<version>${springVersion}</version>
 			</dependency>
-			<!-- SPRING END -->
 
 			<!-- spring data -->
 			<dependency>
@@ -377,42 +376,6 @@
 				<artifactId>spring-data-rest-webmvc</artifactId>
 				<version>2.6.1.RELEASE</version>
 			</dependency>
-
-			<!-- spring boot -->
-			<!--<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-test</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-autoconfigure</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-devtools</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-logging</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-tomcat</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-jdbc</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-aop</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-log4j2</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-web</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-actuator</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-configuration-processor</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-actuator</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-data-jpa</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-mongodb</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-validation</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-redis</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-freemarker</artifactId> <version>${springBootVersion}</version> 
-				</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-amqp</artifactId> 
-				<version>${springBootVersion}</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> 
-				<artifactId>spring-boot-starter-data-rest</artifactId> <version>${springBootVersion}</version> 
-				</dependency> -->
 
 			<!-- activemq -->
 			<dependency>
@@ -542,17 +505,6 @@
 				<version>1.8.3</version>
 			</dependency>
 
-			<!-- <dependency> -->
-			<!-- <groupId>log4j</groupId> -->
-			<!-- <artifactId>log4j</artifactId> -->
-			<!-- <version>1.2.17</version> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>log4j</groupId> -->
-			<!-- <artifactId>apache-log4j-extras</artifactId> -->
-			<!-- <version>1.2.17</version> -->
-			<!-- </dependency> -->
-
 			<!-- 中文分词 -->
 			<dependency>
 				<groupId>org.ansj</groupId>
@@ -586,14 +538,6 @@
 				<version>1.4</version>
 			</dependency>
 
-			<!-- tomcat -->
-			<!-- <dependency> -->
-			<!-- <groupId>org.apache.tomcat</groupId> -->
-			<!-- <artifactId>tomcat</artifactId> -->
-			<!-- <version>8.5.14</version> -->
-			<!-- <scope>provided</scope> -->
-			<!-- </dependency> -->
-
 		</dependencies>
 	</dependencyManagement>
 
@@ -623,10 +567,34 @@
 					</compilerArguments>
 				</configuration>
 			</plugin>
+			<!--配置生成文档 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
+				<version>2.10.4</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<aggregate>true</aggregate>
+					<charset>UTF-8</charset>
+					<docencoding>UTF-8</docencoding>
+				</configuration>
+			</plugin>
+			<!--配置生成源码包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase><!--指定绑定的声明周期阶段 -->
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!--surefire plugin的作用 surefire 插件用来在maven构建生命周期的test phase执行一个应用的单元测试。它会产生两种不同形式的测试结果报告 -->
 			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
