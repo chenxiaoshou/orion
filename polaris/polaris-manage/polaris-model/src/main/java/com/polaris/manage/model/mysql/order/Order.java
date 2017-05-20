@@ -14,7 +14,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.polaris.common.base.BaseObject;
-import com.polaris.common.utils.DateUtil;
 
 @Entity
 @Table(name="pms_order", indexes = {
@@ -119,14 +118,6 @@ public class Order extends BaseObject implements Serializable {
 
 	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
-	}
-	
-	public static void main(String[] args) {
-		Order order= new Order();
-		order.setCreateTime(DateUtil.timestamp());
-		order.setId("2");
-		order.setSaleChannel("SMT");
-		System.out.println(order);
 	}
 
 }

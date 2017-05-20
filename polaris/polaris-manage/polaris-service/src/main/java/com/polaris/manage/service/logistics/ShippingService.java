@@ -1,4 +1,4 @@
-package com.polaris.manage.service.srv.logistics;
+package com.polaris.manage.service.logistics;
 
 import java.util.List;
 
