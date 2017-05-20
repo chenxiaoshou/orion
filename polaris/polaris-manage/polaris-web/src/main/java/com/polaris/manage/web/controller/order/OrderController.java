@@ -1,6 +1,7 @@
 package com.polaris.manage.web.controller.order;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +21,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polaris.common.exception.ApiException;
-import com.polaris.common.exception.BeanCopyException;
+import com.polaris.common.paging.PagingSupport;
+import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
+import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.mysql.order.Order;
-import com.polaris.manage.service.srv.order.OrderService;
-import com.polaris.manage.web.databean.test.Test4Get;
+import com.polaris.manage.service.order.OrderService;
+import com.polaris.manage.web.vo.order.Order4Create;
+import com.polaris.manage.web.vo.order.Order4Put;
+import com.polaris.manage.web.vo.order.OrderQuery;
+import com.polaris.manage.web.vo.test.Test4Get;
 
 @RestController
 @RequestMapping("/order")
@@ -41,16 +47,28 @@ public class OrderController {
 	 * @param dataBean
 	 * @param request
 	 * @return
+	 * @throws BeanCopyException
+	 * @throws URISyntaxException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Order saveOrder(@RequestBody @Valid Order order, HttpServletRequest request) {
+	public Order saveOrder(@RequestBody @Valid Order4Create order4Create, HttpServletRequest request) {
+		Order order = new Order();
+		BeanUtil.copyProperties(order4Create, order);
 		Timestamp now = DateUtil.timestamp();
 		order.setCreateTime(now);
-		order.setUpdateTime(now);
-		return this.orderService.saveOrder(order);
+		return this.orderService.save(order);
+	}
+
+	public static void main(String[] args) {
+		Order order = new Order();
+		order.setPaymentAmount(5.6d);
+		order.setSaleChannel("Amazon");
+		order.setStatus(1);
+		order.setTotalPrice(5.6d);
+		System.out.println(JsonUtil.toJSON(order));
 	}
 
 	/**
@@ -60,16 +78,18 @@ public class OrderController {
 	 * @param request
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
-	 * @throws BeanCopyException 
+	 * @throws BeanCopyException
 	 */
-	@RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateOrder(@RequestBody @Valid Order order, HttpServletRequest request) throws BeanCopyException {
-		if (StringUtils.isBlank(order.getId())) {
+	@RequestMapping(value = "/{orderId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void updateOrder(@PathVariable String orderId, @RequestBody @Valid Order4Put order4Put,
+			HttpServletRequest request) {
+		if (StringUtils.isBlank(orderId)) {
 			throw new ApiException("order.id.null");
 		}
-		order.setUpdateTime(DateUtil.timestamp());
-		this.orderService.updateOrder(order);
+		Order order = orderService.find(orderId);
+		BeanUtil.copyProperties(order4Put, order);
+		this.orderService.modify(order);
 	}
 
 	/**
@@ -82,11 +102,24 @@ public class OrderController {
 	@RequestMapping(value = "/{orderId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public Order findOne(@PathVariable String orderId, HttpServletRequest request) {
-		Order order = this.orderService.findOne(orderId);
+		Order order = this.orderService.find(orderId);
 		if (order == null) {
 			throw new ApiException("order.is_null");
 		}
 		return order;
+	}
+	
+	/**
+	 * 搜索Order
+	 * 
+	 * @param orderId
+	 * @param request
+	 */
+	@RequestMapping(value = "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public PagingSupport<Order> search(@RequestBody @Valid OrderQuery orderQuery, HttpServletRequest request) {
+		// TODO 
+		return null;
 	}
 
 	/**
@@ -98,9 +131,9 @@ public class OrderController {
 	@RequestMapping(value = "/{orderId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String orderId, HttpServletRequest request) {
-		Order order = this.orderService.findOne(orderId);
+		Order order = this.orderService.find(orderId);
 		if (order != null) {
-			this.orderService.deleteOrder(order);
+			this.orderService.delete(order);
 		}
 	}
 
