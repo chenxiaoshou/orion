@@ -204,6 +204,7 @@
         <logger name="org.mybatis" level="WARN" />
         <logger name="org.apache.ibatis" level="WARN" />
 		<logger name="org.mongodb.driver" level="WARN" />
+		<logger name="org.apache.commons" level="WARN" />
 		
 		<logger name="com.polaris" level="DEBUG">
 			<appender-ref ref="polaris_log"/>

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 import net.sf.json.JSONObject;
@@ -32,8 +33,13 @@ public final class JsonUtil {
 		// 另一种方式配置jaxb注解
 		// mapper.setAnnotationIntrospector(new
 		// JaxbAnnotationIntrospector(mapper.getTypeFactory()));
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		return mapper;
+	}
+
+	public static <T> T fromJSON(String json, Class<T> beanClass) {
+		return JsonUtil.fromJSON(json, beanClass, new Class<?>[0]);
 	}
 
 	/**

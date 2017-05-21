@@ -24,17 +24,17 @@ import com.polaris.common.exception.ApiException;
 import com.polaris.common.paging.PagingSupport;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
-import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.mysql.order.Order;
+import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.service.order.OrderService;
+import com.polaris.manage.web.controller.BaseController;
 import com.polaris.manage.web.vo.order.Order4Create;
 import com.polaris.manage.web.vo.order.Order4Put;
 import com.polaris.manage.web.vo.order.OrderQuery;
-import com.polaris.manage.web.vo.test.Test4Get;
 
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends BaseController {
 
 	private static final Logger LOGGER = LogManager.getLogger(OrderController.class);
 
@@ -54,21 +54,14 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Order saveOrder(@RequestBody @Valid Order4Create order4Create, HttpServletRequest request) {
+	public String save(@RequestBody @Valid Order4Create order4Create, HttpServletRequest request) {
 		Order order = new Order();
 		BeanUtil.copyProperties(order4Create, order);
 		Timestamp now = DateUtil.timestamp();
 		order.setCreateTime(now);
-		return this.orderService.save(order);
-	}
-
-	public static void main(String[] args) {
-		Order order = new Order();
-		order.setPaymentAmount(5.6d);
-		order.setSaleChannel("Amazon");
-		order.setStatus(1);
-		order.setTotalPrice(5.6d);
-		System.out.println(JsonUtil.toJSON(order));
+		Order savedOrder = this.orderService.save(order);
+		LOGGER.debug("save order [" + savedOrder.getId() + "]");
+		return order.getId();
 	}
 
 	/**
@@ -82,8 +75,9 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/{orderId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void updateOrder(@PathVariable String orderId, @RequestBody @Valid Order4Put order4Put,
+	public void modify(@PathVariable String orderId, @RequestBody @Valid Order4Put order4Put,
 			HttpServletRequest request) {
+		LOGGER.debug("modify order [" + orderId + "]");
 		if (StringUtils.isBlank(orderId)) {
 			throw new ApiException("order.id.null");
 		}
@@ -101,14 +95,15 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/{orderId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Order findOne(@PathVariable String orderId, HttpServletRequest request) {
+	public Order find(@PathVariable String orderId, HttpServletRequest request) {
 		Order order = this.orderService.find(orderId);
 		if (order == null) {
 			throw new ApiException("order.is_null");
 		}
+		LOGGER.debug("find order [" + order.getId() + "]");
 		return order;
 	}
-	
+
 	/**
 	 * 搜索Order
 	 * 
@@ -118,8 +113,10 @@ public class OrderController {
 	@RequestMapping(value = "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public PagingSupport<Order> search(@RequestBody @Valid OrderQuery orderQuery, HttpServletRequest request) {
-		// TODO 
-		return null;
+		LOGGER.debug("search orders ... ");
+		SearchOrderCriteria criteria = new SearchOrderCriteria();
+		BeanUtil.copyProperties(orderQuery, criteria);
+		return orderService.search(criteria);
 	}
 
 	/**
@@ -133,24 +130,9 @@ public class OrderController {
 	public void delete(@PathVariable String orderId, HttpServletRequest request) {
 		Order order = this.orderService.find(orderId);
 		if (order != null) {
+			LOGGER.debug("delete order [" + order.getId() + "]");
 			this.orderService.delete(order);
 		}
-	}
-
-	/**
-	 * 测试应用
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public Test4Get test(HttpServletRequest request) {
-		LOGGER.warn("for testing ... ");
-		Test4Get test4Get = new Test4Get();
-		test4Get.setCode("1");
-		test4Get.setResult("OK");
-		return test4Get;
 	}
 
 }

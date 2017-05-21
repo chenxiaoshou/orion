@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polaris.common.paging.PagingSupport;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.persist.mysql.order.pub.OrderDao;
@@ -41,7 +42,13 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<Order> search(SearchOrderCriteria criteria) {
+	public List<Order> list(SearchOrderCriteria criteria) {
+		PagingSupport<Order> ps = this.search(criteria);
+		return ps.getResults();
+	}
+
+	@Override
+	public PagingSupport<Order> search(SearchOrderCriteria criteria) {
 		return this.orderDao.search(criteria);
 	}
 

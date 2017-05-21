@@ -26,6 +26,10 @@ public final class ReflectionUtils {
 		return isInteger(clazz) || isShort(clazz) || isByte(clazz) || isLong(clazz) || isDouble(clazz) || isFloat(clazz)
 				|| isBoolean(clazz) || isCharacter(clazz);
 	}
+	
+	public static boolean isBaseClassOrString(Class<?> clazz) {
+		return isBaseClass(clazz) || isString(clazz);
+	}
 
 	public static boolean isInteger(Class<?> clazz) {
 		return clazz == Integer.class || clazz == int.class;

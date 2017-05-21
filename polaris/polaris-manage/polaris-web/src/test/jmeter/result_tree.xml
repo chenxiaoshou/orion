@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<httpSample t="2001" it="0" lt="0" ct="2001" ts="1495351921490" s="false" lb="Ping目标服务器" rc="Non HTTP response code: java.net.ConnectException" rm="Non HTTP response message: Connection refused: connect" tn="polaris-web-api线程组 1-1" dt="text" de="" by="2225" sby="0" sc="1" ec="1" ng="2" na="2" hn="John-PC">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+</requestHeader>
+  <responseData class="java.lang.String">java.net.ConnectException: Connection refused: connect&#xd;
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)&#xd;
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)&#xd;
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)&#xd;
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)&#xd;
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)&#xd;
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)&#xd;
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)&#xd;
+	at java.net.Socket.connect(Socket.java:589)&#xd;
+	at org.apache.http.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:121)&#xd;
+	at org.apache.http.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:180)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.hc.ManagedClientConnectionImpl.open(ManagedClientConnectionImpl.java:318)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.MeasuringConnectionManager$MeasuredConnection.open(MeasuringConnectionManager.java:114)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:610)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:445)&#xd;
+	at org.apache.http.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:835)&#xd;
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.executeRequest(HTTPHC4Impl.java:654)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.sample(HTTPHC4Impl.java:413)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy.sample(HTTPSamplerProxy.java:74)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1189)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1178)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:491)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:425)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:254)&#xd;
+	at java.lang.Thread.run(Thread.java:748)&#xd;
+</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://localhost/polaris/v1:8080/ping</java.net.URL>
+</httpSample>
+<httpSample t="2002" it="0" lt="0" ct="2002" ts="1495351921991" s="false" lb="Ping目标服务器" rc="Non HTTP response code: java.net.ConnectException" rm="Non HTTP response message: Connection refused: connect" tn="polaris-web-api线程组 1-2" dt="text" de="" by="2225" sby="0" sc="1" ec="1" ng="2" na="2" hn="John-PC">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+</requestHeader>
+  <responseData class="java.lang.String">java.net.ConnectException: Connection refused: connect&#xd;
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)&#xd;
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)&#xd;
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)&#xd;
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)&#xd;
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)&#xd;
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)&#xd;
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)&#xd;
+	at java.net.Socket.connect(Socket.java:589)&#xd;
+	at org.apache.http.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:121)&#xd;
+	at org.apache.http.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:180)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.hc.ManagedClientConnectionImpl.open(ManagedClientConnectionImpl.java:318)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.MeasuringConnectionManager$MeasuredConnection.open(MeasuringConnectionManager.java:114)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:610)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:445)&#xd;
+	at org.apache.http.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:835)&#xd;
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.executeRequest(HTTPHC4Impl.java:654)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.sample(HTTPHC4Impl.java:413)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy.sample(HTTPSamplerProxy.java:74)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1189)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1178)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:491)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:425)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:254)&#xd;
+	at java.lang.Thread.run(Thread.java:748)&#xd;
+</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://localhost/polaris/v1:8080/ping</java.net.URL>
+</httpSample>
+<httpSample t="2005" it="0" lt="0" ct="2005" ts="1495351923497" s="false" lb="Ping目标服务器" rc="Non HTTP response code: java.net.ConnectException" rm="Non HTTP response message: Connection refused: connect" tn="polaris-web-api线程组 1-1" dt="text" de="" by="2225" sby="0" sc="1" ec="1" ng="2" na="2" hn="John-PC">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+</requestHeader>
+  <responseData class="java.lang.String">java.net.ConnectException: Connection refused: connect&#xd;
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)&#xd;
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)&#xd;
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)&#xd;
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)&#xd;
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)&#xd;
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)&#xd;
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)&#xd;
+	at java.net.Socket.connect(Socket.java:589)&#xd;
+	at org.apache.http.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:121)&#xd;
+	at org.apache.http.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:180)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.hc.ManagedClientConnectionImpl.open(ManagedClientConnectionImpl.java:318)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.MeasuringConnectionManager$MeasuredConnection.open(MeasuringConnectionManager.java:114)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:610)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:445)&#xd;
+	at org.apache.http.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:835)&#xd;
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.executeRequest(HTTPHC4Impl.java:654)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.sample(HTTPHC4Impl.java:413)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy.sample(HTTPSamplerProxy.java:74)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1189)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1178)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:491)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:425)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:254)&#xd;
+	at java.lang.Thread.run(Thread.java:748)&#xd;
+</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://localhost/polaris/v1:8080/ping</java.net.URL>
+</httpSample>
+<httpSample t="1999" it="0" lt="0" ct="1999" ts="1495351923999" s="false" lb="Ping目标服务器" rc="Non HTTP response code: java.net.ConnectException" rm="Non HTTP response message: Connection refused: connect" tn="polaris-web-api线程组 1-2" dt="text" de="" by="2225" sby="0" sc="1" ec="1" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+</requestHeader>
+  <responseData class="java.lang.String">java.net.ConnectException: Connection refused: connect&#xd;
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)&#xd;
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)&#xd;
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)&#xd;
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)&#xd;
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)&#xd;
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)&#xd;
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)&#xd;
+	at java.net.Socket.connect(Socket.java:589)&#xd;
+	at org.apache.http.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:121)&#xd;
+	at org.apache.http.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:180)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.hc.ManagedClientConnectionImpl.open(ManagedClientConnectionImpl.java:318)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.MeasuringConnectionManager$MeasuredConnection.open(MeasuringConnectionManager.java:114)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:610)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:445)&#xd;
+	at org.apache.http.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:835)&#xd;
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.executeRequest(HTTPHC4Impl.java:654)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.sample(HTTPHC4Impl.java:413)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy.sample(HTTPSamplerProxy.java:74)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1189)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1178)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:491)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:425)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:254)&#xd;
+	at java.lang.Thread.run(Thread.java:748)&#xd;
+</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://localhost/polaris/v1:8080/ping</java.net.URL>
+</httpSample>
+
+<httpSample t="28" it="0" lt="27" ct="9" ts="1495352100639" s="true" lb="Ping目标服务器" rc="200" rm="" tn="polaris-web-api线程组 1-1" dt="text" de="UTF-8" by="202" sby="173" sc="1" ec="0" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String">HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sun, 21 May 2017 07:35:00 GMT
+</responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Host: 127.0.0.1:8080
+User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_131)
+</requestHeader>
+  <responseData class="java.lang.String">{&quot;ack&quot;:&quot;success&quot;,&quot;message&quot;:&quot;服务器已准备好提供服务&quot;}</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://127.0.0.1:8080/polaris/v1/ping</java.net.URL>
+</httpSample>
+<httpSample t="8" it="0" lt="7" ct="0" ts="1495352100668" s="true" lb="Ping目标服务器" rc="200" rm="" tn="polaris-web-api线程组 1-1" dt="text" de="UTF-8" by="202" sby="173" sc="1" ec="0" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String">HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sun, 21 May 2017 07:35:00 GMT
+</responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Host: 127.0.0.1:8080
+User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_131)
+</requestHeader>
+  <responseData class="java.lang.String">{&quot;ack&quot;:&quot;success&quot;,&quot;message&quot;:&quot;服务器已准备好提供服务&quot;}</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://127.0.0.1:8080/polaris/v1/ping</java.net.URL>
+</httpSample>
+<httpSample t="19" it="0" lt="19" ct="1" ts="1495352101140" s="true" lb="Ping目标服务器" rc="200" rm="" tn="polaris-web-api线程组 1-2" dt="text" de="UTF-8" by="202" sby="173" sc="1" ec="0" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String">HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sun, 21 May 2017 07:35:00 GMT
+</responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Host: 127.0.0.1:8080
+User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_131)
+</requestHeader>
+  <responseData class="java.lang.String">{&quot;ack&quot;:&quot;success&quot;,&quot;message&quot;:&quot;服务器已准备好提供服务&quot;}</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://127.0.0.1:8080/polaris/v1/ping</java.net.URL>
+</httpSample>
+<httpSample t="16" it="0" lt="15" ct="0" ts="1495352101162" s="true" lb="Ping目标服务器" rc="200" rm="" tn="polaris-web-api线程组 1-2" dt="text" de="UTF-8" by="202" sby="173" sc="1" ec="0" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String">HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sun, 21 May 2017 07:35:00 GMT
+</responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Host: 127.0.0.1:8080
+User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_131)
+</requestHeader>
+  <responseData class="java.lang.String">{&quot;ack&quot;:&quot;success&quot;,&quot;message&quot;:&quot;服务器已准备好提供服务&quot;}</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://127.0.0.1:8080/polaris/v1/ping</java.net.URL>
+</httpSample>
+
+<httpSample t="30" it="0" lt="30" ct="0" ts="1495352566981" s="true" lb="Ping目标服务器" rc="200" rm="" tn="polaris-web-api线程组 1-1" dt="text" de="UTF-8" by="202" sby="173" sc="1" ec="0" ng="1" na="1" hn="John-PC">
+  <assertionResult>
+    <name>响应断言</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <responseHeader class="java.lang.String">HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sun, 21 May 2017 07:42:47 GMT
+</responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Host: 127.0.0.1:8080
+User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_131)
+</requestHeader>
+  <responseData class="java.lang.String">{&quot;ack&quot;:&quot;success&quot;,&quot;message&quot;:&quot;服务器已准备好提供服务&quot;}</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">GET</method>
+  <queryString class="java.lang.String"></queryString>
+  <java.net.URL>http://127.0.0.1:8080/polaris/v1/ping</java.net.URL>
+</httpSample>
+<httpSample t="1002" it="0" lt="0" ct="1002" ts="1495352567014" s="false" lb="添加订单" rc="Non HTTP response code: java.net.ConnectException" rm="Non HTTP response message: Connection refused: connect" tn="polaris-web-api线程组 1-1" dt="text" de="" by="2225" sby="0" sc="1" ec="1" ng="1" na="1" hn="John-PC">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String">Connection: keep-alive
+Accept: application/json;charset=UTF-8
+Content-Type: application/x-www-form-urlencoded
+</requestHeader>
+  <responseData class="java.lang.String">java.net.ConnectException: Connection refused: connect&#xd;
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)&#xd;
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)&#xd;
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)&#xd;
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)&#xd;
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)&#xd;
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)&#xd;
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)&#xd;
+	at java.net.Socket.connect(Socket.java:589)&#xd;
+	at org.apache.http.conn.scheme.PlainSocketFactory.connectSocket(PlainSocketFactory.java:121)&#xd;
+	at org.apache.http.impl.conn.DefaultClientConnectionOperator.openConnection(DefaultClientConnectionOperator.java:180)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.hc.ManagedClientConnectionImpl.open(ManagedClientConnectionImpl.java:318)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.MeasuringConnectionManager$MeasuredConnection.open(MeasuringConnectionManager.java:114)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.tryConnect(DefaultRequestDirector.java:610)&#xd;
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:445)&#xd;
+	at org.apache.http.impl.client.AbstractHttpClient.doExecute(AbstractHttpClient.java:835)&#xd;
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.executeRequest(HTTPHC4Impl.java:654)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl.sample(HTTPHC4Impl.java:413)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy.sample(HTTPSamplerProxy.java:74)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1189)&#xd;
+	at org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.sample(HTTPSamplerBase.java:1178)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:491)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:425)&#xd;
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:254)&#xd;
+	at java.lang.Thread.run(Thread.java:748)&#xd;
+</responseData>
+  <cookies class="java.lang.String"></cookies>
+  <method class="java.lang.String">POST</method>
+  <queryString class="java.lang.String">{&#xd;
+    &quot;status&quot;:4,&#xd;
+    &quot;totalPrice&quot;:62,&#xd;
+    &quot;paymentAmount&quot;:62,&#xd;
+    &quot;saleChannel&quot;:&#xd;
+}</queryString>
+  <java.net.URL>http://127.0.0.1/polaris/v1:8080/order</java.net.URL>
+</httpSample>
+
+</testResults>

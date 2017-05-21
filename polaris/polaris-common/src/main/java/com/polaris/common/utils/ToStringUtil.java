@@ -15,57 +15,51 @@ import net.sf.json.JSONObject;
  * @author dong
  *
  */
-public final class ToStringFormatter {
+public final class ToStringUtil {
 
-	private ToStringFormatter() {
+	private ToStringUtil() {
 
 	}
 
 	/**
 	 * 输出类toString方法格式的字符串
+	 * 
 	 * @param obj
 	 * @return
 	 */
 	public static String toString(Object obj) {
-		String result = "";
+		Object result = "";
 		Class<?> clz = obj.getClass();
 		if (ReflectionUtils.isArray(clz)) {
 			result = arrayToString(obj, ToStringStyle.SHORT_PREFIX_STYLE);
+		} else if (ReflectionUtils.isBaseClassOrString(clz)) {
+			result = obj;
 		} else {
 			result = ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
-		return result;
+		return result.toString();
 	}
 
 	/**
 	 * 输出Json风格的字符串
+	 * 
 	 * @param obj
 	 * @return
 	 */
-	public static String toJson(Object obj) {
-		String result = "";
-		Class<?> clz = obj.getClass();
-		String typeName = obj.getClass().getSimpleName();
-		if (ReflectionUtils.isArray(clz)) {
-			typeName = typeName.replaceAll("\\[\\]", "");
-			result = arrayToString(obj, ToStringStyle.JSON_STYLE);
-		} else {
-			result = ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE);
-		}
-		JSONObject json = new JSONObject();
-		json.accumulate(typeName, result);
-		return json.toString();
+	public static String toJSON(Object obj) {
+		JSONObject jsonObj = new JSONObject();
+		return jsonObj.accumulate(obj.getClass().getName(), JsonUtil.toJSON(obj)).toString();
 	}
-
+	
 	private static String arrayToString(Object obj, ToStringStyle style) {
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		int length = Array.getLength(obj);
 		sb.append(SymbolicConstants.LEFT_BRACKETS);
 		for (int i = 0; i < length; i++) {
 			Object subObj = Array.get(obj, i);
 			subObj = subObj == null ? "" : subObj;
 			Class<?> clazz = subObj.getClass();
-			if (ReflectionUtils.isBaseClass(clazz) || ReflectionUtils.isString(clazz)) { // 基本类型
+			if (ReflectionUtils.isBaseClassOrString(clazz)) { // 基本类型or字符串类型
 				sb.append(String.valueOf(subObj));
 			} else if (clazz.isArray()) { // 数组
 				sb.append(arrayToString(subObj, style));
