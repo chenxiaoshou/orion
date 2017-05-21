@@ -27,13 +27,6 @@ import com.polaris.manage.model.mysql.order.Order;
 
 public class OrderControllerTest extends NormalBaseTest {
 
-	// @Test
-	public void test() throws Exception {
-		mockMvc.perform(get("/order/test").accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andDo(print())
-				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.andExpect(jsonPath("$.result").value("OK"));
-	}
-
 	@Test
 	public void crudOrder() throws Exception {
 		// 增加

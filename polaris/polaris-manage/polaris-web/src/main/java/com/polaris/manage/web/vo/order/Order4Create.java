@@ -2,16 +2,22 @@ package com.polaris.manage.web.vo.order;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
+
 public class Order4Create implements Serializable {
 
 	private static final long serialVersionUID = -1100351041463473872L;
 
+	@Range(min = 1, max = 5, message = "order.status.over_range")
 	private int status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
-	
+
+	@NotBlank(message = "order.totalprice.not_blank")
 	private double totalPrice; // 订单总金额
-	
+
 	private double paymentAmount; // 实际已支付金额
-	
+
+	@NotBlank(message = "order.salechannel.not_blank")
 	private String saleChannel; // 订单来源渠道
 
 	public int getStatus() {
@@ -45,5 +51,5 @@ public class Order4Create implements Serializable {
 	public void setSaleChannel(String saleChannel) {
 		this.saleChannel = saleChannel;
 	}
-	
+
 }

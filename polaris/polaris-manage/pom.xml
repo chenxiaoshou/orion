@@ -35,6 +35,18 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- valid验证 -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+		<!-- valid验证实现 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
 			<groupId>com.opensource</groupId>

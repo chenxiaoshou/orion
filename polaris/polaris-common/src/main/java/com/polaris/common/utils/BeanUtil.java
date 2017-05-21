@@ -35,7 +35,7 @@ public final class BeanUtil {
 			throw new PolarisException(e.getMessage(), e);
 		}
 	}
-
+	
 	/**
 	 * 深度复制，实参类必须实现Serializable接口
 	 * 

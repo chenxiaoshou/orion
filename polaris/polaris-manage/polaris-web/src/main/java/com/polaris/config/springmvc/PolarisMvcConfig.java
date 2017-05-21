@@ -184,14 +184,17 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename(env.getProperty("message_source", PolarisConstants.MESSAGE_SOURCE));
-		messageSource.setCacheSeconds(5);
+		String messagePath = env.getProperty("message_source", PolarisConstants.MESSAGE_SOURCE);
+		messageSource.setBasenames(messagePath.split(","));
+		messageSource.setCacheSeconds(300);
+		messageSource.setUseCodeAsDefaultMessage(true);
 		return messageSource;
 	}
 
 	/**
 	 * 添加静态资源映射
 	 */
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(PolarisConstants.RESOURCE_HANDLER)
 				.addResourceLocations(PolarisConstants.RESOURCE_LOCATION);
@@ -200,6 +203,7 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 	/**
 	 * 因为将spring的拦截模式设置为"/"时会对静态资源进行拦截, 将对于静态资源的请求转发到Servlet容器的默认处理静态资源的servlet
 	 */
+	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}

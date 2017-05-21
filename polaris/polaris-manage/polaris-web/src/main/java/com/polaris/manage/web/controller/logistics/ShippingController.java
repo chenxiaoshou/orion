@@ -1,5 +1,7 @@
 package com.polaris.manage.web.controller.logistics;
 
-public class ShippingController {
+import com.polaris.manage.web.controller.BaseController;
+
+public class ShippingController extends BaseController {
 
 }

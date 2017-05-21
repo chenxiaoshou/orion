@@ -105,7 +105,7 @@ public final class PolarisConstants {
 	/**
 	 *  消息国际化默认使用的模板名称
 	 */
-	public static final String MESSAGE_SOURCE = "message_zh_CN";
+	public static final String MESSAGE_SOURCE = "i18n.message,i18n.operate";
 
 	/**
 	 *  polaris jpa persistence_unit_name
