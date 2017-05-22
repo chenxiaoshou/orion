@@ -1,9 +1,12 @@
 package com.polaris.config.springdata;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +28,17 @@ import com.polaris.common.constant.SolrConstants;
 @Configuration
 @EnableSolrRepositories(basePackages = {
 		"com.polaris.manage.*.solr" }, multicoreSupport = true, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
-public class SolrConfig implements InitializingBean, DisposableBean {
+public class SolrConfig {
+
+	private static final Logger LOGGER = LogManager.getLogger(SolrConfig.class);
 
 	private static final String PROPERTY_NAME_SOLR_SERVER_URL = "solr.host";
 
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private SolrClient solrClient;
 
 	@Bean
 	public SolrClient solrClient() {
@@ -40,57 +48,65 @@ public class SolrConfig implements InitializingBean, DisposableBean {
 
 	@Bean
 	public MappingSolrConverter solrConverter() {
-		MappingSolrConverter mappingSolrConverter = new MappingSolrConverter(new SimpleSolrMappingContext());
-		// mappingSolrConverter.setCustomConversions(customConversions); // 自定义转换器
-		return mappingSolrConverter;
+		// 自定义转换器
+		// mappingSolrConverter.setCustomConversions(customConversions);
+		return new MappingSolrConverter(new SimpleSolrMappingContext());
 	}
-	
+
 	@Bean
 	public SolrTemplate solrTemplate() {
-		return new SolrTemplate(solrClient(), SolrConstants.solrCoreName);
+		return new SolrTemplate(solrClient, SolrConstants.solrCoreName);
 	}
 
-	@Override
+	@PreDestroy
 	public void destroy() throws Exception {
-		solrClient().close();
+		try {
+			solrClient.close();
+			LOGGER.debug(String.format("Destroy solrClient %s successful", solrClient));
+		} catch (Exception e) {
+			LOGGER.debug(String.format("Destroy solrClient %s error", solrClient), e);
+		}
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// init
+	@PostConstruct
+	public void init() throws Exception {
+		// 初始化
 	}
 
-//	public static void main(String[] args) {
-//		SolrClient client = new HttpSolrClient("http://192.168.199.106:8080/solr/");
-//		SolrTemplate solrTemplate = new SolrTemplate(client);
-//		solrTemplate.setSolrCore(SolrConstants.solrCoreName);
-//		solrTemplate.afterPropertiesSet();
-//		// SolrOrderShippingInfo info = new SolrOrderShippingInfo();
-//		// info.setId("2");
-//		// info.setBuyerAddress("中国江苏省苏州市新区金枫路234号东创产业园E栋12楼1206室");
-//		// info.setBuyerCity("苏州市suzhou");
-//		// info.setBuyerCountry("中国China");
-//		// info.setBuyerEmail("momogoing@163.com");
-//		// info.setBuyerProvince("江苏省jiangsu");
-//		// info.setBuyerStreet("金枫路234号东创产业园E栋12楼1206室");
-//		// info.setOrderId("OD123");
-//		// System.out.println(JsonUtil.toJSON(info));
-//		// solrTemplate.saveBean(info);
-//		// solrTemplate.commit(SolrConstants.solrCoreName);
-//		Query query = new SimpleQuery();
-//		query.addCriteria(Criteria.where("id").in(new Object[] { "1", "2" }).and("buyerAddress").contains("中国"));
-//		query.addSort(new Sort(Sort.Direction.DESC, "id"));
-//		// query.addSort(new Sort(Sort.Direction.DESC, "id", "description"));
-//		// query.addSort(new Sort(Sort.Direction.DESC, "description").and(new
-//		// Sort(Sort.Direction.ASC, "id")));
-//		Page<SolrOrderShippingInfo> page = solrTemplate.query(SolrConstants.solrCoreName, query,
-//				SolrOrderShippingInfo.class);
-//		page.forEach(new Consumer<SolrOrderShippingInfo>() {
-//			@Override
-//			public void accept(SolrOrderShippingInfo info) {
-//				System.out.println(JsonUtil.toJSON(info));
-//			}
-//		});
-//	}
+	// public static void main(String[] args) {
+	// SolrClient client = new
+	// HttpSolrClient("http://192.168.199.106:8080/solr/");
+	// SolrTemplate solrTemplate = new SolrTemplate(client);
+	// solrTemplate.setSolrCore(SolrConstants.solrCoreName);
+	// solrTemplate.afterPropertiesSet();
+	// // SolrOrderShippingInfo info = new SolrOrderShippingInfo();
+	// // info.setId("2");
+	// // info.setBuyerAddress("中国江苏省苏州市新区金枫路234号东创产业园E栋12楼1206室");
+	// // info.setBuyerCity("苏州市suzhou");
+	// // info.setBuyerCountry("中国China");
+	// // info.setBuyerEmail("momogoing@163.com");
+	// // info.setBuyerProvince("江苏省jiangsu");
+	// // info.setBuyerStreet("金枫路234号东创产业园E栋12楼1206室");
+	// // info.setOrderId("OD123");
+	// // System.out.println(JsonUtil.toJSON(info));
+	// // solrTemplate.saveBean(info);
+	// // solrTemplate.commit(SolrConstants.solrCoreName);
+	// Query query = new SimpleQuery();
+	// query.addCriteria(Criteria.where("id").in(new Object[] { "1", "2"
+	// }).and("buyerAddress").contains("中国"));
+	// query.addSort(new Sort(Sort.Direction.DESC, "id"));
+	// // query.addSort(new Sort(Sort.Direction.DESC, "id", "description"));
+	// // query.addSort(new Sort(Sort.Direction.DESC, "description").and(new
+	// // Sort(Sort.Direction.ASC, "id")));
+	// Page<SolrOrderShippingInfo> page =
+	// solrTemplate.query(SolrConstants.solrCoreName, query,
+	// SolrOrderShippingInfo.class);
+	// page.forEach(new Consumer<SolrOrderShippingInfo>() {
+	// @Override
+	// public void accept(SolrOrderShippingInfo info) {
+	// System.out.println(JsonUtil.toJSON(info));
+	// }
+	// });
+	// }
 
 }

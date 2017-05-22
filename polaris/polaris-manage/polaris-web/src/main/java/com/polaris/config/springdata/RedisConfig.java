@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.polaris.common.constant.PatternConstants;
 import com.polaris.common.constant.RedisConstants;
@@ -37,12 +40,21 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 @EnableRedisRepositories(basePackages = { "com.polaris.manage.*.redis" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
-public class RedisConfig implements InitializingBean, DisposableBean {
+public class RedisConfig {
 
 	private static final Logger LOGGER = LogManager.getLogger(RedisConfig.class);
 
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private JedisPoolConfig jedisPoolConfig;
+
+	@Autowired
+	private RedisClusterConfiguration redisClusterConfiguration;
+
+	@Autowired
+	private JedisConnectionFactory jedisConnectionFactory;
 
 	@Bean
 	public JedisPoolConfig jedisPoolConfig() {
@@ -74,8 +86,8 @@ public class RedisConfig implements InitializingBean, DisposableBean {
 	 */
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
-		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration(),
-				jedisPoolConfig());
+		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration,
+				jedisPoolConfig);
 		jedisConnectionFactory.setUsePool(true);
 		jedisConnectionFactory.setTimeout(30000);
 		jedisConnectionFactory.afterPropertiesSet();
@@ -110,7 +122,7 @@ public class RedisConfig implements InitializingBean, DisposableBean {
 	@Bean
 	public RedisTemplate<Serializable, Serializable> redisTemplate() {
 		RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<Serializable, Serializable>();
-		redisTemplate.setConnectionFactory(jedisConnectionFactory());
+		redisTemplate.setConnectionFactory(jedisConnectionFactory);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
 		return redisTemplate;
@@ -124,7 +136,7 @@ public class RedisConfig implements InitializingBean, DisposableBean {
 	@Bean
 	public StringRedisTemplate stringRedisTemplate() {
 		StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
-		stringRedisTemplate.setConnectionFactory(jedisConnectionFactory());
+		stringRedisTemplate.setConnectionFactory(jedisConnectionFactory);
 		stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
 		stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
 		return stringRedisTemplate;
@@ -140,6 +152,8 @@ public class RedisConfig implements InitializingBean, DisposableBean {
 		ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
 		objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 		objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.setDateFormat(new SimpleDateFormat(PatternConstants.DATE_FORMAT_PATTERN_1));
 		JaxbAnnotationModule module = new JaxbAnnotationModule();
 		objectMapper.registerModule(module);
@@ -148,20 +162,25 @@ public class RedisConfig implements InitializingBean, DisposableBean {
 
 	@Bean
 	public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {
-		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(
+		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
 				Object.class);
 		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		return jackson2JsonRedisSerializer;
 	}
 
-	@Override
+	@PreDestroy
 	public void destroy() throws Exception {
-		jedisConnectionFactory().destroy();
+		try {
+			jedisConnectionFactory.destroy();
+			LOGGER.debug(String.format("Destroy jedisConnectionFactory %s successful", jedisConnectionFactory));
+		} catch (Exception e) {
+			LOGGER.debug(String.format("Destroy jedisConnectionFactory %s error", jedisConnectionFactory), e);
+		}
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// init
+	@PostConstruct
+	public void init() throws Exception {
+		// 初始化
 	}
 
 }

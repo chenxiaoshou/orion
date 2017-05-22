@@ -26,13 +26,8 @@ public final class JsonUtil {
 
 	public static ObjectMapper createMapper() {
 		ObjectMapper mapper = new ObjectMapper();
-		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_DATETIME);
-		mapper.setDateFormat(dateFormat);
-		JaxbAnnotationModule module = new JaxbAnnotationModule();
-		mapper.registerModule(module);
-		// 另一种方式配置jaxb注解
-		// mapper.setAnnotationIntrospector(new
-		// JaxbAnnotationIntrospector(mapper.getTypeFactory()));
+		mapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT_DATETIME));
+		mapper.registerModule(new JaxbAnnotationModule());
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		return mapper;

@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
+import com.polaris.common.exception.PolarisException;
+
 public class SpringUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(SpringUtil.class);
@@ -30,6 +32,10 @@ public class SpringUtil {
 		this.applicationContext = applicationContext;
 	}
 
+	public void close() {
+		this.applicationContext = null;
+	}
+	
 	/**
 	 * 容器启动时，会将applicationContext注入到当前类中。如果是Junit测试，需要手动注入才能使用
 	 * @param beanName
@@ -39,7 +45,7 @@ public class SpringUtil {
 		ApplicationContext ac = SpringUtil.getInstance().getApplicationContext();
 		if (ac == null) {
 			LOGGER.error("failed inject applicationContext into SpringUtil");
-			throw new RuntimeException("Failed inject applicationContext into SpringUtil");
+			throw new PolarisException("Failed inject applicationContext into SpringUtil");
 		}
 		return ac.getBean(beanName);
 	}

@@ -1,15 +1,14 @@
 package com.polaris.config.datasource;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +22,11 @@ import com.alibaba.druid.filter.logging.Log4j2Filter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.opensource.dbhelp.DbHelper;
+import com.polaris.common.exception.PolarisException;
 
 @Configuration
 @PropertySource("classpath:config.properties")
-public class DataSourceConfig implements InitializingBean, DisposableBean {
+public class DataSourceConfig {
 
 	private static final Logger LOGGER = LogManager.getLogger(DataSourceConfig.class);
 
@@ -42,34 +42,40 @@ public class DataSourceConfig implements InitializingBean, DisposableBean {
 	@Bean
 	@Primary
 	public DruidDataSource dataSource() {
-		DruidDataSource dataSource = new DruidDataSource();
-		dataSource.setUrl(env.getProperty("mysql.url"));
-		dataSource.setUsername(env.getProperty("mysql.username"));
-		dataSource.setPassword(env.getProperty("mysql.password"));
-		dataSource.setInitialSize(Integer.parseInt(env.getProperty("mysql.initialSize")));
-		dataSource.setMinIdle(Integer.parseInt(env.getProperty("mysql.minIdle")));
-		dataSource.setMaxActive(Integer.parseInt(env.getProperty("mysql.maxActive")));
-		dataSource.setMaxWait(Long.parseLong(env.getProperty("mysql.maxWait")));
-		dataSource.setTimeBetweenEvictionRunsMillis(
-				Long.parseLong(env.getProperty("mysql.timeBetweenEvictionRunsMillis")));
-		dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(env.getProperty("mysql.minEvictableIdleTimeMillis")));
-		dataSource.setPoolPreparedStatements(Boolean.valueOf(env.getProperty("mysql.poolPreparedStatements")));
-		dataSource.setMaxPoolPreparedStatementPerConnectionSize(
-				Integer.parseInt(env.getProperty("mysql.maxPoolPreparedStatementPerConnectionSize")));
-		dataSource.setValidationQuery("SELECT 'x' from dual");
-		dataSource.setTestWhileIdle(true);
-		dataSource.setTestOnBorrow(false);
-		dataSource.setTestOnReturn(false);
+		DruidDataSource dataSource = null;
 		try {
+			dataSource = new DruidDataSource();
+			dataSource.setUrl(env.getProperty("mysql.url"));
+			dataSource.setUsername(env.getProperty("mysql.username"));
+			dataSource.setPassword(env.getProperty("mysql.password"));
+			dataSource.setInitialSize(Integer.parseInt(env.getProperty("mysql.initialSize")));
+			dataSource.setMinIdle(Integer.parseInt(env.getProperty("mysql.minIdle")));
+			dataSource.setMaxActive(Integer.parseInt(env.getProperty("mysql.maxActive")));
+			dataSource.setMaxWait(Long.parseLong(env.getProperty("mysql.maxWait")));
+			dataSource.setTimeBetweenEvictionRunsMillis(
+					Long.parseLong(env.getProperty("mysql.timeBetweenEvictionRunsMillis")));
+			dataSource
+					.setMinEvictableIdleTimeMillis(Long.parseLong(env.getProperty("mysql.minEvictableIdleTimeMillis")));
+			dataSource.setPoolPreparedStatements(Boolean.valueOf(env.getProperty("mysql.poolPreparedStatements")));
+			dataSource.setMaxPoolPreparedStatementPerConnectionSize(
+					Integer.parseInt(env.getProperty("mysql.maxPoolPreparedStatementPerConnectionSize")));
+			dataSource.setValidationQuery("SELECT 'x' from dual");
+			dataSource.setTestWhileIdle(true);
+			dataSource.setTestOnBorrow(false);
+			dataSource.setTestOnReturn(false);
 			// stat-sql统计，log4j2-日志记录，wall-sql防注入攻击
 			dataSource.setFilters("stat,log4j2,wall");
-		} catch (SQLException e) {
-			LOGGER.error("Druid设置过滤器失败", e);
+			List<Filter> filters = new ArrayList<>();
+			filters.add(log4j2Filter());
+			filters.add(statFilter());
+			dataSource.setProxyFilters(filters);
+		} catch (Exception e) {
+			LOGGER.error("init DruidDataSource error", e);
+			if (dataSource != null) {
+				dataSource.close();
+			}
+			throw new PolarisException("init DruidDataSource error", e);
 		}
-		List<Filter> filters = new ArrayList<>();
-		filters.add(log4j2Filter());
-		filters.add(statFilter());
-		dataSource.setProxyFilters(filters);
 		return dataSource;
 	}
 
@@ -111,13 +117,19 @@ public class DataSourceConfig implements InitializingBean, DisposableBean {
 		return new DbHelper(transactionAwareDataSourceProxy());
 	}
 
-	@Override
+	@PreDestroy
 	public void destroy() throws Exception {
-		dataSource().close();
+		DruidDataSource druidDataSource = (DruidDataSource) dataSource;
+		try {
+			druidDataSource.close();
+			LOGGER.debug(String.format("Destroy druidDataSource %s successful", druidDataSource));
+		} catch (Exception e) {
+			LOGGER.debug(String.format("Destroy druidDataSource %s error", druidDataSource), e);
+		}
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
+	@PostConstruct
+	public void init() throws Exception {
 		// 初始化
 	}
 

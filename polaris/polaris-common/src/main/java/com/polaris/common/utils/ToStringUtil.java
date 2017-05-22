@@ -48,7 +48,7 @@ public final class ToStringUtil {
 	 */
 	public static String toJSON(Object obj) {
 		JSONObject jsonObj = new JSONObject();
-		return jsonObj.accumulate(obj.getClass().getName(), JsonUtil.toJSON(obj)).toString();
+		return jsonObj.accumulate(obj.getClass().getSimpleName(), JsonUtil.toJSON(obj)).toString();
 	}
 	
 	private static String arrayToString(Object obj, ToStringStyle style) {
