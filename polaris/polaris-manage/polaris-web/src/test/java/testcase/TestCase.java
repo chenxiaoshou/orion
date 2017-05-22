@@ -1,6 +1,5 @@
 package testcase;
 
-import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.dic.OrderStatus;
 import com.polaris.manage.web.vo.order.Order4Create;
 
@@ -12,7 +11,10 @@ public class TestCase {
 		order.setSaleChannel("SMT");
 		order.setStatus(OrderStatus.STEP_AWAIT_PROCESSING.getStatus());
 		order.setTotalPrice(19.9d);
-		System.out.println(JsonUtil.toJSON(order));
+		
+		System.out.println(OrderStatus.STEP_AWAIT_PROCESSING.name());
+		
+		
 	}
 
 }

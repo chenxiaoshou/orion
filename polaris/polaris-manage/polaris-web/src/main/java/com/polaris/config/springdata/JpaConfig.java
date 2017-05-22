@@ -2,12 +2,14 @@ package com.polaris.config.springdata;
 
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,14 +24,23 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.polaris.config.datasource.DataSourceConfig;
+
 @Configuration
 @EnableJpaRepositories(basePackages = {
-		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
-				entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
-public class JpaConfig implements InitializingBean, DisposableBean {
+		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
+public class JpaConfig {
+
+	private static final Logger LOGGER = LogManager.getLogger(DataSourceConfig.class);
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private JpaVendorAdapter vendorAdapter;
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	/**
 	 * JPA实体转换器
@@ -56,7 +67,7 @@ public class JpaConfig implements InitializingBean, DisposableBean {
 	@Primary
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-		factory.setJpaVendorAdapter(vendorAdapter());
+		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPersistenceProvider(new HibernatePersistenceProvider());
 		factory.setPackagesToScan("com.polaris.manage.model.mysql");
 		factory.setDataSource(dataSource);
@@ -84,18 +95,23 @@ public class JpaConfig implements InitializingBean, DisposableBean {
 	@Primary
 	public PlatformTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory());
+		transactionManager.setEntityManagerFactory(entityManagerFactory);
 		return transactionManager;
 	}
 
-	@Override
+	@PreDestroy
 	public void destroy() throws Exception {
-		entityManagerFactory().close();
+		try {
+			entityManagerFactory.close();
+			LOGGER.debug(String.format("Destroy entityManagerFactory %s successful", entityManagerFactory));
+		} catch (Exception e) {
+			LOGGER.debug(String.format("Destroy entityManagerFactory %s error", entityManagerFactory), e);
+		}
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// init
+	@PostConstruct
+	public void init() throws Exception {
+		// 初始化
 	}
 
 }

@@ -7,7 +7,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
-public class Order4Create implements Serializable {
+import com.polaris.common.base.BaseObject;
+
+public class Order4Create extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -1100351041463473872L;
 
