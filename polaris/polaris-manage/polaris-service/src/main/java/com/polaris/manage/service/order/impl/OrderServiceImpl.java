@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polaris.common.paging.PagingSupport;
+import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.persist.mysql.order.pub.OrderDao;
@@ -22,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public Order save(Order order) {
+		order.setUpdateTime(DateUtil.timestamp());
 		return this.orderDao.save(order);
 	}
 
@@ -55,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public Order modify(Order order) {
+		order.setUpdateTime(DateUtil.timestamp());
 		return this.orderDao.save(order);
 	}
 

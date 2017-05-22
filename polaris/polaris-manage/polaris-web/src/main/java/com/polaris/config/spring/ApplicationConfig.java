@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,7 +34,7 @@ import com.polaris.config.springdata.SolrConfig;
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, ControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 支持切面,设置proxyTargetClass参数用来指定是使用CGLIB基于类的代理还是使用jdk基于接口的代理，使用@Aspect注解
 @EnableTransactionManagement // 支持事务,使用@Transational注解
-@EnableScheduling // 支持定时任务,使用@Scheduled注解
+//@EnableScheduling // 支持定时任务,使用@Scheduled注解
 @EnableAsync // 支持异步,使用@Async注解
 public class ApplicationConfig {
 

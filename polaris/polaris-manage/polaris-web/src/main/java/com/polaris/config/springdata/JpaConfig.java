@@ -6,6 +6,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +26,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableJpaRepositories(basePackages = {
 		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, 
 				entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
-public class JpaConfig {
+public class JpaConfig implements InitializingBean, DisposableBean {
 
 	@Autowired
 	private DataSource dataSource;
@@ -84,6 +86,16 @@ public class JpaConfig {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactory());
 		return transactionManager;
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		entityManagerFactory().close();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// init
 	}
 
 }

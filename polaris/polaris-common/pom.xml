@@ -14,7 +14,7 @@
 	<name>polaris-common</name>
 	<url>http://maven.apache.org</url>
 	<packaging>jar</packaging>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -35,8 +35,8 @@
 
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
-			   <groupId>com.opensource</groupId>
-			   <artifactId>dbhelper</artifactId>
+			<groupId>com.opensource</groupId>
+			<artifactId>dbhelper</artifactId>
 		</dependency>
 
 		<!-- spring -->
@@ -106,6 +106,12 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mongodb</groupId>
+					<artifactId>mongo-java-driver</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -127,6 +133,12 @@
 			<artifactId>spring-data-rest-webmvc</artifactId>
 		</dependency>
 
+		<!-- mongodb -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+		</dependency>
+
 		<!-- activemq -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
@@ -144,7 +156,7 @@
 			<!--<optional>true</optional> -->
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+		<!-- aspectjrt -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>

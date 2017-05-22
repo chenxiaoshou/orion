@@ -35,4 +35,9 @@ public final class ExceptionConstants {
 	 */
 	public static final String BAD_REQUEST = "global.bad_request";
 	
+	/**
+	 * 400 - App Exception
+	 */
+	public static final String API_EXCEPTION = "global.api_exception";
+	
 }

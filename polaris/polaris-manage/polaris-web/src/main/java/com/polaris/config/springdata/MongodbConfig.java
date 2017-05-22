@@ -2,6 +2,8 @@ package com.polaris.config.springdata;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -21,7 +23,7 @@ import com.polaris.common.converter.TimestampConverter;
  */
 @Configuration
 @EnableMongoRepositories(basePackages = { "com.polaris.manage.*.mongo" })
-public class MongodbConfig extends AbstractMongoConfiguration {
+public class MongodbConfig extends AbstractMongoConfiguration implements InitializingBean, DisposableBean {
 
 	@Autowired
 	private Environment env;
@@ -40,6 +42,16 @@ public class MongodbConfig extends AbstractMongoConfiguration {
 	@Override
 	public CustomConversions customConversions() {
 		return new CustomConversions(Collections.singletonList(TimestampConverter.INSTANCE));
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		mongo().close();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// init
 	}
 
 //	public static void main(String[] args) {

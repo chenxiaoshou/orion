@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.compress.utils.Charsets;
 import org.aspectj.lang.annotation.Aspect;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -62,14 +64,14 @@ import com.polaris.common.utils.JsonUtil;
  */
 @Configuration
 @ComponentScan(basePackages = { "com.polaris.manage.web" }, useDefaultFilters = false, includeFilters = {
-		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, RestController.class,
+		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, RestController.class,
 				Aspect.class, ControllerAdvice.class, RestControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
 public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private Environment env;
-	
+
 	/**
 	 * JSP视图解析器
 	 * 
@@ -135,7 +137,8 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 		converters.add(stringConverter);
 		// XML消息转换器，两种方式:Jaxb 和 Marshalling，任选其一
 		converters.add(new Jaxb2RootElementHttpMessageConverter());
-//		converters.add(new MarshallingHttpMessageConverter(new CastorMarshaller(), new CastorMarshaller()));
+		// converters.add(new MarshallingHttpMessageConverter(new
+		// CastorMarshaller(), new CastorMarshaller()));
 		// 待测 converters.add(new MarshallingHttpMessageConverter(new
 		// Jaxb2Marshaller(), new Jaxb2Marshaller()));
 		// Json消息转换器
@@ -173,7 +176,20 @@ public class PolarisMvcConfig extends WebMvcConfigurationSupport {
 		super.requestMappingHandlerAdapter();
 		RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
 		requestMappingHandlerAdapter.setMessageConverters(createMessageConverters());
+		requestMappingHandlerAdapter.setWebBindingInitializer(getConfigurableWebBindingInitializer());
 		return requestMappingHandlerAdapter;
+	}
+
+	/**
+	 * validator
+	 */
+	@Bean
+	public LocalValidatorFactoryBean validator() {
+		LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
+		validatorFactoryBean.setProviderClass(HibernateValidator.class);
+		validatorFactoryBean.setValidationMessageSource(messageSource());
+		validatorFactoryBean.afterPropertiesSet();
+		return validatorFactoryBean;
 	}
 
 	/**

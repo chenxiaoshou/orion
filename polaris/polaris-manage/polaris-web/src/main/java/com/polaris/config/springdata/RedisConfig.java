@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +37,7 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 @EnableRedisRepositories(basePackages = { "com.polaris.manage.*.redis" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
-public class RedisConfig {
+public class RedisConfig implements InitializingBean, DisposableBean {
 
 	private static final Logger LOGGER = LogManager.getLogger(RedisConfig.class);
 
@@ -150,6 +152,16 @@ public class RedisConfig {
 				Object.class);
 		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		return jackson2JsonRedisSerializer;
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		jedisConnectionFactory().destroy();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// init
 	}
 
 }

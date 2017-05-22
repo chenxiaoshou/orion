@@ -2,6 +2,8 @@ package com.polaris.config.springdata;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +25,7 @@ import com.polaris.common.constant.SolrConstants;
 @Configuration
 @EnableSolrRepositories(basePackages = {
 		"com.polaris.manage.*.solr" }, multicoreSupport = true, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND)
-public class SolrConfig {
+public class SolrConfig implements InitializingBean, DisposableBean {
 
 	private static final String PROPERTY_NAME_SOLR_SERVER_URL = "solr.host";
 
@@ -46,6 +48,16 @@ public class SolrConfig {
 	@Bean
 	public SolrTemplate solrTemplate() {
 		return new SolrTemplate(solrClient(), SolrConstants.solrCoreName);
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		solrClient().close();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// init
 	}
 
 //	public static void main(String[] args) {

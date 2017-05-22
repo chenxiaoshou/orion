@@ -47,6 +47,12 @@
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
+		<!-- jsp等视图技术中可以使用el表达式的方式访问到国际化信息 -->
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+		</dependency>
+
 		<!-- dbhelper 自定义jar包 -->
 		<dependency>
 			<groupId>com.opensource</groupId>
@@ -207,11 +213,11 @@
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
 		</dependency>
-		
+
 		<!-- mongodb -->
 		<dependency>
-		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongo-java-driver</artifactId>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
 		</dependency>
 
 	</dependencies>

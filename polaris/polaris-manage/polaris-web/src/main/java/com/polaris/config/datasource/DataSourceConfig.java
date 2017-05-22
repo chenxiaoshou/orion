@@ -8,6 +8,8 @@ import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +26,7 @@ import com.opensource.dbhelp.DbHelper;
 
 @Configuration
 @PropertySource("classpath:config.properties")
-public class DataSourceConfig {
+public class DataSourceConfig implements InitializingBean, DisposableBean {
 
 	private static final Logger LOGGER = LogManager.getLogger(DataSourceConfig.class);
 
@@ -39,7 +41,7 @@ public class DataSourceConfig {
 	 */
 	@Bean
 	@Primary
-	public DataSource dataSource() {
+	public DruidDataSource dataSource() {
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(env.getProperty("mysql.url"));
 		dataSource.setUsername(env.getProperty("mysql.username"));
@@ -107,6 +109,16 @@ public class DataSourceConfig {
 	@Bean
 	public DbHelper dbHelper() {
 		return new DbHelper(transactionAwareDataSourceProxy());
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		dataSource().close();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// 初始化
 	}
 
 }
