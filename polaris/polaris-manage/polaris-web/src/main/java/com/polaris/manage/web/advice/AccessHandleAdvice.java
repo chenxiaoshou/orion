@@ -71,8 +71,8 @@ public class AccessHandleAdvice {
 		String[] paramNames = methodSignature.getParameterNames();
 		String returnType = methodSignature.getReturnType().getSimpleName();
 		AccessAdviceInfo accessAdviceInfo = new AccessAdviceInfo();
-		// visitor
-		// visitorIp
+		// visitor TODO
+		// visitorIp TODO
 		// requestURL
 		accessAdviceInfo.setRequestURL(request.getRequestURL().toString());
 		// className

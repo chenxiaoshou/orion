@@ -216,6 +216,13 @@
 				<artifactId>hibernate-validator</artifactId>
 				<version>5.4.1.Final</version>
 			</dependency>
+			
+			<!-- jsp等视图技术中可以使用el表达式的方式访问到国际化信息 -->
+			<dependency>
+			    <groupId>javax.el</groupId>
+			    <artifactId>javax.el-api</artifactId>
+			    <version>3.0.0</version>
+			</dependency>
 
 			<!-- google.guava -->
 			<dependency>
