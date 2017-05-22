@@ -1,0 +1,3 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,Latency,IdleTime,Connect
+1495349440219,1002,Ping目标服务器,Non HTTP response code: java.net.ConnectException,Non HTTP response message: Connection refused: connect,polaris-web-api线程组 1-1,text,false,"Test failed: text expected to contain /""ack"":""success""/",2225,0,1,1,0,0,1001
+1495349441231,1006,添加订单,Non HTTP response code: java.net.ConnectException,Non HTTP response message: Connection refused: connect,polaris-web-api线程组 1-1,text,false,"Test failed: text expected to contain /""ack"":""success""/",2225,0,1,1,0,0,1006
