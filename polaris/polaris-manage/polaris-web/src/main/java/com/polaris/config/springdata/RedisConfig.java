@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
-import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.polaris.common.constant.PatternConstants;
-import com.polaris.common.constant.RedisConstants;
 
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -63,6 +61,11 @@ public class RedisConfig {
 		poolConfig.setMaxIdle(env.getRequiredProperty("redis.maxIdle", Integer.class));
 		poolConfig.setMaxWaitMillis(env.getRequiredProperty("redis.maxWaitMillis", Long.class));
 		poolConfig.setTestOnBorrow(env.getRequiredProperty("redis.testOnBorrow", Boolean.class));
+		poolConfig.setTestWhileIdle(env.getRequiredProperty("redis.testWhileIdle", Boolean.class));
+		poolConfig
+				.setMinEvictableIdleTimeMillis(env.getRequiredProperty("redis.minEvictableIdleTimeMillis", Long.class));
+		poolConfig.setTimeBetweenEvictionRunsMillis(
+				env.getRequiredProperty("redis.timeBetweenEvictionRunsMillis", Long.class));
 		return poolConfig;
 	}
 
@@ -89,29 +92,9 @@ public class RedisConfig {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration,
 				jedisPoolConfig);
 		jedisConnectionFactory.setUsePool(true);
-		jedisConnectionFactory.setTimeout(30000);
+		jedisConnectionFactory.setTimeout(env.getRequiredProperty("redis.connectionTimeout", Integer.class));
 		jedisConnectionFactory.afterPropertiesSet();
-		testConn(jedisConnectionFactory);
 		return jedisConnectionFactory;
-	}
-
-	// 测试连接，有问题就抛错, 通知容器中止启动
-	private void testConn(JedisConnectionFactory jedisConnectionFactory) {
-		RedisClusterConnection conn = null;
-		try {
-			conn = jedisConnectionFactory.getClusterConnection();
-			if (!RedisConstants.PONG.equalsIgnoreCase(conn.ping())) {
-				LOGGER.fatal("Redis服务器连接异常");
-				throw new RuntimeException("Redis服务器连接异常");
-			}
-		} catch (Exception e) {
-			LOGGER.fatal("Redis服务器连接异常");
-			throw new RuntimeException("Redis服务器连接异常", e);
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-		}
 	}
 
 	/**
@@ -121,7 +104,8 @@ public class RedisConfig {
 	 */
 	@Bean
 	public RedisTemplate<Serializable, Serializable> redisTemplate() {
-		RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<Serializable, Serializable>();
+		RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<>();
+		redisTemplate.afterPropertiesSet();
 		redisTemplate.setConnectionFactory(jedisConnectionFactory);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
@@ -136,6 +120,7 @@ public class RedisConfig {
 	@Bean
 	public StringRedisTemplate stringRedisTemplate() {
 		StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
+		stringRedisTemplate.afterPropertiesSet();
 		stringRedisTemplate.setConnectionFactory(jedisConnectionFactory);
 		stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
 		stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer());

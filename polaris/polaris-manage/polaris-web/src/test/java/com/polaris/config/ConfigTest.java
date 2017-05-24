@@ -8,6 +8,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.polaris.BaseTest;
 import com.polaris.common.constant.RabbitmqConstants;
@@ -17,11 +19,17 @@ public class ConfigTest extends BaseTest {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	
-//	@Test
+
+	@Autowired
+	private JedisConnectionFactory jedisConnectionFactory;
+
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
+	// @Test
 	public void testConfig() {
 		Assert.assertNotNull(mongoTemplate);
 		Set<String> collnames = mongoTemplate.getCollectionNames();
@@ -29,22 +37,35 @@ public class ConfigTest extends BaseTest {
 			System.out.println(collName);
 		}
 	}
-	
-	@Test
-	public void amqpTemplate() {
-		for (int i=0; i<5; i++) {
+
+	// @Test
+	public void testAmqpTemplate() {
+		for (int i = 0; i < 5; i++) {
 			Order obj = new Order();
 			obj.setId("OD" + i);
 			obj.setStatus(i % 5);
 			rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 			rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_PMS, RabbitmqConstants.ROUTINGKEY_PMS_ORDER, obj);
 		}
-		for (int i=0; i<5; i++) {
+		for (int i = 0; i < 5; i++) {
 			Order order = (Order) rabbitTemplate.receiveAndConvert(RabbitmqConstants.QUEUE_PMS_ORDER);
 			if (order != null) {
 				System.out.println(order);
 			}
 		}
 	}
-	
+
+	// @Test
+	public void testJedisConnectionFactory() {
+		System.out.println(
+				jedisConnectionFactory.getClusterConnection().lPush("polaris".getBytes(), "very good".getBytes()));
+		System.out.println(new String(jedisConnectionFactory.getClusterConnection().lPop("polaris".getBytes())));
+	}
+
+	@Test
+	public void testRedisTemplate() {
+		System.out.println(redisTemplate.getHashKeySerializer());
+		System.out.println(redisTemplate.getHashValueSerializer());
+	}
+
 }
