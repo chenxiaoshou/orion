@@ -9,13 +9,11 @@ import javax.servlet.ServletException;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextCleanupListener;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
 import com.polaris.common.constant.PolarisConstants;
-import com.polaris.common.listener.ContextDestroyListener;
 
 /**
  * 原web.xml中的配置信息(不包括web Servlet的配置)
@@ -30,19 +28,9 @@ public class WebInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
 		/**
-		 * 自定义应用资源清理监听器
-		 */
-		servletContext.addListener(ContextDestroyListener.class);
-		
-		/**
-		 * Spring资源清理监听器
+		 * IntrospectorCleanupListener
 		 */
 		servletContext.addListener(IntrospectorCleanupListener.class);
-		
-		/**
-		 * Spring ContextCleanupListener
-		 */
-		servletContext.addListener(ContextCleanupListener.class);
 		
 		/**
 		 * CharacterEncodingFilter 过滤器
