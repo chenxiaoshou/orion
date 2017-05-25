@@ -1,5 +1,10 @@
 package com.polaris.config.springdata;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -30,8 +35,13 @@ import com.polaris.common.constant.RabbitmqConstants;
 @EnableRabbit
 public class RabbitmqConfig {
 
+	private static final Logger LOGGER = LogManager.getLogger(RabbitmqConfig.class);
+	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private ConnectionFactory rabbitConnectionFactory;
 	
 	@Bean
 	public ConnectionFactory rabbitConnectionFactory() {
@@ -111,6 +121,22 @@ public class RabbitmqConfig {
 	@Bean
 	public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
 		return new Jackson2JsonMessageConverter();
+	}
+	
+	@PreDestroy
+	public void destroy() throws Exception {
+		try {
+			CachingConnectionFactory factory = (CachingConnectionFactory) rabbitConnectionFactory;
+			factory.destroy();
+			LOGGER.debug(String.format("Destroy rabbitConnectionFactory %s successful", rabbitConnectionFactory));
+		} catch (Exception e) {
+			LOGGER.debug(String.format("Destroy rabbitConnectionFactory %s error", rabbitConnectionFactory), e);
+		}
+	}
+
+	@PostConstruct
+	public void init() throws Exception {
+		// 初始化
 	}
 	
 }
