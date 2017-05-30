@@ -16,48 +16,45 @@ import org.hibernate.annotations.Parameter;
 import com.polaris.common.base.BaseObject;
 
 @Entity
-@Table(name="pms_order", indexes = {
-        @Index(columnList = "total_price", name = "idx_total_price")} )
+@Table(name = "PMS_ORDER", indexes = { @Index(columnList = "total_price", name = "idx_total_price") })
 public class Order extends BaseObject implements Serializable {
-	
+
 	private static final long serialVersionUID = -8594808281318789626L;
 
-	private String id; //订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
-	
+	private String id; // 订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
+
 	private int status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
-	
+
 	private double totalPrice; // 订单总金额
-	
+
 	private double paymentAmount; // 实际已支付金额
-	
+
 	private String saleChannel; // 订单来源渠道
-	
+
+	private String creator; // 创建者
+
 	private Timestamp createTime; // 创建时间
-	
+
+	private String updater; // 更新者
+
 	private Timestamp updateTime; // 更新时间
-	
+
 	private Timestamp completeTime; // 完成时间
-	
-	// 处于后期效率的考虑，这里不适用级联
-	// 这里的一对多，默认是由多的一方来维护关系，这里mappedBy指向的是多的一方中的order字段，不加这个的话，jpa会自动生成一个中间表
-	/*@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy="order")
-	@JoinColumn(name = "order_id")
-	private Set<OrderItem> orderItems = Collections.synchronizedSet(new HashSet<OrderItem>());*/
-	
+
 	@Id
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "OD")})
-	@Column(name = "id", nullable = false, columnDefinition = "varchar(128) default '' comment '订单唯一标识'")
+			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "OD") })
+	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	@Column(name = "status", nullable = false, columnDefinition = "int(2) default 0 comment '订单状态'")
+
+	@Column(name = "STATUS", nullable = false, columnDefinition = "int(2) default 0 comment '订单状态'")
 	public int getStatus() {
 		return status;
 	}
@@ -66,7 +63,7 @@ public class Order extends BaseObject implements Serializable {
 		this.status = status;
 	}
 
-	@Column(name = "total_price", nullable = false, precision=2, columnDefinition = "double(11,2) default 0.00 comment '订单总金额'")
+	@Column(name = "TOTAL_PRICE", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '订单总金额'")
 	public double getTotalPrice() {
 		return totalPrice;
 	}
@@ -75,7 +72,7 @@ public class Order extends BaseObject implements Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	@Column(name = "payment_amount", nullable = false, precision=2, columnDefinition = "double(11,2) default 0.00 comment '实际已支付金额'")
+	@Column(name = "PAYMENT_AMOUNT", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '实际已支付金额'")
 	public double getPaymentAmount() {
 		return paymentAmount;
 	}
@@ -84,7 +81,7 @@ public class Order extends BaseObject implements Serializable {
 		this.paymentAmount = paymentAmount;
 	}
 
-	@Column(name = "sale_channel", nullable = false, length=10, columnDefinition = "varchar(10) default '' comment '订单来源渠道'")
+	@Column(name = "SALE_CHANNEL", nullable = false, length = 16, columnDefinition = "varchar(16) default '' comment '订单来源渠道'")
 	public String getSaleChannel() {
 		return saleChannel;
 	}
@@ -93,7 +90,7 @@ public class Order extends BaseObject implements Serializable {
 		this.saleChannel = saleChannel;
 	}
 
-	@Column(name = "create_time", nullable = false, updatable=false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
+	@Column(name = "CREATE_TIME", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -102,7 +99,7 @@ public class Order extends BaseObject implements Serializable {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "update_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
+	@Column(name = "UPDATE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
@@ -111,13 +108,31 @@ public class Order extends BaseObject implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	@Column(name = "complete_time", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
+	@Column(name = "COMPLETE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
 	public Timestamp getCompleteTime() {
 		return completeTime;
 	}
 
 	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
+	}
+
+	@Column(name = "UPDATER", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater;
+	}
+
+	@Column(name = "CREATOR", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
 }

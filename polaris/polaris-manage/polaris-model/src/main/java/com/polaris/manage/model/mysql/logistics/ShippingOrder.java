@@ -21,7 +21,7 @@ import com.polaris.common.base.BaseObject;
  *
  */
 @Entity
-@Table(name = "pms_shipping_order")
+@Table(name = "PMS_SHIPPING_ORDER")
 public class ShippingOrder extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -294238168881496088L;
@@ -46,7 +46,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "SO") })
-	@Column(name = "id", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(128) default '' comment '物流订单唯一标识'")
+	@Column(name = "ID", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(64) default '' comment '物流订单唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -55,7 +55,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "freight", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '运费'")
+	@Column(name = "FREIGHT", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '运费'")
 	public double getFreight() {
 		return freight;
 	}
@@ -64,7 +64,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.freight = freight;
 	}
 
-	@Column(name = "shipment_number", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '物流单号'")
+	@Column(name = "SHIPMENT_NUMBER", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '物流单号'")
 	public String getShipmentNumber() {
 		return shipmentNumber;
 	}
@@ -73,7 +73,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.shipmentNumber = shipmentNumber;
 	}
 
-	@Column(name = "freight_forwarder_number", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '物流单号'")
+	@Column(name = "FREIGHT_FORWARDER_NUMBER", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '物流单号'")
 	public String getFreightForwarderNumber() {
 		return FreightForwarderNumber;
 	}
@@ -82,7 +82,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		FreightForwarderNumber = freightForwarderNumber;
 	}
 
-	@Column(name = "create_time", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
+	@Column(name = "CREATE_TIME", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -91,7 +91,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "delivery_time", nullable = true, columnDefinition = "DATETIME default NULL comment '交运时间'")
+	@Column(name = "DELIVERY_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '交运时间'")
 	public Timestamp getDeliveryTime() {
 		return deliveryTime;
 	}
@@ -100,7 +100,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.deliveryTime = deliveryTime;
 	}
 
-	@Column(name = "complete_time", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
+	@Column(name = "COMPLETE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
 	public Timestamp getCompleteTime() {
 		return completeTime;
 	}
@@ -109,7 +109,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 		this.completeTime = completeTime;
 	}
 
-	@Column(name = "order_id", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '订单id'")
+	@Column(name = "ORDER_ID", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '订单id'")
 	public String getOrderId() {
 		return orderId;
 	}

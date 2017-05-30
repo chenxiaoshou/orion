@@ -117,4 +117,6 @@ public final class PolarisConstants {
 	 */
 	public static final String UNKNOWN_EXCEPTION = "global.unknown_exception";
 
+	public static final String POLARIS_AUTH_DB = "polaris_auth";
+	
 }
