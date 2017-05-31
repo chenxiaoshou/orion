@@ -1,7 +1,5 @@
 package com.polaris.config.web;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +9,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.polaris.common.constant.PolarisConstants;
-import com.polaris.common.listener.ContextDestroyListener;
 import com.polaris.common.utils.SpringUtil;
 import com.polaris.config.spring.ApplicationConfig;
 import com.polaris.config.springmvc.PolarisMvcConfig;
@@ -25,14 +22,8 @@ import com.polaris.config.springmvc.PolarisMvcConfig;
 @Order(1)
 public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-	private static final Logger LOGGER = LogManager.getLogger(PolarisInitializer.class);
+	private static final Logger LOG = LogManager.getLogger(PolarisInitializer.class);
 
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-		super.onStartup(servletContext);
-		servletContext.addListener(ContextDestroyListener.class); // 在Spring的ContextLoaderListener之后声明，可以使用Spring管理的bean
-	}
-	
 	/**
 	 * 设置DispatcherServlet的name
 	 */
@@ -93,13 +84,11 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	@Override
 	protected WebApplicationContext createRootApplicationContext() {
 		WebApplicationContext ctx = super.createRootApplicationContext();
-		if (ctx != null && LOGGER.isDebugEnabled()) {
-			LOGGER.info("inject spring webapplicationcontext to SpringUtil");
+		if (ctx != null && LOG.isDebugEnabled()) {
+			LOG.info("inject spring webapplicationcontext to SpringUtil");
 		}
 		SpringUtil.getInstance().setApplicationContext(ctx);
 		return ctx;
 	}
-	
-	
 
 }

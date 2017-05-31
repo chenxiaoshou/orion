@@ -1,8 +1,11 @@
 package com.polaris.config.web;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -14,6 +17,8 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.filter.AccessControlFilter;
+import com.polaris.common.listener.ContextDestroyListener;
 
 /**
  * 原web.xml中的配置信息(不包括web Servlet的配置)
@@ -28,7 +33,12 @@ public class WebInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
 		/**
-		 * IntrospectorCleanupListener
+		 * 自定义监听器，用于应用关闭时的资源清理工作
+		 */
+		servletContext.addListener(ContextDestroyListener.class);
+		
+		/**
+		 * Spring提供的监听器，用于关闭时清理工作
 		 */
 		servletContext.addListener(IntrospectorCleanupListener.class);
 		
@@ -38,7 +48,7 @@ public class WebInitializer implements WebApplicationInitializer {
 		servletContext
 			.addFilter("characterEncodingFilter",new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8, true))
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, 
-						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR),false,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR), false, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 
 		/**
 		 * OpenEntityManagerInViewFilter
@@ -47,15 +57,30 @@ public class WebInitializer implements WebApplicationInitializer {
 		 */
 		servletContext.addFilter("openEntityManagerInViewFilter", new OpenEntityManagerInViewFilter())
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST,
-						DispatcherType.ASYNC, DispatcherType.ERROR),true,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						DispatcherType.ASYNC, DispatcherType.ERROR), true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 
 		/**
 		 * HiddenHttpMethodFilter过滤器，使java支持restful风格中http的put和delete方法
 		 */
 		servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter()).addMappingForUrlPatterns(
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
-						true,PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 
+		/**
+		 * AccessControlFilter,自定义的过滤器，用来处理Ajax跨域请求的问题
+		 */
+		Map<String, String> initParameters = new HashMap<>();
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_HEADERS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_HEADERS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_METHODS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_METHODS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_ORIGIN, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_ORIGIN);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_EXPOSE_HEADERS, PolarisConstants.VALUE_ACCESS_CONTROL_EXPOSE_HEADERS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_MAX_AGE, PolarisConstants.VALUE_ACCESS_CONTROL_MAX_AGE);
+		FilterRegistration.Dynamic accessControlFilter = servletContext.addFilter("accessControlFilter", new AccessControlFilter());
+		accessControlFilter.setInitParameters(initParameters);
+		accessControlFilter.addMappingForUrlPatterns(
+				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
+						true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
 	}
 
 }
