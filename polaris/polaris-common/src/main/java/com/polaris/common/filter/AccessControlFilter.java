@@ -1,6 +1,7 @@
 package com.polaris.common.filter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -8,12 +9,16 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.polaris.common.utils.ArrayUtil;
 
@@ -26,6 +31,8 @@ import com.polaris.common.utils.ArrayUtil;
  */
 public class AccessControlFilter implements Filter {
 
+	private static final Logger LOGGER = LogManager.getLogger(AccessControlFilter.class);
+	
 	/**
 	 * 跨域访问，服务端要想获取客户端和设置客户端的Cookie，必须要设置具体的域地址，不能使用通配符*
 	 */
@@ -97,6 +104,29 @@ public class AccessControlFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
+		
+//		// cookie test
+//		Cookie[] cookies = request.getCookies();
+//		if (cookies != null) {
+//			for (Cookie cookie : cookies) {
+//				LOGGER.debug("cookie [" + cookie.getName() + "] value [" + cookie.getValue() + "]");
+//			}
+//		}
+//		response.addCookie(new Cookie("test-cookie", "test-cookie"));
+//		
+//		// session test
+//		HttpSession session = request.getSession();
+//		if (session != null) {
+//			LOGGER.debug("session [" + session.getId() + "]");
+//			Enumeration<String> anumAttr = session.getAttributeNames();
+//			while (anumAttr.hasMoreElements()) {
+//				String attrName = anumAttr.nextElement();
+//				String value = (String) session.getAttribute(attrName);
+//				LOGGER.debug("attrName [" + attrName + "] value [" + value + "]");
+//			}
+//			session.setAttribute("test-session", "test-session");
+//		}
+		
 		// Ajax请求必须要包含在PolarisHttpFilter初始化中配置的域列表中，否则不允许进行跨域请求
 		if (StringUtils.isNotEmpty(allowOrigin)) {
 			String[] allowOrigins = allowOrigin.split(",");
