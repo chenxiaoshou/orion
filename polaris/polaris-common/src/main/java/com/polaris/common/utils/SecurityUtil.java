@@ -17,6 +17,7 @@ import javax.crypto.Cipher;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public final class SecurityUtil {
 
@@ -189,4 +190,17 @@ public final class SecurityUtil {
 		return new String(cipher.doFinal(cryptoBytes), StandardCharsets.UTF_8);
 	}
 
+	/**
+	 *  BCrypt加密演示，预备使用到系统中，用来存储用户的注册密码
+	 */
+	public static void main(String[] args) {
+		//hashed就是明文密码password加密后的结果，存储到数据库
+		String hashed = BCrypt.hashpw("123456", BCrypt.gensalt());
+		//candidate是明文密码，checkpw方法返回的是boolean
+		if (BCrypt.checkpw("123456", hashed))
+		    System.out.println("It matches");
+		else
+		    System.out.println("It does not match");
+	}
+	
 }

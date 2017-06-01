@@ -1,7 +1,6 @@
 package com.polaris.common.filter;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -9,30 +8,23 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.polaris.common.utils.ArrayUtil;
 
 /**
- * 1.解决Ajax跨域请求问题的过滤器；
- * 2.配置缓存策略
+ * 1.解决Ajax跨域请求问题的过滤器； 2.配置缓存策略
  * 
  * @author John
  *
  */
 public class AccessControlFilter implements Filter {
 
-	private static final Logger LOGGER = LogManager.getLogger(AccessControlFilter.class);
-	
 	/**
 	 * 跨域访问，服务端要想获取客户端和设置客户端的Cookie，必须要设置具体的域地址，不能使用通配符*
 	 */
@@ -59,24 +51,24 @@ public class AccessControlFilter implements Filter {
 	 * Origin,X-Requested-With,Content-Type,Accept,Cache-Control
 	 */
 	public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
-	
+
 	/**
 	 * 该字段可选，用来指定本次预检请求的有效期，单位为秒
 	 */
 	public static final String ACCESS_CONTROL_MAX_AGE = "Access-Control-Max-Age";
 
 	private static final String ORIGIN = "Origin";
-	
+
 	private static final String REFERER = "Referer";
-	
+
 	private static final String HTTP = "http";
-	
+
 	private static final String HTTPS = "https";
-	
+
 	private static final String SLASH = "/";
-	
+
 	private static final String SLASH2 = "//";
-	
+
 	private String allowOrigin;
 
 	private String allowMethods;
@@ -86,7 +78,7 @@ public class AccessControlFilter implements Filter {
 	private String allowHeaders;
 
 	private String exposeHeaders;
-	
+
 	private String accessControlMaxAge;
 
 	@Override
@@ -104,29 +96,30 @@ public class AccessControlFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		
-//		// cookie test
-//		Cookie[] cookies = request.getCookies();
-//		if (cookies != null) {
-//			for (Cookie cookie : cookies) {
-//				LOGGER.debug("cookie [" + cookie.getName() + "] value [" + cookie.getValue() + "]");
-//			}
-//		}
-//		response.addCookie(new Cookie("test-cookie", "test-cookie"));
-//		
-//		// session test
-//		HttpSession session = request.getSession();
-//		if (session != null) {
-//			LOGGER.debug("session [" + session.getId() + "]");
-//			Enumeration<String> anumAttr = session.getAttributeNames();
-//			while (anumAttr.hasMoreElements()) {
-//				String attrName = anumAttr.nextElement();
-//				String value = (String) session.getAttribute(attrName);
-//				LOGGER.debug("attrName [" + attrName + "] value [" + value + "]");
-//			}
-//			session.setAttribute("test-session", "test-session");
-//		}
-		
+
+		// // cookie test
+		// Cookie[] cookies = request.getCookies();
+		// if (cookies != null) {
+		// for (Cookie cookie : cookies) {
+		// LOGGER.debug("cookie [" + cookie.getName() + "] value [" +
+		// cookie.getValue() + "]");
+		// }
+		// }
+		// response.addCookie(new Cookie("test-cookie", "test-cookie"));
+		//
+		// // session test
+		// HttpSession session = request.getSession();
+		// if (session != null) {
+		// LOGGER.debug("session [" + session.getId() + "]");
+		// Enumeration<String> anumAttr = session.getAttributeNames();
+		// while (anumAttr.hasMoreElements()) {
+		// String attrName = anumAttr.nextElement();
+		// String value = (String) session.getAttribute(attrName);
+		// LOGGER.debug("attrName [" + attrName + "] value [" + value + "]");
+		// }
+		// session.setAttribute("test-session", "test-session");
+		// }
+
 		// Ajax请求必须要包含在PolarisHttpFilter初始化中配置的域列表中，否则不允许进行跨域请求
 		if (StringUtils.isNotEmpty(allowOrigin)) {
 			String[] allowOrigins = allowOrigin.split(",");
@@ -146,24 +139,24 @@ public class AccessControlFilter implements Filter {
 		if (StringUtils.isNotEmpty(allowCredentials)) {
 			response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, allowCredentials);
 		}
-		
+
 		if (StringUtils.isNotEmpty(allowHeaders)) {
 			response.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, allowHeaders);
 		}
-		
+
 		if (StringUtils.isNotEmpty(exposeHeaders)) {
 			response.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, exposeHeaders);
 		}
-		
+
 		if (StringUtils.isNotEmpty(accessControlMaxAge)) {
 			response.setHeader(ACCESS_CONTROL_MAX_AGE, accessControlMaxAge);
 		}
-		
+
 		// 不要缓存页面（这里先写死，后续如果需要再设置成配置模式）
 		response.setHeader(HttpHeaders.EXPIRES, "-1");
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
 		response.setHeader(HttpHeaders.PRAGMA, "no-cache");
-		
+
 		chain.doFilter(request, resp);
 	}
 
@@ -180,7 +173,7 @@ public class AccessControlFilter implements Filter {
 		}
 		return origin;
 	}
-	
+
 	@Override
 	public void destroy() {
 		// Do Nothing
