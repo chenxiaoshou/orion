@@ -11,11 +11,16 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import com.polaris.common.base.BaseObject;
 import com.polaris.common.constant.PolarisConstants;
 
+/**
+ * 用户表
+ * 
+ * @author John
+ *
+ */
 @Entity
 @Table(name = "PMS_USER", schema = PolarisConstants.POLARIS_AUTH_DB, indexes = {
 		@Index(columnList = "username", name = "idx_username"),
@@ -29,18 +34,18 @@ public class User extends BaseObject implements Serializable {
 	private String username; // 登录用户名
 
 	private String password; // SHA256加密之后的密码
-	
+
 	private String realName; // 员工姓名
-	
-	private int gender; // 性别
+
+	private Integer gender; // 性别
 
 	private String mobile;
 
 	private String idCard;
 
 	private String email;
-	
-	private boolean enable;
+
+	private Boolean enable;
 
 	private Timestamp lastLoginTime;
 
@@ -54,9 +59,8 @@ public class User extends BaseObject implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "USER") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '用户唯一标识'")
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -84,11 +88,11 @@ public class User extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "ENABLE", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
-	public boolean isEnable() {
+	public Boolean isEnable() {
 		return enable;
 	}
 
-	public void setEnable(boolean enable) {
+	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
 
@@ -156,11 +160,11 @@ public class User extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "GENDER", nullable = false, columnDefinition = "TINYINT(2) default 0 comment '性别(0：不明，1：女性， 2：男性)'")
-	public int getGender() {
+	public Integer getGender() {
 		return gender;
 	}
 
-	public void setGender(int gender) {
+	public void setGender(Integer gender) {
 		this.gender = gender;
 	}
 

@@ -45,7 +45,7 @@ public final class SecurityUtil {
 		try {
 			keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
 			initKey();
-			LOGGER.error("RSA Public Key [" + getBase64PublicKey() + "]");
+			LOGGER.error("RSA Public Key [" + getBase64PublicKey() + "] Private Key [" + getBase64PrivateKey() + "]");
 		} catch (Exception e) {
 			keyMap.clear();
 			LOGGER.error("Init RSA key failure!", e);

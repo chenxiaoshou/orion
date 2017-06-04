@@ -30,13 +30,19 @@ public class ShippingOrder extends BaseObject implements Serializable {
 
 	private String orderId; // 订单id
 
-	private double freight; // 运费
+	private Double freight; // 运费
 
 	private String shipmentNumber; // 物流单号
 
 	private String FreightForwarderNumber; // 货代单号
 
 	private Timestamp createTime; // 物流订单创建时间
+
+	private String creator;
+
+	private Timestamp updateTime;
+
+	private String updater;
 
 	private Timestamp deliveryTime; // 发货时间
 
@@ -46,7 +52,7 @@ public class ShippingOrder extends BaseObject implements Serializable {
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "SO") })
-	@Column(name = "ID", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(64) default '' comment '物流订单唯一标识'")
+	@Column(name = "ID", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -56,11 +62,11 @@ public class ShippingOrder extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "FREIGHT", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '运费'")
-	public double getFreight() {
+	public Double getFreight() {
 		return freight;
 	}
 
-	public void setFreight(double freight) {
+	public void setFreight(Double freight) {
 		this.freight = freight;
 	}
 
@@ -116,6 +122,33 @@ public class ShippingOrder extends BaseObject implements Serializable {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	@Column(name = "UPDATE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
+	public Timestamp getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	@Column(name = "UPDATER", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater;
+	}
+
+	@Column(name = "CREATOR", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
 }

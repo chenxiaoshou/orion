@@ -12,11 +12,11 @@ public class Order4Get implements Serializable {
 
 	private String orderId; // 订单Id
 
-	private int status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
+	private Integer status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 
-	private double totalPrice; // 订单总金额
+	private Double totalPrice; // 订单总金额
 
-	private double paymentAmount; // 实际已支付金额
+	private Double paymentAmount; // 实际已支付金额
 
 	private String saleChannel; // 订单来源渠道
 
@@ -37,27 +37,27 @@ public class Order4Get implements Serializable {
 		this.orderId = orderId;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public double getTotalPrice() {
+	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
-	public double getPaymentAmount() {
+	public Double getPaymentAmount() {
 		return paymentAmount;
 	}
 
-	public void setPaymentAmount(double paymentAmount) {
+	public void setPaymentAmount(Double paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
 

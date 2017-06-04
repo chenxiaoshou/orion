@@ -11,34 +11,23 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.polaris.common.base.BaseObject;
-
 /**
- * 菜单表
- * 
+ * 权限表
  * @author John
  *
  */
 @Entity
-@Table(name = "PMS_MENU")
-public class Menu extends BaseObject implements Serializable {
+@Table(name = "PMS_PRIVILEGE")
+public class Privilege implements Serializable {
 
-	private static final long serialVersionUID = 8773879710657400266L;
+	private static final long serialVersionUID = 5240662074365174587L;
 
 	private String id;
-
-	private String parentId;
-
-	private String name;
-
-	private String accessUrl;
-
-	private Integer level;
-
-	private String path;
 	
-	private Integer orderIndex;
+	private String type; // 权限类型
 
+	private String desc; // 权限描述
+	
 	private String creator; // 创建者
 
 	private Timestamp createTime; // 创建时间
@@ -58,59 +47,14 @@ public class Menu extends BaseObject implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	@Column(name = "NAME", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '菜单名'")
-	public String getName() {
-		return name;
+	
+	@Column(name = "TYPE", nullable = false, length = 16, columnDefinition = "varchar(16) default '' comment '权限类型(add,delete,view,modify,execute等)'")
+	public String getType() {
+		return type;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Column(name = "PARENT_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '父菜单ID'")
-	public String getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
-
-	@Column(name = "LEVEL", nullable = false, columnDefinition = "int(2) default 0 comment '菜单级数'")
-	public Integer getLevel() {
-		return level;
-	}
-
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
-
-	@Column(name = "PATH", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '父子菜单关系路径'")
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	@Column(name = "ACCESS_URL", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '访问路径'")
-	public String getAccessUrl() {
-		return accessUrl;
-	}
-
-	public void setAccessUrl(String accessUrl) {
-		this.accessUrl = accessUrl;
-	}
-
-	@Column(name = "ORDER_INDEX", nullable = false, columnDefinition = "int(10) default 0 comment '菜单排序索引'")
-	public Integer getOrderIndex() {
-		return orderIndex;
-	}
-
-	public void setOrderIndex(Integer orderIndex) {
-		this.orderIndex = orderIndex;
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	@Column(name = "CREATOR", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
@@ -149,4 +93,13 @@ public class Menu extends BaseObject implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	@Column(name = "DESC", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '权限描述'")
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	
 }

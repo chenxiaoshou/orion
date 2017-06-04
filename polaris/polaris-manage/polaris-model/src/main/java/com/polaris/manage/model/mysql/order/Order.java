@@ -23,11 +23,11 @@ public class Order extends BaseObject implements Serializable {
 
 	private String id; // 订单号，预备采用Redis的RedisAtomicLong来生成唯一标识
 
-	private int status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
+	private Integer status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 
-	private double totalPrice; // 订单总金额
+	private Double totalPrice; // 订单总金额
 
-	private double paymentAmount; // 实际已支付金额
+	private Double paymentAmount; // 实际已支付金额
 
 	private String saleChannel; // 订单来源渠道
 
@@ -45,7 +45,7 @@ public class Order extends BaseObject implements Serializable {
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "OD") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
+	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -55,29 +55,29 @@ public class Order extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "STATUS", nullable = false, columnDefinition = "int(2) default 0 comment '订单状态'")
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
 	@Column(name = "TOTAL_PRICE", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '订单总金额'")
-	public double getTotalPrice() {
+	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
 	@Column(name = "PAYMENT_AMOUNT", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '实际已支付金额'")
-	public double getPaymentAmount() {
+	public Double getPaymentAmount() {
 		return paymentAmount;
 	}
 
-	public void setPaymentAmount(double paymentAmount) {
+	public void setPaymentAmount(Double paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
 

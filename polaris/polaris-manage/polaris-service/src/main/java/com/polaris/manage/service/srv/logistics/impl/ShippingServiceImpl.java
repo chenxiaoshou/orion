@@ -1,4 +1,4 @@
-package com.polaris.manage.service.logistics.impl;
+package com.polaris.manage.service.srv.logistics.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.polaris.manage.model.mysql.logistics.ShippingOrder;
 import com.polaris.manage.persist.mysql.logistics.dto.SearchShippingOrderCriteria;
 import com.polaris.manage.persist.mysql.logistics.pub.ShippingOrderDao;
-import com.polaris.manage.service.logistics.ShippingService;
+import com.polaris.manage.service.srv.logistics.ShippingService;
 
 public class ShippingServiceImpl implements ShippingService {
 

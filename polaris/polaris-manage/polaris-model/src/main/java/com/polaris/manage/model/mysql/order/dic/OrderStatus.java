@@ -1,4 +1,4 @@
-package com.polaris.manage.model.dic;
+package com.polaris.manage.model.mysql.order.dic;
 
 public enum OrderStatus {
 

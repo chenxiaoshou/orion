@@ -26,9 +26,9 @@ import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
-import com.polaris.manage.service.order.OrderService;
+import com.polaris.manage.service.srv.order.OrderService;
 import com.polaris.manage.web.controller.BaseController;
-import com.polaris.manage.web.vo.order.Order4Create;
+import com.polaris.manage.web.vo.order.Order4Add;
 import com.polaris.manage.web.vo.order.Order4Put;
 import com.polaris.manage.web.vo.order.OrderQuery;
 
@@ -54,9 +54,9 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public String save(@RequestBody @Valid Order4Create order4Create, HttpServletRequest request) {
+	public String save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request) {
 		Order order = new Order();
-		BeanUtil.copyProperties(order4Create, order);
+		BeanUtil.copyProperties(order4Add, order);
 		Timestamp now = DateUtil.timestamp();
 		order.setCreateTime(now);
 		Order savedOrder = this.orderService.save(order);

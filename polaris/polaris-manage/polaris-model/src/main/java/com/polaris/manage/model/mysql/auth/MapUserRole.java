@@ -9,13 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import com.polaris.common.base.BaseObject;
 
 @Entity
-@Table(name = "PMS_USER_ROLE_MAP")
-public class UserRoleMap extends BaseObject implements Serializable {
+@Table(name = "PMS_MAP_USER_ROLE")
+public class MapUserRole extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = 7623237985920744323L;
 
@@ -27,9 +26,8 @@ public class UserRoleMap extends BaseObject implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "USER") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '用户角色关联表唯一标识'")
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}

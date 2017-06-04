@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.polaris.common.base.BaseObject;
 
-public class Order4Create extends BaseObject implements Serializable {
+public class Order4Add extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -1100351041463473872L;
 
