@@ -1,10 +1,12 @@
 package com.polaris.manage.model.solr.logistics;
 
-import java.io.Serializable;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
-import com.polaris.common.base.BaseObject;
+import com.polaris.common.constant.SolrConstants;
+import com.polaris.manage.model.solr.BaseSolrObject;
 
-public class SolrShippingOrder extends BaseObject implements Serializable {
+@SolrDocument(solrCoreName = SolrConstants.solrCoreName)
+public class SolrShippingOrder extends BaseSolrObject {
 
 	private static final long serialVersionUID = -8813854741172306150L;
 

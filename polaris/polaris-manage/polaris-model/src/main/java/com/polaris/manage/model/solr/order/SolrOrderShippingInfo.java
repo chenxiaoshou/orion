@@ -1,7 +1,5 @@
 package com.polaris.manage.model.solr.order;
 
-import java.io.Serializable;
-
 import javax.persistence.GeneratedValue;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -10,12 +8,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
-import com.polaris.common.base.BaseObject;
 import com.polaris.common.constant.SolrConstants;
+import com.polaris.manage.model.solr.BaseSolrObject;
 
 @SolrDocument(solrCoreName = SolrConstants.solrCoreName)
-public class SolrOrderShippingInfo extends BaseObject implements Serializable {
-	
+public class SolrOrderShippingInfo extends BaseSolrObject {
+
 	private static final long serialVersionUID = -2201215121362250422L;
 
 	@Indexed
@@ -32,19 +30,19 @@ public class SolrOrderShippingInfo extends BaseObject implements Serializable {
 
 	@Indexed
 	private String buyerAddress;
-	
+
 	@Indexed
 	private String buyerEmail;
-	
+
 	@Indexed
 	private String buyerCountry;
-	
+
 	@Indexed
 	private String buyerState;
 
 	@Indexed
 	private String buyerProvince;
-	
+
 	@Indexed
 	private String buyerCity;
 
@@ -54,7 +52,7 @@ public class SolrOrderShippingInfo extends BaseObject implements Serializable {
 	@Id
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "32"), @Parameter(name = "perfix", value = "SOSI")})
+			@Parameter(name = "idLength", value = "32"), @Parameter(name = "perfix", value = "SOSI") })
 	public String getId() {
 		return id;
 	}
