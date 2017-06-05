@@ -1,69 +1,46 @@
 package com.polaris.manage.model.mysql.auth;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
-import com.polaris.common.base.BaseObject;
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.manage.model.mysql.BaseMysqlObject;
 
+/**
+ * 用户表
+ * 
+ * @author John
+ *
+ */
 @Entity
 @Table(name = "PMS_USER", schema = PolarisConstants.POLARIS_AUTH_DB, indexes = {
 		@Index(columnList = "username", name = "idx_username"),
 		@Index(columnList = "password", name = "idx_password") })
-public class User extends BaseObject implements Serializable {
+public class User extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -7906916919904469152L;
-
-	private String id;
 
 	private String username; // 登录用户名
 
 	private String password; // SHA256加密之后的密码
-	
+
 	private String realName; // 员工姓名
-	
-	private int gender; // 性别
+
+	private Integer gender; // 性别
 
 	private String mobile;
 
 	private String idCard;
 
 	private String email;
-	
-	private boolean enable;
+
+	private Boolean enable;
 
 	private Timestamp lastLoginTime;
-
-	private String creator;
-
-	private Timestamp createTime;
-
-	private String updater;
-
-	private Timestamp updateTime;
-
-	@Id
-	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "USER") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '用户唯一标识'")
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Column(name = "USERNAME", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
@@ -84,11 +61,11 @@ public class User extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "ENABLE", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
-	public boolean isEnable() {
+	public Boolean isEnable() {
 		return enable;
 	}
 
-	public void setEnable(boolean enable) {
+	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
 
@@ -119,48 +96,12 @@ public class User extends BaseObject implements Serializable {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-	@Column(name = "CREATOR", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	@Column(name = "CREATE_TIME", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
-	public Timestamp getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Timestamp createTime) {
-		this.createTime = createTime;
-	}
-
-	@Column(name = "UPDATER", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
-	public String getUpdater() {
-		return updater;
-	}
-
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
-
-	@Column(name = "UPDATE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
-	public Timestamp getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
-	}
-
 	@Column(name = "GENDER", nullable = false, columnDefinition = "TINYINT(2) default 0 comment '性别(0：不明，1：女性， 2：男性)'")
-	public int getGender() {
+	public Integer getGender() {
 		return gender;
 	}
 
-	public void setGender(int gender) {
+	public void setGender(Integer gender) {
 		this.gender = gender;
 	}
 

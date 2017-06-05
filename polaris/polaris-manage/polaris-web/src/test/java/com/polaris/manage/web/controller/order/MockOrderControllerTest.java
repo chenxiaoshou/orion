@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.polaris.MockBaseTest;
 import com.polaris.manage.model.mysql.order.Order;
-import com.polaris.manage.service.order.OrderService;
+import com.polaris.manage.service.srv.order.OrderService;
 
 /**
  * 由于JUnit4设置的rollback=TRUE，所以没有办法真正向数据库添加数据，导致测试查找方法时，没有数据可用。

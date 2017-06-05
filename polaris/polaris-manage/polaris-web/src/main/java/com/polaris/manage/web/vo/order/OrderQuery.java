@@ -15,13 +15,13 @@ public class OrderQuery implements Serializable {
 
 	private String[] orderIds;
 
-	private int minStatus;
+	private Integer minStatus;
 
-	private int maxStatus;
+	private Integer maxStatus;
 
-	private double minTotalPrice;
+	private Double minTotalPrice;
 
-	private double maxTotalPrice;
+	private Double maxTotalPrice;
 
 	private String saleChannel;
 
@@ -51,35 +51,35 @@ public class OrderQuery implements Serializable {
 		return pageInfo;
 	}
 
-	public int getMinStatus() {
+	public Integer getMinStatus() {
 		return minStatus;
 	}
 
-	public void setMinStatus(int minStatus) {
+	public void setMinStatus(Integer minStatus) {
 		this.minStatus = minStatus;
 	}
 
-	public int getMaxStatus() {
+	public Integer getMaxStatus() {
 		return maxStatus;
 	}
 
-	public void setMaxStatus(int maxStatus) {
+	public void setMaxStatus(Integer maxStatus) {
 		this.maxStatus = maxStatus;
 	}
 
-	public double getMinTotalPrice() {
+	public Double getMinTotalPrice() {
 		return minTotalPrice;
 	}
 
-	public void setMinTotalPrice(double minTotalPrice) {
+	public void setMinTotalPrice(Double minTotalPrice) {
 		this.minTotalPrice = minTotalPrice;
 	}
 
-	public double getMaxTotalPrice() {
+	public Double getMaxTotalPrice() {
 		return maxTotalPrice;
 	}
 
-	public void setMaxTotalPrice(double maxTotalPrice) {
+	public void setMaxTotalPrice(Double maxTotalPrice) {
 		this.maxTotalPrice = maxTotalPrice;
 	}
 

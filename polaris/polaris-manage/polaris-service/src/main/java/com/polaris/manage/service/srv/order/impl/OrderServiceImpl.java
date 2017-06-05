@@ -1,4 +1,4 @@
-package com.polaris.manage.service.order.impl;
+package com.polaris.manage.service.srv.order.impl;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.persist.mysql.order.pub.OrderDao;
-import com.polaris.manage.service.order.OrderService;
+import com.polaris.manage.service.srv.order.OrderService;
 
 @Service
 public class OrderServiceImpl implements OrderService {

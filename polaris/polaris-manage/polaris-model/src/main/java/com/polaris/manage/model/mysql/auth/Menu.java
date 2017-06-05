@@ -1,17 +1,10 @@
 package com.polaris.manage.model.mysql.auth;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
-import com.polaris.common.base.BaseObject;
+import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 /**
  * 菜单表
@@ -21,11 +14,9 @@ import com.polaris.common.base.BaseObject;
  */
 @Entity
 @Table(name = "PMS_MENU")
-public class Menu extends BaseObject implements Serializable {
+public class Menu extends BaseMysqlObject {
 
 	private static final long serialVersionUID = 8773879710657400266L;
-
-	private String id;
 
 	private String parentId;
 
@@ -33,22 +24,11 @@ public class Menu extends BaseObject implements Serializable {
 
 	private String accessUrl;
 
-	private int level;
+	private Integer level;
 
 	private String path;
 
-	@Id
-	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "USER") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(128) default '' comment '菜单唯一标识'")
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private Integer orderIndex;
 
 	@Column(name = "NAME", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '菜单名'")
 	public String getName() {
@@ -69,11 +49,11 @@ public class Menu extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "LEVEL", nullable = false, columnDefinition = "int(2) default 0 comment '菜单级数'")
-	public int getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 
@@ -93,6 +73,15 @@ public class Menu extends BaseObject implements Serializable {
 
 	public void setAccessUrl(String accessUrl) {
 		this.accessUrl = accessUrl;
+	}
+
+	@Column(name = "ORDER_INDEX", nullable = false, columnDefinition = "int(10) default 0 comment '菜单排序索引'")
+	public Integer getOrderIndex() {
+		return orderIndex;
+	}
+
+	public void setOrderIndex(Integer orderIndex) {
+		this.orderIndex = orderIndex;
 	}
 
 }

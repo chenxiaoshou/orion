@@ -1,8 +1,8 @@
 package com.polaris.manage.model.mysql.logistics;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import com.polaris.common.base.BaseObject;
+import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 /**
  * 物流订单
@@ -22,45 +22,43 @@ import com.polaris.common.base.BaseObject;
  */
 @Entity
 @Table(name = "PMS_SHIPPING_ORDER")
-public class ShippingOrder extends BaseObject implements Serializable {
+public class ShippingOrder extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -294238168881496088L;
 
-	private String id;
-
 	private String orderId; // 订单id
 
-	private double freight; // 运费
+	private Double freight; // 运费
 
 	private String shipmentNumber; // 物流单号
 
 	private String FreightForwarderNumber; // 货代单号
-
-	private Timestamp createTime; // 物流订单创建时间
 
 	private Timestamp deliveryTime; // 发货时间
 
 	private Timestamp completeTime; // 完成时间
 
 	@Id
+	@Override
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
 			@Parameter(name = "idLength", value = "15"), @Parameter(name = "perfix", value = "SO") })
-	@Column(name = "ID", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(64) default '' comment '物流订单唯一标识'")
+	@AttributeOverride(name = "ID", column = @Column(name = "ID", nullable = false, unique = true, updatable = false, insertable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'"))
 	public String getId() {
 		return id;
 	}
-
+	
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
 	@Column(name = "FREIGHT", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '运费'")
-	public double getFreight() {
+	public Double getFreight() {
 		return freight;
 	}
 
-	public void setFreight(double freight) {
+	public void setFreight(Double freight) {
 		this.freight = freight;
 	}
 
@@ -80,15 +78,6 @@ public class ShippingOrder extends BaseObject implements Serializable {
 
 	public void setFreightForwarderNumber(String freightForwarderNumber) {
 		FreightForwarderNumber = freightForwarderNumber;
-	}
-
-	@Column(name = "CREATE_TIME", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
-	public Timestamp getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Timestamp createTime) {
-		this.createTime = createTime;
 	}
 
 	@Column(name = "DELIVERY_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '交运时间'")

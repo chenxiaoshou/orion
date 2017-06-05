@@ -41,5 +41,10 @@ public final class PatternConstants {
 	 */
 	public static final String DATE_FORMAT_PATTERN_6 = "yyyyMMddHHmmss";
 	
+	/**
+	 * yyyyMMddHHmmss
+	 */
+	public static final String DATE_FORMAT_PATTERN_7 = "yyyyMMddHH";
+	
 	
 }

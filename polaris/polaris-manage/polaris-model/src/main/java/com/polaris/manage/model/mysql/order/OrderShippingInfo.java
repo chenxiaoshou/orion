@@ -1,17 +1,10 @@
 package com.polaris.manage.model.mysql.order;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
-import com.polaris.common.base.BaseObject;
+import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 /**
  * 订单的交货人信息
@@ -19,16 +12,15 @@ import com.polaris.common.base.BaseObject;
  * @author John
  *
  */
-
 @Entity
 @Table(name = "PMS_ORDER_SHIPPING_INFO")
-public class OrderShippingInfo extends BaseObject implements Serializable {
+public class OrderShippingInfo extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -2180680201712063931L;
 
-	private String id;
-
 	private String orderId;
+
+	private String orderNo;
 
 	private String buyerName;
 
@@ -48,17 +40,22 @@ public class OrderShippingInfo extends BaseObject implements Serializable {
 
 	private String buyerStreet;
 
-	@Id
-	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "16"), @Parameter(name = "perfix", value = "OSI") })
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '订单物流信息唯一标识'")
-	public String getId() {
-		return id;
+	@Column(name = "ORDER_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
+	public String getOrderId() {
+		return orderId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, length = 16, columnDefinition = "varchar(16) default '' comment '订单编号'")
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	@Column(name = "BUYER_NAME", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '收货人姓名'")
@@ -140,15 +137,6 @@ public class OrderShippingInfo extends BaseObject implements Serializable {
 
 	public void setBuyerStreet(String buyerStreet) {
 		this.buyerStreet = buyerStreet;
-	}
-
-	@Column(name = "ORDER_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
 	}
 
 }
