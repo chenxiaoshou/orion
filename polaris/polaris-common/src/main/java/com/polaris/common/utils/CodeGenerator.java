@@ -30,10 +30,15 @@ public final class CodeGenerator {
 		return seqNum;
 	}
 
-	// TODO 需要严格测试
-	public synchronized static String generateUniqueStringCode(String perfix, int length) {
-		if (length < 24) {
-			throw new PolarisException("必须保证最小字符的长度 >= 24");
+	/**
+	 * 生成订单单号
+	 * @param perfix
+	 * @param length
+	 * @return
+	 */
+	public static String generateOrderNo(String perfix, int length) {
+		if (length < 18) {
+			throw new PolarisException("必须保证最小字符的长度 >= 18");
 		}
 		String timestamp = DateUtil.date2str(DateUtil.now(), PatternConstants.DATE_FORMAT_PATTERN_7);
 		String seqKey = StringUtil.joinWith("_", perfix, timestamp);
@@ -47,11 +52,6 @@ public final class CodeGenerator {
 		}
 		buf.append(seqNum);
 		return buf.toString();
-	}
-
-	public synchronized static String generateUniqueIntCode(int length) {
-		// TODO
-		return null;
 	}
 
 }

@@ -27,8 +27,8 @@ public class BaseMysqlObject implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "uuid")
-	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
+	@GenericGenerator(name = "idGenerator", strategy = "uuid2")
+	@Column(name = "id", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}
@@ -37,7 +37,7 @@ public class BaseMysqlObject implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "CREATOR", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
+	@Column(name = "creator", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
 	public String getCreator() {
 		return creator;
 	}
@@ -46,7 +46,7 @@ public class BaseMysqlObject implements Serializable {
 		this.creator = creator;
 	}
 
-	@Column(name = "CREATE_TIME", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
+	@Column(name = "create_time", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -55,7 +55,7 @@ public class BaseMysqlObject implements Serializable {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "UPDATER", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
+	@Column(name = "updater", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
 	public String getUpdater() {
 		return updater;
 	}
@@ -64,7 +64,7 @@ public class BaseMysqlObject implements Serializable {
 		this.updater = updater;
 	}
 
-	@Column(name = "UPDATE_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
+	@Column(name = "update_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}

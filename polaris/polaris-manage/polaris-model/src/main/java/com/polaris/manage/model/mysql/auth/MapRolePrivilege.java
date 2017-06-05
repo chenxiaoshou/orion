@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 @Entity
-@Table(name = "PMS_MAP_ROLE_PRIVILEGE")
+@Table(name = "pms_map_role_privilege")
 public class MapRolePrivilege extends BaseMysqlObject {
 
 	private static final long serialVersionUID = 7155989115529071627L;
@@ -16,7 +16,7 @@ public class MapRolePrivilege extends BaseMysqlObject {
 
 	private String privilegeId;
 
-	@Column(name = "ROLE_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-角色ID'")
+	@Column(name = "role_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-角色ID'")
 	public String getRoleId() {
 		return roleId;
 	}
@@ -25,7 +25,7 @@ public class MapRolePrivilege extends BaseMysqlObject {
 		this.roleId = roleId;
 	}
 
-	@Column(name = "PRIVILEGE_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-权限ID'")
+	@Column(name = "privilege_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-权限ID'")
 	public String getPrivilegeId() {
 		return privilegeId;
 	}

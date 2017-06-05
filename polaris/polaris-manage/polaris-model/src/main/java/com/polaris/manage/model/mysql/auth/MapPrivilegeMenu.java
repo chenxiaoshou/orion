@@ -13,7 +13,7 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "PMS_MAP_PRIVILEGE_MENU")
+@Table(name = "pms_map_privilege_menu")
 public class MapPrivilegeMenu extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -5373816674121902181L;
@@ -22,7 +22,7 @@ public class MapPrivilegeMenu extends BaseMysqlObject {
 
 	private String privilegeId;
 
-	@Column(name = "MENU_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-菜单ID'")
+	@Column(name = "menu_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-菜单ID'")
 	public String getMenuId() {
 		return menuId;
 	}
@@ -31,7 +31,7 @@ public class MapPrivilegeMenu extends BaseMysqlObject {
 		this.menuId = menuId;
 	}
 
-	@Column(name = "PRIVILEGE_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-权限ID'")
+	@Column(name = "privilege_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-权限ID'")
 	public String getPrivilegeId() {
 		return privilegeId;
 	}

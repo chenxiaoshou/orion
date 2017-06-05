@@ -17,7 +17,7 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "PMS_USER", schema = PolarisConstants.POLARIS_AUTH_DB, indexes = {
+@Table(name = "pms_user", schema = PolarisConstants.POLARIS_AUTH_DB, indexes = {
 		@Index(columnList = "username", name = "idx_username"),
 		@Index(columnList = "password", name = "idx_password") })
 public class User extends BaseMysqlObject {
@@ -42,7 +42,7 @@ public class User extends BaseMysqlObject {
 
 	private Timestamp lastLoginTime;
 
-	@Column(name = "USERNAME", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '用户名'")
+	@Column(name = "username", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
 		return username;
 	}
@@ -51,7 +51,7 @@ public class User extends BaseMysqlObject {
 		this.username = username;
 	}
 
-	@Column(name = "PASSWORD", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '密码'")
+	@Column(name = "password", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '密码'")
 	public String getPassword() {
 		return password;
 	}
@@ -60,7 +60,7 @@ public class User extends BaseMysqlObject {
 		this.password = password;
 	}
 
-	@Column(name = "ENABLE", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
+	@Column(name = "enable", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
 	public Boolean isEnable() {
 		return enable;
 	}
@@ -69,7 +69,7 @@ public class User extends BaseMysqlObject {
 		this.enable = enable;
 	}
 
-	@Column(name = "MOBILE", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '电话'")
+	@Column(name = "mobile", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '电话'")
 	public String getMobile() {
 		return mobile;
 	}
@@ -78,7 +78,7 @@ public class User extends BaseMysqlObject {
 		this.mobile = mobile;
 	}
 
-	@Column(name = "IDCARD", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '身份证号码'")
+	@Column(name = "idcard", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '身份证号码'")
 	public String getIdCard() {
 		return idCard;
 	}
@@ -87,7 +87,7 @@ public class User extends BaseMysqlObject {
 		this.idCard = idCard;
 	}
 
-	@Column(name = "LAST_LOGIN_TIME", nullable = true, columnDefinition = "DATETIME default NULL comment '最后登录时间'")
+	@Column(name = "last_login_time", nullable = true, columnDefinition = "DATETIME default NULL comment '最后登录时间'")
 	public Timestamp getLastLoginTime() {
 		return lastLoginTime;
 	}
@@ -96,7 +96,7 @@ public class User extends BaseMysqlObject {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-	@Column(name = "GENDER", nullable = false, columnDefinition = "TINYINT(2) default 0 comment '性别(0：不明，1：女性， 2：男性)'")
+	@Column(name = "gender", nullable = false, columnDefinition = "TINYINT(2) default 0 comment '性别(0：不明，1：女性， 2：男性)'")
 	public Integer getGender() {
 		return gender;
 	}
@@ -105,7 +105,7 @@ public class User extends BaseMysqlObject {
 		this.gender = gender;
 	}
 
-	@Column(name = "REALNAME", nullable = false, length = 16, columnDefinition = "varchar(16) default '' comment '真实姓名'")
+	@Column(name = "realname", nullable = false, length = 16, columnDefinition = "varchar(16) default '' comment '真实姓名'")
 	public String getRealName() {
 		return realName;
 	}
@@ -114,7 +114,7 @@ public class User extends BaseMysqlObject {
 		this.realName = realName;
 	}
 
-	@Column(name = "EMAIL", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '邮箱'")
+	@Column(name = "email", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '邮箱'")
 	public String getEmail() {
 		return email;
 	}

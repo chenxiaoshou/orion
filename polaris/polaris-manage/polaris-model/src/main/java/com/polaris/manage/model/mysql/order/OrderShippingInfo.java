@@ -13,7 +13,7 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "PMS_ORDER_SHIPPING_INFO")
+@Table(name = "pms_order_shipping_info")
 public class OrderShippingInfo extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -2180680201712063931L;
@@ -40,7 +40,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 
 	private String buyerStreet;
 
-	@Column(name = "ORDER_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
+	@Column(name = "order_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '订单唯一标识'")
 	public String getOrderId() {
 		return orderId;
 	}
@@ -49,7 +49,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.orderId = orderId;
 	}
 
-	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, length = 16, columnDefinition = "varchar(16) default '' comment '订单编号'")
+	@Column(name = "order_no", nullable = false, updatable = false, insertable = false, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
 	public String getOrderNo() {
 		return orderNo;
 	}
@@ -58,7 +58,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.orderNo = orderNo;
 	}
 
-	@Column(name = "BUYER_NAME", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '收货人姓名'")
+	@Column(name = "buyer_name", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '收货人姓名'")
 	public String getBuyerName() {
 		return buyerName;
 	}
@@ -67,7 +67,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerName = buyerName;
 	}
 
-	@Column(name = "BUYER_PHONE", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '收货人电话'")
+	@Column(name = "buyer_phone", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '收货人电话'")
 	public String getBuyerPhone() {
 		return buyerPhone;
 	}
@@ -76,7 +76,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerPhone = buyerPhone;
 	}
 
-	@Column(name = "BUYER_ADDRESS", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '收货人地址'")
+	@Column(name = "buyer_address", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '收货人地址'")
 	public String getBuyerAddress() {
 		return buyerAddress;
 	}
@@ -85,7 +85,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerAddress = buyerAddress;
 	}
 
-	@Column(name = "BUYER_EMAIL", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '收货人邮件'")
+	@Column(name = "buyer_email", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '收货人邮件'")
 	public String getBuyerEmail() {
 		return buyerEmail;
 	}
@@ -94,7 +94,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerEmail = buyerEmail;
 	}
 
-	@Column(name = "BUYER_COUNTRY", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人国家'")
+	@Column(name = "buyer_country", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人国家'")
 	public String getBuyerCountry() {
 		return buyerCountry;
 	}
@@ -103,7 +103,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerCountry = buyerCountry;
 	}
 
-	@Column(name = "BUYER_STATE", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人所在州'")
+	@Column(name = "buyer_state", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人所在州'")
 	public String getBuyerState() {
 		return buyerState;
 	}
@@ -112,7 +112,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerState = buyerState;
 	}
 
-	@Column(name = "BUYER_PROVINCE", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人省份'")
+	@Column(name = "buyer_province", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人省份'")
 	public String getBuyerProvince() {
 		return buyerProvince;
 	}
@@ -121,7 +121,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerProvince = buyerProvince;
 	}
 
-	@Column(name = "BUYER_CITY", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人城市'")
+	@Column(name = "buyer_city", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '收货人城市'")
 	public String getBuyerCity() {
 		return buyerCity;
 	}
@@ -130,7 +130,7 @@ public class OrderShippingInfo extends BaseMysqlObject {
 		this.buyerCity = buyerCity;
 	}
 
-	@Column(name = "BUYER_STREET", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '收货人街道'")
+	@Column(name = "buyer_street", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '收货人街道'")
 	public String getBuyerStreet() {
 		return buyerStreet;
 	}

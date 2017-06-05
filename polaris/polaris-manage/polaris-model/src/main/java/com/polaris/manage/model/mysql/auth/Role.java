@@ -13,7 +13,7 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "PMS_ROLE")
+@Table(name = "pms_role")
 public class Role extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -6640269699963057898L;
@@ -22,7 +22,7 @@ public class Role extends BaseMysqlObject {
 
 	private Boolean enable;
 
-	@Column(name = "ENABLE", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
+	@Column(name = "enable", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
 	public Boolean isEnable() {
 		return enable;
 	}
@@ -31,7 +31,7 @@ public class Role extends BaseMysqlObject {
 		this.enable = enable;
 	}
 
-	@Column(name = "NAME", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '角色名'")
+	@Column(name = "name", nullable = false, length = 20, columnDefinition = "varchar(20) default '' comment '角色名'")
 	public String getName() {
 		return name;
 	}

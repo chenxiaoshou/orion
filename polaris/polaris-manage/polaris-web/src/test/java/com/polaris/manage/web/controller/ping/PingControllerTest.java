@@ -1,4 +1,4 @@
-package com.polaris.manage.web.controller.test;
+package com.polaris.manage.web.controller.ping;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
