@@ -5,21 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.polaris.manage.model.mysql.BaseMysqlObject;
-
 /**
- * 权限菜单映射表
+ * 权限文件映射表
  * @author John
  *
  */
 @Entity
-@Table(name = "PMS_MAP_PRIVILEGE_ELEMENT")
-public class MapPrivilegeElement extends BaseMysqlObject {
+@Table(name = "PMS_MAP_PRIVILEGE_FILE")
+public class MapPrivilegeFile extends BaseMysqlObject {
 
-	private static final long serialVersionUID = -7208177982189783654L;
-
+	private static final long serialVersionUID = 2456486329644182616L;
+	
 	private String privilegeId;
-
-	private String elementId;
+	
+	private String fileId;
 
 	@Column(name = "PRIVILEGE_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-权限ID'")
 	public String getPrivilegeId() {
@@ -30,13 +29,13 @@ public class MapPrivilegeElement extends BaseMysqlObject {
 		this.privilegeId = privilegeId;
 	}
 
-	@Column(name = "ELEMENT_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-页面元素ID'")
-	public String getElementId() {
-		return elementId;
+	@Column(name = "FILE_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-文件ID'")
+	public String getFileId() {
+		return fileId;
 	}
 
-	public void setElementId(String elementId) {
-		this.elementId = elementId;
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
 	}
 
 }

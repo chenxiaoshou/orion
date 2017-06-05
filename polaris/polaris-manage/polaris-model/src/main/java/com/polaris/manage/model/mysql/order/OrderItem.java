@@ -33,7 +33,7 @@ public class OrderItem extends BaseMysqlObject {
 		this.orderId = orderId;
 	}
 
-	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, length = 16, columnDefinition = "varchar(16) default '' comment '订单编号'")
+	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
 	public String getOrderNo() {
 		return orderNo;
 	}

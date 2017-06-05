@@ -13,14 +13,14 @@ import com.polaris.common.utils.CodeGenerator;
 import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 @Entity
-@Table(name = "PMS_ORDER", indexes = { @Index(columnList = "total_price", name = "idx_total_price") })
+@Table(name = "PMS_ORDER", indexes = { @Index(columnList = "TOTAL_PRICE", name = "idx_total_price") })
 public class Order extends BaseMysqlObject {
 
 	private static final long serialVersionUID = -1189282556226768984L;
 
 	private static final String ORDER_NO_PERFIX = "OD";
 	
-	private static final int ORDER_NO_LENGTH = 16;
+	private static final int ORDER_NO_LENGTH = 18;
 	
 	private String orderNo; // 订单编号
 
@@ -34,11 +34,11 @@ public class Order extends BaseMysqlObject {
 
 	private Timestamp completeTime; // 完成时间
 
-	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, unique = true, length = 16, columnDefinition = "varchar(16) default '' comment '订单编号'")
+	@Column(name = "ORDER_NO", nullable = false, updatable = false, insertable = false, unique = true, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
 	public String getOrderNo() {
 		// 初始化orderNo
 		if (StringUtils.isBlank(this.id) && StringUtils.isBlank(this.orderNo)) {
-			orderNo = CodeGenerator.generateUniqueStringCode(ORDER_NO_PERFIX, ORDER_NO_LENGTH);
+			orderNo = CodeGenerator.generateOrderNo(ORDER_NO_PERFIX, ORDER_NO_LENGTH);
 		}
 		return orderNo;
 	}

@@ -11,11 +11,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.polaris.BaseTest;
+import com.polaris.NormalBaseTest;
 import com.polaris.common.constant.RabbitmqConstants;
 import com.polaris.manage.model.mysql.order.Order;
 
-public class ConfigTest extends BaseTest {
+public class ConfigTest extends NormalBaseTest {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;

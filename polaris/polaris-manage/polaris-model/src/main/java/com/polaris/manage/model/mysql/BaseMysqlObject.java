@@ -27,7 +27,7 @@ public class BaseMysqlObject implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GenericGenerator(name = "idGenerator", strategy = "uuid2")
 	@Column(name = "ID", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;

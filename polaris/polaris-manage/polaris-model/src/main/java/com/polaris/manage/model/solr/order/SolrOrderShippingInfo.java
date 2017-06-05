@@ -1,10 +1,5 @@
 package com.polaris.manage.model.solr.order;
 
-import javax.persistence.GeneratedValue;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
@@ -15,9 +10,6 @@ import com.polaris.manage.model.solr.BaseSolrObject;
 public class SolrOrderShippingInfo extends BaseSolrObject {
 
 	private static final long serialVersionUID = -2201215121362250422L;
-
-	@Indexed
-	private String id;
 
 	@Indexed
 	private String orderId;
@@ -48,18 +40,6 @@ public class SolrOrderShippingInfo extends BaseSolrObject {
 
 	@Indexed
 	private String buyerStreet;
-
-	@Id
-	@GeneratedValue(generator = "idGenerator")
-	@GenericGenerator(name = "idGenerator", strategy = "com.polaris.common.utils.IdGenerator", parameters = {
-			@Parameter(name = "idLength", value = "32"), @Parameter(name = "perfix", value = "SOSI") })
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getOrderId() {
 		return orderId;

@@ -22,7 +22,7 @@ public class Element extends BaseMysqlObject {
 
 	private String parenId; // 父元素
 
-	private String desc; // 描述
+	private String description; // 描述
 
 	@Column(name = "CODE", nullable = false, length = 32, columnDefinition = "varchar(32) default '' comment '页面元素编号'")
 	public String getCode() {
@@ -33,15 +33,6 @@ public class Element extends BaseMysqlObject {
 		this.code = code;
 	}
 
-	@Column(name = "DESC", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '描述'")
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
 	@Column(name = "PAREN_ID", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '父元素ID'")
 	public String getParenId() {
 		return parenId;
@@ -49,6 +40,15 @@ public class Element extends BaseMysqlObject {
 
 	public void setParenId(String parenId) {
 		this.parenId = parenId;
+	}
+
+	@Column(name = "DESCRIPTION", nullable = false, length = 128, columnDefinition = "varchar(128) default '' comment '描述'")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

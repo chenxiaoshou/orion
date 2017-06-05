@@ -9,5 +9,5 @@ package com.polaris.manage.model.mysql.auth.dic;
 public enum OperationType {
 
 	ADD, MODIFY, VIEW, DELETE, EXECUTE;
-
+	
 }
