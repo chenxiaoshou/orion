@@ -9,7 +9,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -141,11 +140,11 @@ public final class SecurityUtil {
 	}
 
 	public static byte[] decryptBASE64(String key) throws Exception {
-		return Base64.getDecoder().decode(key);
+		return CodecUtil.fromBase64(key);
 	}
 
 	public static String encryptBASE64(byte[] key) throws Exception {
-		return Base64.getEncoder().encodeToString(key);
+		return CodecUtil.toBase64(key);
 	}
 
 	public static void initKey() throws Exception {

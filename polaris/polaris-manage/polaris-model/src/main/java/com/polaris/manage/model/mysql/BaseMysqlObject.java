@@ -1,6 +1,5 @@
 package com.polaris.manage.model.mysql;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -10,8 +9,10 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.polaris.common.base.BaseObject;
+
 @MappedSuperclass
-public class BaseMysqlObject implements Serializable {
+public class BaseMysqlObject extends BaseObject {
 
 	private static final long serialVersionUID = 5836536587070114007L;
 

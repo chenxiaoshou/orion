@@ -67,7 +67,7 @@ import com.polaris.common.utils.JsonUtil;
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class, RestController.class,
 				Aspect.class, ControllerAdvice.class, RestControllerAdvice.class }) })
 @EnableAspectJAutoProxy(proxyTargetClass = true) // 启用Springmvc层面的切面自动代理，用于AOP,并指定使用CGLIB代理
-public class PolarisMvcConfig extends WebMvcConfigurationSupport {
+public class SpringMvcConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private Environment env;

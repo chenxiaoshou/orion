@@ -40,4 +40,9 @@ public final class ExceptionConstants {
 	 */
 	public static final String API_EXCEPTION = "global.api_exception";
 	
+	/**
+	 * 401 - Unauthorized Exception
+	 */
+	public static final String UNAUTHORIZED_EXCEPTION = "global.unauthorized";
+	
 }

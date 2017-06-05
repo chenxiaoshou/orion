@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polaris.manage.web.controller.BaseController;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/auth")
 public class AuthController extends BaseController {
 
 	private static final Logger LOGGER = LogManager.getLogger(AuthController.class);
