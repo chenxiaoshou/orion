@@ -40,7 +40,7 @@ public class DruidInitializer implements WebApplicationInitializer {
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST,
 						DispatcherType.ASYNC),
 				true, // 在所有当前已经被声明的 Filter的前面先匹配 URL
-				PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+				PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN);
 
 		// Servlet
 		ServletRegistration.Dynamic druidStatView = servletContext.addServlet("DruidStatView", new StatViewServlet());

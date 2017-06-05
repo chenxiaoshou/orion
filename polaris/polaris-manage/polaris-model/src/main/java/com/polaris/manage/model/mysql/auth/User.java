@@ -40,7 +40,11 @@ public class User extends BaseMysqlObject {
 
 	private Boolean enable;
 
+	private Boolean locked;
+	
 	private Timestamp lastLoginTime;
+	
+	private Timestamp lastPasswordResetTime;
 
 	@Column(name = "username", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
@@ -61,7 +65,7 @@ public class User extends BaseMysqlObject {
 	}
 
 	@Column(name = "enable", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
-	public Boolean isEnable() {
+	public Boolean getEnable() {
 		return enable;
 	}
 
@@ -121,6 +125,24 @@ public class User extends BaseMysqlObject {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Column(name = "last_password_reset_time", nullable = true, columnDefinition = "DATETIME default NULL comment '最后一次密码重置的时间'")
+	public Timestamp getLastPasswordResetTime() {
+		return lastPasswordResetTime;
+	}
+
+	public void setLastPasswordResetTime(Timestamp lastPasswordResetTime) {
+		this.lastPasswordResetTime = lastPasswordResetTime;
+	}
+
+	@Column(name = "locked", nullable = false, columnDefinition = "bit(1) default 0 comment '是否被锁定'")
+	public Boolean getLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
 	}
 
 }

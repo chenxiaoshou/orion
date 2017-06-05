@@ -48,7 +48,7 @@ public class WebInitializer implements WebApplicationInitializer {
 		servletContext
 			.addFilter("characterEncodingFilter",new CharacterEncodingFilter(PolarisConstants.CHAESET_UTF_8, true))
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, 
-						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR), false, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR), false, PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN);
 
 		/**
 		 * OpenEntityManagerInViewFilter
@@ -57,14 +57,14 @@ public class WebInitializer implements WebApplicationInitializer {
 		 */
 		servletContext.addFilter("openEntityManagerInViewFilter", new OpenEntityManagerInViewFilter())
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST,
-						DispatcherType.ASYNC, DispatcherType.ERROR), true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						DispatcherType.ASYNC, DispatcherType.ERROR), true, PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN);
 
 		/**
 		 * HiddenHttpMethodFilter过滤器，使java支持restful风格中http的put和delete方法
 		 */
 		servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter()).addMappingForUrlPatterns(
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
-						true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						true, PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN);
 
 		/**
 		 * AccessControlFilter,自定义的过滤器，用来处理Ajax跨域请求的问题
@@ -80,7 +80,7 @@ public class WebInitializer implements WebApplicationInitializer {
 		accessControlFilter.setInitParameters(initParameters);
 		accessControlFilter.addMappingForUrlPatterns(
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
-						true, PolarisConstants.POLARIS_MAPPING_URL_PATTERN);
+						true, PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN);
 	}
 
 }

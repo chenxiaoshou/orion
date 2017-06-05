@@ -18,9 +18,14 @@ public final class PolarisConstants {
 	public static final String DEFAULT_SERVLET_NAME = "Polaris";
 
 	/**
-	 * spring mvc dispatcher servlet mapping url pattern
+	 * API请求路径前缀
 	 */
-	public static final String POLARIS_MAPPING_URL_PATTERN = "/v1/*";
+	public static final String POLARIS_API_MAPPING_URL_PATTERN = "/api/v1/*";
+	
+	/**
+	 * 管理系统请求路径前缀
+	 */
+	public static final String POLARIS_ADMIN_MAPPING_URL_PATTERN = "/admin/v1/*";
 
 	/**
 	 * druid stat view servlet name 查看sql统计
@@ -121,7 +126,7 @@ public final class PolarisConstants {
 
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS = "true";
 
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control";
+	public static final String VALUE_ACCESS_CONTROL_ALLOW_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token";
 
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,DELETE,OPTIONS,HEAD";
 

@@ -23,7 +23,7 @@ public class Role extends BaseMysqlObject {
 	private Boolean enable;
 
 	@Column(name = "enable", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
-	public Boolean isEnable() {
+	public Boolean getEnable() {
 		return enable;
 	}
 

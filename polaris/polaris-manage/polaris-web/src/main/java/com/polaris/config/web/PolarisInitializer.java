@@ -63,7 +63,7 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	 */
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] { PolarisConstants.POLARIS_MAPPING_URL_PATTERN };
+		return new String[] { PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN };
 	}
 
 	/**
