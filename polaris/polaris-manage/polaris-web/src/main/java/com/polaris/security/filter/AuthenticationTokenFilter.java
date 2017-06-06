@@ -17,12 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.security.util.TokenUtil;
 
-@Component
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
 	private static final Logger LOGGER = LogManager.getLogger(AuthenticationTokenFilter.class);

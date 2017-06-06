@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,30 +42,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private EntryPointUnauthorizedHandler unauthorizedHandler;
 
-	@Bean
-	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-		authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
-		authenticationTokenFilter.setUsernameParameter(PARAMETER_USERNAME);
-		authenticationTokenFilter.setPasswordParameter(PARAMETER_PASSWORD);
-		return authenticationTokenFilter;
-	}
-
-	@Bean
-	@Override
-	public UserDetailsService userDetailsService() {
-		return new UserDetailsServiceImpl();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 	/**
 	 * 使用自定义的userDetailsService
 	 */
 	@Override
+	@Autowired
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 	}
@@ -78,6 +60,32 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/**/*.css", "/**/*.js")
 				.permitAll().antMatchers("/auth/**").permitAll().anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+	}
+	
+	@Bean
+	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
+		authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
+		authenticationTokenFilter.setUsernameParameter(PARAMETER_USERNAME);
+		authenticationTokenFilter.setPasswordParameter(PARAMETER_PASSWORD);
+		return authenticationTokenFilter;
+	}
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+	
+    @Bean
+	@Override
+	public UserDetailsService userDetailsService() {
+		return new UserDetailsServiceImpl();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	/**

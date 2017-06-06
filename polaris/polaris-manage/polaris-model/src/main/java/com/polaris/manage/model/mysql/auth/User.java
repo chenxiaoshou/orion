@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -169,6 +170,7 @@ public class User extends BaseMysqlObject {
 		this.roles = roles;
 	}
 
+	@Transient
 	public List<String> getRoleList() {
 		List<String> roleList = new ArrayList<>();
 		if (StringUtils.isNotBlank(roles)) {

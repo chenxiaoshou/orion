@@ -19,6 +19,13 @@ public class SecurityUser implements UserDetails {
 
 	private User user;
 
+	private List<SimpleGrantedAuthority> authorities;
+
+	public SecurityUser(User user, List<SimpleGrantedAuthority> authorities) {
+		this.user = user;
+		this.authorities = authorities;
+	}
+
 	public SecurityUser(User user) {
 		this.user = user;
 	}
@@ -29,27 +36,16 @@ public class SecurityUser implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		List<SimpleGrantedAuthority> userAuthorities = new ArrayList<>();
 		if (this.user != null) {
-			List<String> roleList = getRoleList();
-			if (CollectionUtils.isNotEmpty(roleList)) {
-				for (String roleName : roleList) {
-					authorities.add(new SimpleGrantedAuthority(roleName));
-				}
+			if (CollectionUtils.isNotEmpty(this.authorities)) {
+				userAuthorities = this.authorities;
 			} else {
 				SecurityService securityService = (SecurityService) SpringUtil.getBean("securityService");
-				authorities = securityService.getAuthorities(this.user.getId());
+				userAuthorities = securityService.getAuthorities(this.user.getId());
 			}
 		}
-		return authorities;
-	}
-
-	private List<String> getRoleList() {
-		List<String> roles = new ArrayList<>();
-		if (this.user != null) {
-			roles = this.user.getRoleList();
-		}
-		return roles;
+		return userAuthorities;
 	}
 
 	@Override

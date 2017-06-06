@@ -198,8 +198,8 @@
 	<Loggers>
 		
 		<!-- 设置第三方日志系统 -->
-        <logger name="org.springframework" level="WARN" />
         <logger name="org.springframework.security" level="DEBUG" />
+        <logger name="org.springframework" level="WARN" />
         <logger name="org.hibernate" level="WARN" />
         <logger name="com.opensource.dbhelp" level="WARN" />
         <logger name="com.google" level="WARN" />

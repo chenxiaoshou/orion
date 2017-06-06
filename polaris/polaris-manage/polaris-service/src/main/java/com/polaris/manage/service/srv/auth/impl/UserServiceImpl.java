@@ -57,4 +57,9 @@ public class UserServiceImpl implements UserService {
 		return this.userDao.findAll();
 	}
 
+	@Override
+	public User findByUsername(String username) {
+		return this.userDao.findByUsername(username);
+	}
+
 }
