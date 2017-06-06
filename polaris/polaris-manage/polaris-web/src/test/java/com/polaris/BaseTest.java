@@ -14,11 +14,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.polaris.common.utils.SpringUtil;
 import com.polaris.config.spring.ApplicationConfig;
-import com.polaris.config.springmvc.PolarisMvcConfig;
+import com.polaris.config.springmvc.SpringMvcConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextHierarchy({ @ContextConfiguration(name = "parent", classes = ApplicationConfig.class),
-		@ContextConfiguration(name = "child", classes = PolarisMvcConfig.class) })
+		@ContextConfiguration(name = "child", classes = SpringMvcConfig.class) })
 @WebAppConfiguration(value = "src/main/webapp")
 @Transactional(transactionManager = "transactionManager")
 @Rollback(false)

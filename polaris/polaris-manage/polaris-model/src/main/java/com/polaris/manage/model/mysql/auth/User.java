@@ -26,7 +26,7 @@ public class User extends BaseMysqlObject {
 
 	private String username; // 登录用户名
 
-	private String password; // SHA256加密之后的密码
+	private String password; // 加密之后的密码(加密算法：BCrypt)
 
 	private String realName; // 员工姓名
 
@@ -46,7 +46,7 @@ public class User extends BaseMysqlObject {
 	
 	private Timestamp lastPasswordResetTime;
 
-	@Column(name = "username", nullable = false, length = 255, columnDefinition = "varchar(255) default '' comment '用户名'")
+	@Column(name = "username", nullable = false, length = 255, unique = true, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
 		return username;
 	}
@@ -143,6 +143,11 @@ public class User extends BaseMysqlObject {
 
 	public void setLocked(Boolean locked) {
 		this.locked = locked;
+	}
+
+	public String getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

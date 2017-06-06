@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.SpringUtil;
 import com.polaris.config.spring.ApplicationConfig;
-import com.polaris.config.springmvc.PolarisMvcConfig;
+import com.polaris.config.springmvc.SpringMvcConfig;
 
 /**
  * Spring MVC DispatcherServlet
@@ -19,7 +19,7 @@ import com.polaris.config.springmvc.PolarisMvcConfig;
  * @author John
  *
  */
-@Order(1)
+@Order(2)
 public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	private static final Logger LOG = LogManager.getLogger(PolarisInitializer.class);
@@ -46,7 +46,7 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	 */
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { PolarisMvcConfig.class };
+		return new Class<?>[] { SpringMvcConfig.class };
 	}
 
 	/**

@@ -2,11 +2,13 @@ package com.polaris.manage.service.srv.order.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polaris.common.exception.PolarisException;
 import com.polaris.common.paging.PagingSupport;
 import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.model.mysql.order.Order;
@@ -57,6 +59,9 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public Order modify(Order order) {
+		if (StringUtils.isBlank(order.getId())) {
+			throw new PolarisException("目标对象的ID字段为空，无法执行数据库修改操作！[" + order.toString() + "]");
+		}
 		order.setUpdateTime(DateUtil.timestamp());
 		return this.orderDao.save(order);
 	}

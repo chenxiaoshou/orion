@@ -1,8 +1,8 @@
 package com.polaris.common.utils;
 
-public final class IOUtil {
+public final class IoUtil {
 
-	private IOUtil() {
+	private IoUtil() {
 		
 	}
 	

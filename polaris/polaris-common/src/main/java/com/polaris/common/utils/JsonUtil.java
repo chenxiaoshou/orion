@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -71,11 +72,19 @@ public final class JsonUtil {
 	public static boolean isJsonStr(String content) {
 		boolean isJsonStr = true;
 		try {
-			JSONObject.fromObject(content);
+			getJSONObject(content);
 		} catch (Exception e) {
 			isJsonStr = false;
 		}
 		return isJsonStr;
+	}
+
+	public static JSONObject getJSONObject(Object payload) {
+		return JSONObject.fromObject(payload);
+	}
+
+	public static JSONArray getJSONArray(Object payload) {
+		return JSONArray.fromObject(payload);
 	}
 
 }

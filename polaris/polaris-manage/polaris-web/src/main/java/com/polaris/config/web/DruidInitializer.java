@@ -21,7 +21,7 @@ import com.polaris.common.constant.PolarisConstants;
  * @author dong
  *
  */
-@Order(2)
+@Order(3)
 public class DruidInitializer implements WebApplicationInitializer {
 
 	@Override
