@@ -1,5 +1,6 @@
 package com.polaris.security.util;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public final class TokenUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(TokenUtil.class);
 
+	private static String errMsg = "从jwt [{0}]中获取{1}失败！";
+
 	private TokenUtil() {
 
 	}
@@ -36,7 +39,7 @@ public final class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			userId = payload.getString(JwtUtil.CLAIMS_USERNAME);
 		} catch (Exception e) {
-			LOGGER.error("从JWT [" + token + "] 中获取userId失败！");
+			LOGGER.error(MessageFormat.format(errMsg, token, "username"));
 			userId = null;
 		}
 		return userId;
@@ -54,7 +57,7 @@ public final class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			userId = payload.getString(JwtUtil.CLAIMS_SUB);
 		} catch (Exception e) {
-			LOGGER.error("从JWT [" + token + "] 中获取userId失败！");
+			LOGGER.error(MessageFormat.format(errMsg, token, "userId"));
 			userId = null;
 		}
 		return userId;
@@ -72,7 +75,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			createTime = new Date(headers.getLong(JwtUtil.CLAIMS_IAT));
 		} catch (Exception e) {
-			LOGGER.error("从JWT [" + token + "] 中获取createTime失败！");
+			LOGGER.error(MessageFormat.format(errMsg, token, "createTime"));
 			createTime = null;
 		}
 		return createTime;
@@ -84,7 +87,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			expiration = new Date(headers.getLong(JwtUtil.CLAIMS_EXP));
 		} catch (Exception e) {
-			LOGGER.error("从JWT [" + token + "] 中获取expiration失败！");
+			LOGGER.error(MessageFormat.format(errMsg, token, "expiration"));
 			expiration = null;
 		}
 		return expiration;
@@ -96,7 +99,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			audience = headers.getString(JwtUtil.CLAIMS_AUD);
 		} catch (Exception e) {
-			LOGGER.error("从JWT [" + token + "] 中获取audience失败！");
+			LOGGER.error(MessageFormat.format(errMsg, token, "audience"));
 			audience = null;
 		}
 		return audience;
@@ -180,6 +183,7 @@ public final class TokenUtil {
 
 	/**
 	 * 校验token是否合法
+	 * 
 	 * @param token
 	 * @param userDetails
 	 * @return

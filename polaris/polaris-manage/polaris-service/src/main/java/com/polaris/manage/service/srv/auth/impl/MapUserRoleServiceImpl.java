@@ -57,4 +57,19 @@ public class MapUserRoleServiceImpl implements MapUserRoleService {
 		return this.mapUserRoleDao.findAll();
 	}
 
+	@Override
+	public List<MapUserRole> findByUserId(String userId) {
+		return this.mapUserRoleDao.findByUserId(userId);
+	}
+
+	@Override
+	public List<MapUserRole> findByRoleId(String roleId) {
+		return this.mapUserRoleDao.findByRoleId(roleId);
+	}
+
+	@Override
+	public MapUserRole findByUserIdAndRoleId(String userId, String roleId) {
+		return this.mapUserRoleDao.findByUserIdAndRoleId(userId, roleId);
+	}
+	
 }

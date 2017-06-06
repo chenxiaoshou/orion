@@ -15,7 +15,7 @@ public class AppMessage implements Serializable {
 
 	private String type; // 异常类型(WARNNING, ERROR)
 
-	private int code; // 应用内部自定义错误代码
+	private String code; // 应用内部自定义错误代码
 
 	private String message; // 错误信息
 	
@@ -25,26 +25,25 @@ public class AppMessage implements Serializable {
 	private Throwable throwable;
 
 	public AppMessage() {
-
 	}
 
 	public AppMessage(int httpStatus) {
-		this(httpStatus, null, 0, null, null);
+		this(httpStatus, null, null, null, null);
 	}
 
 	public AppMessage(int httpStatus, String type) {
-		this(httpStatus, type, 0, null, null);
+		this(httpStatus, type, null, null, null);
 	}
 
-	public AppMessage(int httpStatus, String type, int code) {
+	public AppMessage(int httpStatus, String type, String code) {
 		this(httpStatus, type, code, null, null);
 	}
 
-	public AppMessage(int httpStatus, String type, int code, String message) {
+	public AppMessage(int httpStatus, String type, String code, String message) {
 		this(httpStatus, type, code, message, null);
 	}
 
-	public AppMessage(int httpStatus, String type, int code, String message, Throwable throwable) {
+	public AppMessage(int httpStatus, String type, String code, String message, Throwable throwable) {
 		this.setCode(code);
 		this.setHttpStatus(httpStatus);
 		this.setType(type);
@@ -52,7 +51,7 @@ public class AppMessage implements Serializable {
 		this.throwable = throwable;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
@@ -88,7 +87,7 @@ public class AppMessage implements Serializable {
 		this.type = type;
 	}
 
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

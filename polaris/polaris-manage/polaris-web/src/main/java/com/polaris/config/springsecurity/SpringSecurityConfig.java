@@ -16,8 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.polaris.security.filter.AuthenticationTokenFilter;
-import com.polaris.security.service.SecurityService;
-import com.polaris.security.util.EntryPointUnauthorizedHandler;
+import com.polaris.security.handler.EntryPointUnauthorizedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -29,9 +28,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-
-	@Autowired
-	private SecurityService securityService;
 
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -52,10 +48,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/**").permitAll().anyRequest()
-				.authenticated();
+		httpSecurity
+			.csrf().disable()
+			.exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler)
+			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 不创建session
+			.and().authorizeRequests()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.antMatchers(
+                        HttpMethod.GET,
+                        "/static/**",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js"
+                ).permitAll()
+				.antMatchers("/auth/**").permitAll()
+			.anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
 
