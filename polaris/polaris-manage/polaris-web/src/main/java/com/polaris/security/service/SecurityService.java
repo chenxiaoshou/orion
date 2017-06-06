@@ -1,7 +1,17 @@
 package com.polaris.security.service;
 
+import java.util.List;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 public interface SecurityService {
 
-  public Boolean hasProtectedAccess();
+	public Boolean hasProtectedAccess();
+
+	/**
+	 * 获取用户的角色授权列表
+	 * @return
+	 */
+	public List<SimpleGrantedAuthority> getAuthorities(String userId);
 
 }

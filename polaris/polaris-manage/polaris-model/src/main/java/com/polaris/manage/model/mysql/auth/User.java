@@ -1,13 +1,20 @@
 package com.polaris.manage.model.mysql.auth;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.utils.ArrayUtil;
 import com.polaris.manage.model.mysql.BaseMysqlObject;
 
 /**
@@ -32,6 +39,8 @@ public class User extends BaseMysqlObject {
 
 	private Integer gender; // 性别
 
+	private String roles; // role角色字符串拼接，冗余字段
+
 	private String mobile;
 
 	private String idCard;
@@ -41,9 +50,9 @@ public class User extends BaseMysqlObject {
 	private Boolean enable;
 
 	private Boolean locked;
-	
+
 	private Timestamp lastLoginTime;
-	
+
 	private Timestamp lastPasswordResetTime;
 
 	@Column(name = "username", nullable = false, length = 255, unique = true, columnDefinition = "varchar(255) default '' comment '用户名'")
@@ -66,6 +75,9 @@ public class User extends BaseMysqlObject {
 
 	@Column(name = "enable", nullable = false, columnDefinition = "bit(1) default 0 comment '是否启用'")
 	public Boolean getEnable() {
+		if (enable == null) {
+			enable = true;
+		}
 		return enable;
 	}
 
@@ -138,6 +150,9 @@ public class User extends BaseMysqlObject {
 
 	@Column(name = "locked", nullable = false, columnDefinition = "bit(1) default 0 comment '是否被锁定'")
 	public Boolean getLocked() {
+		if (locked == null) {
+			locked = false;
+		}
 		return locked;
 	}
 
@@ -145,9 +160,24 @@ public class User extends BaseMysqlObject {
 		this.locked = locked;
 	}
 
-	public String getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+	@Column(name = "roles", nullable = false, length = 512, columnDefinition = "varchar(512) default '' comment '角色字符串的拼接(root,admin,pm,cs)，冗余字段'")
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	public List<String> getRoleList() {
+		List<String> roleList = new ArrayList<>();
+		if (StringUtils.isNotBlank(roles)) {
+			String[] roleArr = ArrayUtil.trimElems(roles.split(","));
+			if (ArrayUtils.isNotEmpty(roleArr)) {
+				roleList = Arrays.asList(roleArr);
+			}
+		}
+		return roleList;
 	}
 
 }

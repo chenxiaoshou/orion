@@ -17,4 +17,10 @@ public interface MapUserRoleService {
 
 	List<MapUserRole> list();
 
+	List<MapUserRole> findByUserId(String userId);
+	
+	List<MapUserRole> findByRoleId(String roleId);
+	
+	MapUserRole findByUserIdAndRoleId(String userId, String roleId);
+
 }

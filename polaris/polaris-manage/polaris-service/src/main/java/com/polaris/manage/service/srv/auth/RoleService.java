@@ -17,4 +17,6 @@ public interface RoleService {
 
 	List<Role> list();
 
+	List<Role> findByIdIn(List<String> roleIds);
+
 }
