@@ -17,14 +17,13 @@ import com.polaris.security.model.SecurityUser;
 
 import net.sf.json.JSONObject;
 
-public final class TokenUtil {
+public class TokenUtil {
 
 	private static final Logger LOGGER = LogManager.getLogger(TokenUtil.class);
 
 	private static String errMsg = "从jwt [{0}]中获取{1}失败！";
 
 	private TokenUtil() {
-
 	}
 
 	/**
@@ -34,15 +33,15 @@ public final class TokenUtil {
 	 * @return
 	 */
 	public static String getUsernameFromToken(String token) {
-		String userId;
+		String username;
 		try {
 			final JSONObject payload = JwtUtil.getPayload(token);
-			userId = payload.getString(JwtUtil.CLAIMS_USERNAME);
+			username = payload.getString(JwtUtil.CLAIMS_USERNAME);
 		} catch (Exception e) {
-			LOGGER.error(MessageFormat.format(errMsg, token, "username"));
-			userId = null;
+			LOGGER.info(MessageFormat.format(errMsg, token, "username"));
+			username = null;
 		}
-		return userId;
+		return username;
 	}
 
 	/**
@@ -57,7 +56,7 @@ public final class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			userId = payload.getString(JwtUtil.CLAIMS_SUB);
 		} catch (Exception e) {
-			LOGGER.error(MessageFormat.format(errMsg, token, "userId"));
+			LOGGER.info(MessageFormat.format(errMsg, token, "userId"));
 			userId = null;
 		}
 		return userId;
@@ -75,7 +74,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			createTime = new Date(headers.getLong(JwtUtil.CLAIMS_IAT));
 		} catch (Exception e) {
-			LOGGER.error(MessageFormat.format(errMsg, token, "createTime"));
+			LOGGER.info(MessageFormat.format(errMsg, token, "createTime"));
 			createTime = null;
 		}
 		return createTime;
@@ -87,7 +86,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			expiration = new Date(headers.getLong(JwtUtil.CLAIMS_EXP));
 		} catch (Exception e) {
-			LOGGER.error(MessageFormat.format(errMsg, token, "expiration"));
+			LOGGER.info(MessageFormat.format(errMsg, token, "expiration"));
 			expiration = null;
 		}
 		return expiration;
@@ -99,7 +98,7 @@ public final class TokenUtil {
 			final JSONObject headers = JwtUtil.getHeader(token);
 			audience = headers.getString(JwtUtil.CLAIMS_AUD);
 		} catch (Exception e) {
-			LOGGER.error(MessageFormat.format(errMsg, token, "audience"));
+			LOGGER.info(MessageFormat.format(errMsg, token, "audience"));
 			audience = null;
 		}
 		return audience;
@@ -145,6 +144,12 @@ public final class TokenUtil {
 		return (DeviceEnum.Tablet.name().equals(audience) || DeviceEnum.Mobile.name().equals(audience));
 	}
 
+	/**
+	 * 生成jwt
+	 * @param userDetails
+	 * @param device
+	 * @return
+	 */
 	public static String generateToken(UserDetails userDetails, Device device) {
 		Map<String, Object> payloads = JwtUtil.buildNormalJwtPayloads();
 		SecurityUser securityUser = (SecurityUser) userDetails;

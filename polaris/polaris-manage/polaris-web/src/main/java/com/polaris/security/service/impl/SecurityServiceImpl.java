@@ -23,7 +23,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
 	private MapUserRoleService mapUserRoleService;
-
+	
 	@Override
 	public Boolean hasProtectedAccess() {
 		return (SecurityContextHolder.getContext().getAuthentication().getAuthorities()
