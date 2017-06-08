@@ -11,4 +11,6 @@ public interface RedisService {
 	 */
 	void storeUserInfo(String token, UserInfoCache userInfoCache);
 
+	void removeUserInfo(String token);
+
 }

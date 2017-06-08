@@ -13,8 +13,8 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "pms_access_url_expression")
-public class AccessUrlExpression extends BaseMysqlObject {
+@Table(name = "pms_access_url")
+public class AccessUrl extends BaseMysqlObject {
 
 	private static final long serialVersionUID = 1186408204756564325L;
 

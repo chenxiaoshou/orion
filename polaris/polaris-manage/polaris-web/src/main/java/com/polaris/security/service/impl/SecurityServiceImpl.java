@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.polaris.manage.model.mysql.auth.MapUserRole;
@@ -23,12 +22,6 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
 	private MapUserRoleService mapUserRoleService;
-	
-	@Override
-	public Boolean hasProtectedAccess() {
-		return (SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-				.contains(new SimpleGrantedAuthority("ADMIN")));
-	}
 
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities(String userId) {

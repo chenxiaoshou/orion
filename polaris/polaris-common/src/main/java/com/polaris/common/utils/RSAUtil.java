@@ -1,5 +1,11 @@
 package com.polaris.common.utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -16,30 +22,47 @@ import javax.crypto.Cipher;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
-public final class SecurityUtil {
+/**
+ * RSA公钥/私钥/签名工具包
+ * <p>
+ * 字符串格式的密钥在未在特殊说明情况下都为BASE64编码格式<br/>
+ * 由于非对称加密速度极其缓慢，一般文件不使用它来加密而是使用对称加密，<br/>
+ * 非对称加密算法可以用来对对称加密的密钥加密，这样保证密钥的安全也就保证了数据的安全
+ * </p>
+ * 
+ * @author John
+ *
+ */
+public class RSAUtil {
 
-	private static final Logger LOGGER = LogManager.getLogger(SecurityUtil.class);
+	private static final Logger LOGGER = LogManager.getLogger(RSAUtil.class);
 
+	/**
+	 * 加密算法
+	 */
 	public static final String KEY_ALGORITHM = "RSA";
 
-	private static final int KEY_SIZE = 1024;
+	/**
+	 * 签名算法
+	 */
+	public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
-	private static KeyFactory keyFactory = null;
+	private static final int KEY_SIZE = 1024;
 
 	private static final String PUBLIC_KEY = "RSAPublicKey";
 
 	private static final String PRIVATE_KEY = "RSAPrivateKey";
 
-	/** 准备一对已生成的公私密钥作为备用 */
-	private static final String DEFAULT_PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDXqnVDfVQlKvdoB1/HGqcBqjqP3th2x/31tTwhOFCNAOJN2YcA4M7IKQK2XnIsAD/bXm23fwWCV78ySHEpQTr/3NdWnSHmwnzXuSRf4ZhTGLZWHf5E6jNRhJj2+Aj4lcG9d+AKqI8AmuM2Hl2mrM0SeyIiJ7DDGU8Rl6MF4EMCQIDAQAB";
+	private static KeyFactory keyFactory = null;
 
-	private static final String DEFAULT_PRIVATE_KEY = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAINeqdUN9VCUq92gHX8capwGqOo/e2HbH/fW1PCE4UI0A4k3ZhwDgzsgpArZeciwAP9tebbd/BYJXvzJIcSlBOv/c11adIebCfNe5JF/hmFMYtlYd/kTqM1GEmPb4CPiVwb134AqojwCa4zYeXaaszRJ7IiInsMMZTxGXowXgQwJAgMBAAECgYBID2wfZzmySur/de3YJNFB5tFPNSVL5zPg8iH6ERmzA+8QnKfRJAgfLedt4B9Se2EAu59xNNErkVZeWUHBqTdKH7yshmc3MbrTBrvZijLIyCAGo0umC+HR3Ax1vCDXrHKmS2CeCFPzdQD+/izjZqbA7pyjXEjHiOty5dODdG5LgQJBAPLEh5i99Vs7SKAnMJv0kabaXeJHgwuvyWMm8eEUYfsYiRzShaT7cNumYK5XCtiieVnyoL0X6D2UJtueBQm6z1ECQQCKh7zcRRyxYETNFwECPtIgHJkIon2KTHo8C96d0xYoxWW+Dgs6kqYzKjySE4pnY9g+46bixshzmfWyfPPWb/M5AkBvcI/eKbTrgDdCbTr/HDGQKkVWjgU15CfKACKgc77WiNjIBkubBGE2MxXGceZks5CJHbtzkfnl6pA72Dnv0XVBAkAYdnHWX+n6NKrRoK9P6zIF86bejHso0ep/8gSk0CLInlsiHa7D8COjQ2Eg1oyJR2tnZ6IPx9Sb/WMS2tfgVTKZAkBGvAX4zahcRWXNry0POIT7NJ0TWLS0l/9sVHD+kC9W4XCX7ZUTfVAGjslDDFRPePKvuGVf1t3zLaJyh/D7LhJp";
+	private static final String PUBLIC_KEY_FILE_PATH = "classpath:keystore/publicKey.keystore";
+
+	private static final String PRIVATE_KEY_FILE_PATH = "classpath:keystore/privateKey.keystore";
 
 	private static final Map<String, Object> keyMap = new HashMap<>(2);
 
-	/** 随JVM启动自动生成一对RSA公私秘钥 */
+	/** 随JVM启动自动加载系统中的公钥私钥到内存中（分布式系统中，保持密钥文件的一致） */
 	static {
 		try {
 			keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -51,16 +74,7 @@ public final class SecurityUtil {
 		}
 	}
 
-	private SecurityUtil() {
-
-	}
-
-	public static String getDefaultPublicKey() {
-		return DEFAULT_PUBLIC_KEY;
-	}
-
-	public static String getDefaultPrivateKey() {
-		return DEFAULT_PRIVATE_KEY;
+	private RSAUtil() {
 	}
 
 	/**
@@ -92,13 +106,7 @@ public final class SecurityUtil {
 	 * @throws Exception
 	 */
 	public static PublicKey getPublicKey() throws Exception {
-		PublicKey key = null;
-		if (keyMap.get(PUBLIC_KEY) == null) {
-			key = getPublicKeyFromBase64(DEFAULT_PUBLIC_KEY);
-		} else {
-			key = (PublicKey) keyMap.get(PUBLIC_KEY);
-		}
-		return key;
+		return (PublicKey) keyMap.get(PUBLIC_KEY);
 	}
 
 	/**
@@ -108,13 +116,7 @@ public final class SecurityUtil {
 	 * @throws Exception
 	 */
 	public static PrivateKey getPrivateKey() throws Exception {
-		PrivateKey key = null;
-		if (keyMap.get(PRIVATE_KEY) == null) {
-			key = getPrivateKeyFromBase64(DEFAULT_PRIVATE_KEY);
-		} else {
-			key = (PrivateKey) keyMap.get(PRIVATE_KEY);
-		}
-		return key;
+		return (PrivateKey) keyMap.get(PRIVATE_KEY);
 	}
 
 	/**
@@ -139,26 +141,63 @@ public final class SecurityUtil {
 		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decryptBASE64(base64PrivateKey)));
 	}
 
+	/**
+	 * 将base64数据解密为byte数组
+	 * 
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
 	public static byte[] decryptBASE64(String key) throws Exception {
 		return CodecUtil.fromBase64(key);
 	}
 
+	/**
+	 * 将byte数组数据加密为base64
+	 * 
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
 	public static String encryptBASE64(byte[] key) throws Exception {
 		return CodecUtil.toBase64(key);
 	}
 
+	/**
+	 * 从外部文件中加载密钥文件，转换为对象之后保存到keyMap中
+	 * 
+	 * @throws Exception
+	 */
 	public static void initKey() throws Exception {
+		String base64PublicKey = readFromFile(PUBLIC_KEY_FILE_PATH);
+		String base64PrivateKey = readFromFile(PRIVATE_KEY_FILE_PATH);
+		keyMap.put(PUBLIC_KEY, getPublicKeyFromBase64(base64PublicKey));
+		keyMap.put(PRIVATE_KEY, getPrivateKeyFromBase64(base64PrivateKey));
+	}
+
+	/**
+	 * 生成密钥对
+	 * 
+	 * @throws Exception
+	 */
+	public static void genKeyPair() throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(KEY_SIZE);
 		KeyPair keyPair = keyPairGen.generateKeyPair();
 		PublicKey publicKey = keyPair.getPublic();
 		PrivateKey privateKey = keyPair.getPrivate();
-		keyMap.put(PUBLIC_KEY, publicKey);
-		keyMap.put(PRIVATE_KEY, privateKey);
+		String publicKeyStr = encryptBASE64(publicKey.getEncoded());
+		String privateKeyStr = encryptBASE64(privateKey.getEncoded());
+		// 将密钥对写入到文件
+		writeToFile(publicKeyStr, PUBLIC_KEY_FILE_PATH);
+		writeToFile(privateKeyStr, PRIVATE_KEY_FILE_PATH);
 	}
 
 	/**
 	 * 加密数据
+	 * <p>
+	 * RSA加密明文最大长度117字节,所以此处采用分段加密
+	 * </p>
 	 * 
 	 * @param source
 	 *            源数据
@@ -175,6 +214,9 @@ public final class SecurityUtil {
 
 	/**
 	 * 解密数据
+	 * <p>
+	 * 解密要求密文最大长度为128字节,所以此处采用分段解密
+	 * </p>
 	 * 
 	 * @param cryptograph
 	 *            密文
@@ -189,17 +231,34 @@ public final class SecurityUtil {
 		return new String(cipher.doFinal(cryptoBytes), StandardCharsets.UTF_8);
 	}
 
-	/**
-	 *  BCrypt加密演示，预备使用到系统中，用来存储用户的注册密码
-	 */
-	public static void main(String[] args) {
-		//hashed就是明文密码password加密后的结果，存储到数据库
-		String hashed = BCrypt.hashpw("123456", BCrypt.gensalt());
-		//candidate是明文密码，checkpw方法返回的是boolean
-		if (BCrypt.checkpw("123456", hashed))
-		    System.out.println("It matches");
-		else
-		    System.out.println("It does not match");
+	private static void writeToFile(String publicKeyStr, String filePath) throws IOException {
+		try (FileWriter fw = new FileWriter(filePath); BufferedWriter bw = new BufferedWriter(fw);) {
+			bw.write(publicKeyStr);
+		}
 	}
-	
+
+	private static String readFromFile(String filePath) throws FileNotFoundException, IOException {
+		try (FileReader fr = new FileReader(filePath); BufferedReader br = new BufferedReader(fr);) {
+			String readLine = null;
+			StringBuilder sb = new StringBuilder();
+			while ((readLine = br.readLine()) != null) {
+				sb.append(readLine);
+			}
+			return sb.toString();
+		}
+	}
+
+	public static String extractFilePath() {
+		// TODO
+		return null;
+	}
+
+	public static void main(String[] args) {
+		try {
+			genKeyPair();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

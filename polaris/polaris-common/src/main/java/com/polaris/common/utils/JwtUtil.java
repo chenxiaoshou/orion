@@ -29,7 +29,7 @@ public final class JwtUtil {
 	/**
 	 * 面向的用户（此处用来存储user表唯一主键ID）
 	 */
-	public static final String CLAIMS_SUB = "sub"; 
+	public static final String CLAIMS_SUB = "sub";
 
 	/**
 	 * 接受jwt的一方（可以存储设备信息）
@@ -54,17 +54,22 @@ public final class JwtUtil {
 	/**
 	 * jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
 	 */
-	public static final String CLAIMS_JTI = "jti"; 
+	public static final String CLAIMS_JTI = "jti";
 
 	/**
 	 * 传输到客户端的RSA公钥,供客户端加密数据使用
 	 */
 	public static final String CLAIMS_PUBLICKEY = "puk";
-	
+
 	/**
 	 * 数据库中User的username
 	 */
 	public static final String CLAIMS_USERNAME = "username";
+
+	/**
+	 * 数据库中User的角色字符串
+	 */
+	public static final String CLAIMS_ROLES = "roles";
 
 	private static RsaSigner signer;
 
@@ -76,8 +81,8 @@ public final class JwtUtil {
 
 	static {
 		try {
-			signer = new RsaSigner((RSAPrivateKey) SecurityUtil.getPrivateKey());
-			verifier = new RsaVerifier((RSAPublicKey) SecurityUtil.getPublicKey());
+			signer = new RsaSigner((RSAPrivateKey) RSAUtil.getPrivateKey());
+			verifier = new RsaVerifier((RSAPublicKey) RSAUtil.getPublicKey());
 		} catch (Exception e) {
 			LOGGER.error("init tokenUtil failure!", e);
 		}
@@ -93,11 +98,11 @@ public final class JwtUtil {
 		Jwt jwt = JwtHelper.encode(payload, signer);
 		return jwt.getEncoded();
 	}
-	
+
 	/**
-	 * 同步加密生成JWT
+	 * 生成JWT
 	 * 
-	 * @param jwtHeader：Map<String,
+	 * @param customPayloads：Map<String,
 	 *            String>
 	 * @param payload：JSON字符串格式
 	 * @return
@@ -110,21 +115,25 @@ public final class JwtUtil {
 		return jwt.getEncoded();
 	}
 
+	/**
+	 * 填充通用的payload字段
+	 * 
+	 * @return
+	 */
 	public static Map<String, Object> buildNormalJwtPayloads() {
-		Map<String, Object> headers = new HashMap<>();
-		headers.put(CLAIMS_ISS, PolarisConstants.DEFAULT_SERVLET_NAME);
+		Map<String, Object> payloads = new HashMap<>();
 		long createTime = DateUtil.now().getTime();
-		headers.put(CLAIMS_IAT, createTime);
+		payloads.put(CLAIMS_IAT, createTime);
 		long expirationTime = createTime + PolarisConstants.JWT_EXPIRATION;
-		headers.put(CLAIMS_EXP, expirationTime);
+		payloads.put(CLAIMS_EXP, expirationTime);
 		try {
-			headers.put(CLAIMS_PUBLICKEY, SecurityUtil.getBase64PublicKey());
+			payloads.put(CLAIMS_PUBLICKEY, RSAUtil.getBase64PublicKey());
 		} catch (Exception e) {
 			LOGGER.error("获取RSA公钥失败！", e);
 		}
-		return headers;
+		return payloads;
 	}
-	
+
 	/**
 	 * 检测Token的第三部分签名是否合法（即没有被篡改过）
 	 */
