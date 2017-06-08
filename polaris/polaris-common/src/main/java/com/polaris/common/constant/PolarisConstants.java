@@ -144,4 +144,8 @@ public final class PolarisConstants {
 	
 	public static final long JWT_EXPIRATION = 2 * 60 * 60 * 1000L; // JWT过期时间 - 2小时(表示到毫秒)
 
+	public static final String PUBLIC_KEY_FILE_PATH = "keystore/publicKey.keystore";
+
+	public static final String PRIVATE_KEY_FILE_PATH = "keystore/privateKey.keystore";
+
 }

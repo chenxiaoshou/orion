@@ -45,4 +45,9 @@ public final class ExceptionConstants {
 	 */
 	public static final String UNAUTHORIZED_EXCEPTION = "global.unauthorized";
 	
+	/**
+	 * 403 - Forbidden Exception
+	 */
+	public static final String FORBIDDEN_EXCEPTION = "global.permission_denied";
+	
 }

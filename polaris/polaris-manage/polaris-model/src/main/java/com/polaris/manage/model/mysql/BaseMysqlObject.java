@@ -29,7 +29,7 @@ public class BaseMysqlObject extends BaseObject {
 	@Id
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "uuid2")
-	@Column(name = "id", nullable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
+	@Column(name = "id", nullable = false, unique = true, updatable = false, length = 64, insertable = false, columnDefinition = "varchar(64) default '' comment '主键唯一标识'")
 	public String getId() {
 		return id;
 	}

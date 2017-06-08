@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.utils.BeanUtil;
+import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.service.dto.component.UserInfoCache;
+import com.polaris.manage.service.srv.auth.UserService;
 import com.polaris.manage.service.srv.component.RedisService;
 import com.polaris.manage.web.controller.BaseController;
 import com.polaris.manage.web.vo.auth.Auth4Login;
@@ -47,6 +50,9 @@ public class AuthController extends BaseController {
 
 	@Autowired
 	private RedisService redisService;
+	
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 登录认证
@@ -58,7 +64,8 @@ public class AuthController extends BaseController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public AuthInfo login(@RequestBody @Valid Auth4Login auth4Login, Device device, HttpServletRequest request) {
+	public AuthInfo login(@RequestBody @Valid Auth4Login auth4Login, HttpServletRequest request) {
+		Device device = DeviceUtils.getCurrentDevice(request);
 		// 调用spring security认证逻辑
 		Authentication authentication = this.authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(auth4Login.getUsername(), auth4Login.getPassword()));
@@ -80,6 +87,10 @@ public class AuthController extends BaseController {
 		BeanUtil.copyProperties(securityUser.getUser(), userInfoCache);
 		this.redisService.storeUserInfo(authInfo.getToken(), userInfoCache);
 
+		// 更新数据库User表的最后登录时间
+		securityUser.getUser().setLastLoginTime(DateUtil.timestamp());
+		this.userService.modify(securityUser.getUser());
+		
 		// 将token返回给前端
 		return authInfo;
 	}
@@ -117,6 +128,7 @@ public class AuthController extends BaseController {
 		// 根据token获取用户的信息
 		String token = request.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
 		String userName = TokenUtil.getUsernameFromToken(token);
+		LOGGER.info("userName [" + userName + "] logout");
 		// 将token以及用户相关信息从redis中删除
 		this.redisService.removeUserInfo(token);
 	}

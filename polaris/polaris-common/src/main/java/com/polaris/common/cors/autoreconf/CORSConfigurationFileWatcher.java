@@ -18,9 +18,9 @@ import java.util.logging.Logger;
 
 import javax.servlet.FilterConfig;
 
-import com.thetransactioncompany.cors.CORSConfigurationLoader;
-import com.thetransactioncompany.cors.environment.Environment;
-import com.thetransactioncompany.cors.environment.SystemProperties;
+import com.polaris.common.cors.CORSConfigurationLoader;
+import com.polaris.common.cors.environment.Environment;
+import com.polaris.common.cors.environment.SystemProperties;
 
 /**
  * Watches a CORS filter configuration file for changes.

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.polaris.common.exception.ApiException;
 import com.polaris.common.paging.PagingSupport;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
+import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.service.srv.order.OrderService;
@@ -62,6 +64,18 @@ public class OrderController extends BaseController {
 		Order savedOrder = this.orderService.save(order);
 		LOGGER.debug("save order [" + savedOrder.getId() + "]");
 		return order.getId();
+	}
+	
+	public static void main(String[] args) {
+		Order4Add add = new Order4Add();
+		add.setPaymentAmount(189.9d);
+		add.setSaleChannel("SMT");
+		add.setStatus(1);
+		add.setTotalPrice(189.9d);
+		System.out.println(JsonUtil.toJSON(add));
+		
+		System.out.println(new BCryptPasswordEncoder().encode("1990912"));
+		
 	}
 	
 	/**

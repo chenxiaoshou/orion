@@ -7,8 +7,8 @@ import java.util.Properties;
 
 import javax.servlet.FilterConfig;
 
-import com.thetransactioncompany.cors.environment.Environment;
-import com.thetransactioncompany.cors.environment.SystemProperties;
+import com.polaris.common.cors.environment.Environment;
+import com.polaris.common.cors.environment.SystemProperties;
 
 /**
  * CORS configuration loader.

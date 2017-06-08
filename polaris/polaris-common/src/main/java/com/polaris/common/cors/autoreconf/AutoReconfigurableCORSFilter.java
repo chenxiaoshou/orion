@@ -11,9 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.thetransactioncompany.cors.CORSConfigurationException;
-import com.thetransactioncompany.cors.CORSConfigurationLoader;
-import com.thetransactioncompany.cors.CORSFilter;
+import com.polaris.common.cors.CORSConfigurationException;
+import com.polaris.common.cors.CORSConfigurationLoader;
+import com.polaris.common.cors.CORSFilter;
 
 /**
  * CORS servlet filter which has the ability to automatically detect changes to

@@ -24,4 +24,13 @@ public class RedisServiceImpl implements RedisService {
 		this.stringRedisTemplate.opsForHash().delete(RedisConstants.KEY_USER_INFO, token);
 	}
 
+	@Override
+	public UserInfoCache getUserInfo(String token) {
+		Object value = this.stringRedisTemplate.opsForHash().get(RedisConstants.KEY_USER_INFO, token);
+		if (value != null) {
+			return JsonUtil.fromJSON((String) value, UserInfoCache.class);
+		}
+		return null;
+	}
+
 }

@@ -14,10 +14,10 @@ public class Auth4Login implements Serializable {
 
 	private static final long serialVersionUID = -7825879421230567483L;
 
-	@NotBlank(message = "auth.username.not_blank")
+	@NotBlank(message = "auth.username.is_blank")
 	private String username;
 
-	@NotBlank(message = "auth.password.not_blank")
+	@NotBlank(message = "auth.password.is_blank")
 	private String password;
 
 	public String getUsername() {

@@ -21,6 +21,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
+import org.springframework.mobile.device.site.SitePreferenceHandlerInterceptor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -137,10 +139,6 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 		converters.add(stringConverter);
 		// XML消息转换器，两种方式:Jaxb 和 Marshalling，任选其一
 		converters.add(new Jaxb2RootElementHttpMessageConverter());
-		// converters.add(new MarshallingHttpMessageConverter(new
-		// CastorMarshaller(), new CastorMarshaller()));
-		// 待测 converters.add(new MarshallingHttpMessageConverter(new
-		// Jaxb2Marshaller(), new Jaxb2Marshaller()));
 		// Json消息转换器
 		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 		jsonConverter.setObjectMapper(JsonUtil.createMapper());
@@ -225,10 +223,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 描述 : <注册servlet适配器>. <br>
-	 * <p>
-	 * <只需要在自定义的servlet上用@Controller("映射路径")标注即可>
-	 * </p>
+	 * 注册servlet适配器，只需要在自定义的servlet上用@Controller("映射路径")标注即可
 	 * 
 	 * @return
 	 */
@@ -238,10 +233,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 描述 : <基于cookie的本地化资源处理器>. <br>
-	 * <p>
-	 * <使用方法说明>
-	 * </p>
+	 * 基于cookie的本地化资源处理器
 	 * 
 	 * @return
 	 */
@@ -251,10 +243,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 描述 : <本地化拦截器>. <br>
-	 * <p>
-	 * <使用方法说明>
-	 * </p>
+	 * 本地化拦截器
 	 * 
 	 * @return
 	 */
@@ -264,38 +253,39 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 描述 : <注册自定义拦截器>. <br>
-	 * <p>
-	 * <使用方法说明>
-	 * </p>
+	 * 添加Spring提供的客户端设备的解析拦截器
 	 * 
 	 * @return
 	 */
-	/*
-	 * @Bean public PolarisInitializingInterceptor
-	 * polarisInitializingInterceptor() { return new
-	 * PolarisInitializingInterceptor(); }
-	 */
+	@Bean
+	public DeviceResolverHandlerInterceptor deviceResolverHandlerInterceptor() {
+		return new DeviceResolverHandlerInterceptor();
+	}
 
 	/**
-	 * 描述 : <添加拦截器>. <br>
-	 * <p>
-	 * <使用方法说明>
-	 * </p>
+	 * 客户端站点偏好拦截器
+	 * 
+	 * @return
+	 */
+	@Bean
+	public SitePreferenceHandlerInterceptor sitePreferenceHandlerInterceptor() {
+		return new SitePreferenceHandlerInterceptor();
+	}
+
+	/**
+	 * 添加拦截器
 	 * 
 	 * @param registry
 	 */
 	@Override
 	protected void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor()); // 本地化拦截器
-		// registry.addInterceptor(polarisInitializingInterceptor()); // 自定义拦截器
+		registry.addInterceptor(deviceResolverHandlerInterceptor());
+		registry.addInterceptor(sitePreferenceHandlerInterceptor());
 	}
 
 	/**
-	 * 描述 : <文件上传处理器>. <br>
-	 * <p>
-	 * <使用方法说明>
-	 * </p>
+	 * 文件上传处理器
 	 * 
 	 * @return
 	 */
@@ -305,10 +295,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 描述 : <异常处理器>. <br>
-	 * <p>
-	 * <系统运行时遇到指定的异常将会跳转到指定的页面>
-	 * </p>
+	 * 异常处理器，系统运行时遇到指定的异常将会跳转到指定的页面
 	 * 
 	 * @return
 	 */
@@ -325,10 +312,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	 */
 
 	/**
-	 * 描述 : <注册通用属性编辑器>. <br>
-	 * <p>
-	 * <这里只增加了字符串转日期和字符串两边去空格的处理>
-	 * </p>
+	 * 注册通用属性编辑器
 	 * 
 	 * @return
 	 */

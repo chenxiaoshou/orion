@@ -62,7 +62,8 @@ public class TokenUtil {
 	 * 
 	 * @param userDetails
 	 * @param device
-	 * @param tokenSign token签发者
+	 * @param tokenSign
+	 *            token签发者
 	 * @return
 	 */
 	public static AuthInfo generateTokenAndBuildAuthInfo(UserDetails userDetails, String tokenSign, Device device) {
@@ -177,7 +178,7 @@ public class TokenUtil {
 		}
 		return audience;
 	}
-	
+
 	/**
 	 * 校验token是否合法
 	 * 

@@ -14,7 +14,6 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.utils.ArrayUtil;
 import com.polaris.manage.model.mysql.BaseMysqlObject;
 
@@ -25,8 +24,7 @@ import com.polaris.manage.model.mysql.BaseMysqlObject;
  *
  */
 @Entity
-@Table(name = "pms_user", schema = PolarisConstants.POLARIS_AUTH_DB, indexes = {
-		@Index(columnList = "username", name = "idx_username"),
+@Table(name = "pms_user", indexes = { @Index(columnList = "username", name = "idx_username"),
 		@Index(columnList = "password", name = "idx_password") })
 public class User extends BaseMysqlObject {
 

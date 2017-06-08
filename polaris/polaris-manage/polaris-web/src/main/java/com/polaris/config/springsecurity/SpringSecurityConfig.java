@@ -26,6 +26,7 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.polaris.common.constant.PolarisConstants;
 import com.polaris.security.filter.AuthenticationTokenFilter;
 import com.polaris.security.handler.EntryPointUnauthorizedHandler;
 import com.polaris.security.service.impl.UserDetailsServiceImpl;
@@ -57,9 +58,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 不创建session
 				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**")
 				.permitAll().antMatchers(HttpMethod.GET, "/static/**", "/*.html", "/favicon.ico", "/**/*.html",
-						"/**/*.css", "/**/*.js")
-				.permitAll().antMatchers("/auth/**").permitAll().anyRequest().authenticated();
+						"/**/*.css", "/**/*.js", extractRootBase() + "/ping")
+				.permitAll().antMatchers(extractRootBase() + "auth/**").permitAll().anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+	}
+	
+	private String extractRootBase() {
+		String url = PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN;
+		if (url.endsWith("\\*")) {
+			url = url.substring(0, url.length() - 1);
+		}
+		return url;
 	}
 	
 	@Bean

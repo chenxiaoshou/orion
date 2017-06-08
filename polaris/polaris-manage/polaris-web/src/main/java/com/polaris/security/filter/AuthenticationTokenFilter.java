@@ -28,7 +28,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private RedisService redisService;
 
@@ -37,13 +37,13 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
-		
+
 		String username = TokenUtil.getUsernameFromToken(authToken);
-		LOG.info("Checking authentication for user [" + username + "] token [" + authToken + "]");
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			LOG.info("Checking authentication for user [" + username + "] token [" + authToken + "]");
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 			// 如果验证token无误，并且在redis服务器中存有相关用户信息的话，视为认证通过
-			if (TokenUtil.validateToken(authToken, userDetails) && inRedis(userDetails)) {
+			if (TokenUtil.validateToken(authToken, userDetails) && inRedis(authToken)) {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
@@ -59,9 +59,8 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	 * @param userDetails
 	 * @return
 	 */
-	private boolean inRedis(UserDetails userDetails) {
-		// TODO 这里后续会加上相关实现逻辑
-		return true;
+	private boolean inRedis(String authToken) {
+		return redisService.getUserInfo(authToken) != null;
 	}
 
 }

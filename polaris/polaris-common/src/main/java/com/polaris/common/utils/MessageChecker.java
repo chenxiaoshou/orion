@@ -24,7 +24,7 @@ public class MessageChecker {
 	}
 
 	// 国际化资源文件路径，需根据实际情况自己配置。
-	private static final String MESSAGE_FILE_PATH = "I:/git_repository/polaris/polaris-manage/polaris-web/src/main/resources/message_zh_CN.properties";
+	private static final String MESSAGE_FILE_PATH = "I:/git_repository/polaris/polaris-manage/polaris-web/src/main/resources/i18n/message.properties";
 
 	public static void main(String[] args) {
 		Properties prop = new Properties();

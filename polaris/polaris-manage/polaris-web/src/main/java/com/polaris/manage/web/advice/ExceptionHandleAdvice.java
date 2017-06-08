@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,8 @@ import com.polaris.common.utils.JsonUtil;
 @RestControllerAdvice(annotations = { RestController.class, Controller.class })
 public class ExceptionHandleAdvice {
 
+	private static final Logger LOGGER = LogManager.getLogger(ExceptionHandleAdvice.class);
+
 	@Autowired
 	private MessageSource messageSource;
 
@@ -54,7 +58,7 @@ public class ExceptionHandleAdvice {
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
 	}
-	
+
 	/**
 	 * 处理Controller层主动抛出的API异常
 	 */
@@ -161,6 +165,7 @@ public class ExceptionHandleAdvice {
 		} else {
 			appMessage.setMoreInfo(e.getMessage());
 		}
+		LOGGER.error(e.getMessage(), e);
 		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
 	}
 
@@ -173,6 +178,7 @@ public class ExceptionHandleAdvice {
 		String message = messageSource.getMessage(ExceptionConstants.UNKNOWN_EXCEPTION, null, null);
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		appMessage.setMoreInfo(e.getMessage());
+		LOGGER.error(e.getMessage(), e);
 		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
 	}
 

@@ -43,13 +43,6 @@
 
 	<dependencies>
 
-		<!-- https://mvnrepository.com/artifact/com.thetransactioncompany/cors-filter -->
-		<dependency>
-		    <groupId>com.thetransactioncompany</groupId>
-		    <artifactId>cors-filter</artifactId>
-		    <version>2.5</version>
-		</dependency>
-	
 		<!-- apache common工具包 -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -118,6 +111,13 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servletApiVersion}</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- java-property-utils -->
+		<dependency>
+		    <groupId>com.thetransactioncompany</groupId>
+		    <artifactId>java-property-utils</artifactId>
+		    <version>1.10</version>
 		</dependency>
 
 		<!-- spring -->
@@ -262,7 +262,7 @@
 			<version>2.6.1.RELEASE</version>
 		</dependency>
 	
-	    <!-- https://mvnrepository.com/artifact/org.springframework.mobile/spring-mobile-device -->
+	    <!-- spring-mobile-device -->
 		<dependency>
 		    <groupId>org.springframework.mobile</groupId>
 		    <artifactId>spring-mobile-device</artifactId>
