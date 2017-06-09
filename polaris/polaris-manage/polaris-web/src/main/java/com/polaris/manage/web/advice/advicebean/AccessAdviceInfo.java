@@ -15,8 +15,10 @@ public class AccessAdviceInfo extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -5877789774624894127L;
 
-	private String visitor; // 请求者身份标识
+	private String visitor; // 请求者身份标识(即 username)
 
+	private String token; // 请求者token
+	
 	private String visitorIp; // 访问者Ip
 
 	private String requestURL; // 请求的完整路径
@@ -156,6 +158,14 @@ public class AccessAdviceInfo extends BaseObject implements Serializable {
 
 	public void setReturned(boolean returned) {
 		this.returned = returned;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

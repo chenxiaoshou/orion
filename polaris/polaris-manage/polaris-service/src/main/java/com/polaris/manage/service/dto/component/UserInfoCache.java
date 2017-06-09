@@ -1,8 +1,6 @@
 package com.polaris.manage.service.dto.component;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.polaris.common.base.BaseObject;
 
@@ -28,7 +26,7 @@ public class UserInfoCache extends BaseObject {
 
 	private Timestamp lastLoginTime;
 
-	private List<String> roles = new ArrayList<>();
+	private String roles; // role角色字符串拼接，冗余字段
 
 	public String getUserId() {
 		return userId;
@@ -102,11 +100,11 @@ public class UserInfoCache extends BaseObject {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-	public List<String> getRoles() {
+	public String getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(String roles) {
 		this.roles = roles;
 	}
 

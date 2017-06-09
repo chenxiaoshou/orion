@@ -21,6 +21,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.exception.PolarisException;
 import com.polaris.common.utils.DateUtil;
@@ -28,6 +29,7 @@ import com.polaris.common.utils.ReflectionUtils;
 import com.polaris.common.utils.ToStringUtil;
 import com.polaris.manage.web.advice.advicebean.AccessAdviceInfo;
 import com.polaris.manage.web.advice.advicebean.AdviceException;
+import com.polaris.security.util.TokenUtil;
 
 /**
  * 记录请求日志信息的切面
@@ -41,6 +43,12 @@ public class AccessHandleAdvice {
 
 	private static final Logger LOGGER = LogManager.getLogger(AccessHandleAdvice.class);
 
+	private static final String IP_UNKNOWN = "Unknown";
+
+	private static final String IP_ZERO = "0:0:0:0:0:0:0:1";
+
+	private static final String IP_LOCALHOST = "127.0.0.1";
+	
 	private static final String CONTROLLER_EXECUTION = "execution(public * com.polaris.manage.web.controller..*.*(..))";
 
 	private static final String EXCEPTION_ADVICE_EXECUTION = "execution(public * com.polaris.manage.web.advice.ExceptionHandleAdvice.*(..))";
@@ -71,8 +79,15 @@ public class AccessHandleAdvice {
 		String[] paramNames = methodSignature.getParameterNames();
 		String returnType = methodSignature.getReturnType().getSimpleName();
 		AccessAdviceInfo accessAdviceInfo = new AccessAdviceInfo();
-		// visitor TODO
-		// visitorIp TODO
+		// visitor
+		String token = request.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
+		String username = TokenUtil.getUsernameFromToken(token);
+		accessAdviceInfo.setVisitor(username);
+		// token
+		accessAdviceInfo.setToken(token);
+		// visitorIp
+		String remoteHost = getRemoteHost(request);
+		accessAdviceInfo.setVisitorIp(remoteHost);
 		// requestURL
 		accessAdviceInfo.setRequestURL(request.getRequestURL().toString());
 		// className
@@ -169,4 +184,28 @@ public class AccessHandleAdvice {
 		return (MethodSignature) signature;
 	}
 
+	private String getRemoteHost(javax.servlet.http.HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		// 多级反向代理之后，x-forwarded-for请求头中的ip会变成多个ip拼接串(128.244.32.123,196.128.199.106),取第一个不是unknow的Ip地址，即为真实的客户端ip
+		if (ip != null && ip.length() > 15) {
+			String[] ips = ip.split(",");
+			for (String subIp : ips) {
+				if (!IP_UNKNOWN.equalsIgnoreCase(subIp)) {
+					ip = subIp;
+					break;
+				}
+			}
+		}
+		return IP_ZERO.equals(ip) ? IP_LOCALHOST : ip;
+	}
+	
 }

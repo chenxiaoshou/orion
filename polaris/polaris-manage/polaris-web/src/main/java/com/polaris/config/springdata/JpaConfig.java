@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.auditing.CurrentDateTimeProvider;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -24,11 +28,13 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.polaris.audit.UserAuditorAware;
 import com.polaris.config.datasource.DataSourceConfig;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {
 		"com.polaris.manage.*.mysql" }, queryLookupStrategy = Key.CREATE_IF_NOT_FOUND, entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider", dateTimeProviderRef = "dateTimeProvider")
 public class JpaConfig {
 
 	private static final Logger LOGGER = LogManager.getLogger(DataSourceConfig.class);
@@ -107,6 +113,24 @@ public class JpaConfig {
 		} catch (Exception e) {
 			LOGGER.debug(String.format("Destroy entityManagerFactory %s error", entityManagerFactory), e);
 		}
+	}
+
+	/**
+	 * 添加操作时间审计
+	 * 
+	 * @return
+	 */
+	@Bean
+	public DateTimeProvider dateTimeProvider() {
+		return CurrentDateTimeProvider.INSTANCE;
+	}
+
+	/**
+	 * 添加操作人审计
+	 */
+	@Bean
+	public AuditorAware<String> auditorProvider() {
+		return new UserAuditorAware();
 	}
 
 	@PostConstruct

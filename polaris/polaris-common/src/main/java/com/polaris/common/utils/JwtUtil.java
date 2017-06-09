@@ -32,7 +32,7 @@ public final class JwtUtil {
 	public static final String CLAIMS_SUB = "sub";
 
 	/**
-	 * 接受jwt的一方（可以存储设备信息）
+	 * 接受jwt的一方（这里存储的是对方的ip地址）
 	 */
 	public static final String CLAIMS_AUD = "aud";
 
@@ -62,15 +62,20 @@ public final class JwtUtil {
 	public static final String CLAIMS_PUBLICKEY = "puk";
 
 	/**
-	 * 数据库中User的username
+	 * 访问用户的username
 	 */
 	public static final String CLAIMS_USERNAME = "username";
 
 	/**
-	 * 数据库中User的角色字符串
+	 * 访问用户的角色字符串
 	 */
 	public static final String CLAIMS_ROLES = "roles";
-
+	
+	/**
+	 * 客户端的设备类型
+	 */
+	public static final String CLAIMS_DEVICE = "device";
+	
 	private static RsaSigner signer;
 
 	private static RsaVerifier verifier;
@@ -126,11 +131,6 @@ public final class JwtUtil {
 		payloads.put(CLAIMS_IAT, createTime);
 		long expirationTime = createTime + PolarisConstants.JWT_EXPIRATION;
 		payloads.put(CLAIMS_EXP, expirationTime);
-		try {
-			payloads.put(CLAIMS_PUBLICKEY, RSAUtil.getBase64PublicKey());
-		} catch (Exception e) {
-			LOGGER.error("获取RSA公钥失败！", e);
-		}
 		return payloads;
 	}
 

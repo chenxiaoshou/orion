@@ -66,7 +66,7 @@ public class TokenUtil {
 	 *            token签发者
 	 * @return
 	 */
-	public static AuthInfo generateTokenAndBuildAuthInfo(UserDetails userDetails, String tokenSign, Device device) {
+	public static AuthInfo generateTokenAndBuildAuthInfo(UserDetails userDetails, String remoteHost, String tokenSign, Device device) {
 		Map<String, Object> payloads = JwtUtil.buildNormalJwtPayloads();
 		SecurityUser securityUser = (SecurityUser) userDetails;
 		payloads.put(JwtUtil.CLAIMS_ISS, tokenSign);
@@ -186,7 +186,7 @@ public class TokenUtil {
 	 * @param userDetails
 	 * @return
 	 */
-	public static Boolean validateToken(String token, UserDetails userDetails) {
+	public static Boolean isTokenAvailable(String token, UserDetails userDetails) {
 		SecurityUser securityUser = (SecurityUser) userDetails;
 		final String userId = getUserIdFromToken(token);
 		final String username = getUsernameFromToken(token);
@@ -198,9 +198,21 @@ public class TokenUtil {
 			boolean subResult2 = username.equals(securityUser.getUser().getUsername())
 					&& userId.equals(securityUser.getUser().getId());
 			boolean subResult3 = JwtUtil.verifyJwtToken(token);
+			if (!subResult3 && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("username [" + username + "] token is illegal.");
+			}
 			boolean subResult4 = !isTokenExpired(token);
-			boolean subResult5 = !isCreateTimeBeforeLastPasswordResetTime(createTime,
-					new Date(securityUser.getUser().getLastPasswordResetTime().getTime()));
+			if (!subResult4 && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("username [" + username + "] token is expired.");
+			}
+			boolean subResult5 = true;
+			if (securityUser.getUser().getLastPasswordResetTime() != null) {
+				subResult5 = !isCreateTimeBeforeLastPasswordResetTime(createTime,
+						new Date(securityUser.getUser().getLastPasswordResetTime().getTime()));
+				if (!subResult5 && LOGGER.isDebugEnabled()) {
+					LOGGER.debug("username [" + username + "] create time before last password reset time.");
+				}
+			}
 			return subResult2 && subResult3 && subResult4 && subResult5;
 		} else {
 			return false;
@@ -219,7 +231,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			username = payload.getString(JwtUtil.CLAIMS_USERNAME);
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "username"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "username"));
 			username = null;
 		}
 		return username;
@@ -237,7 +249,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			roles = payload.getString(JwtUtil.CLAIMS_ROLES);
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "roles"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "roles"));
 			roles = null;
 		}
 		return roles;
@@ -255,7 +267,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			userId = payload.getString(JwtUtil.CLAIMS_SUB);
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "userId"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "userId"));
 			userId = null;
 		}
 		return userId;
@@ -273,7 +285,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			createTime = new Date(payload.getLong(JwtUtil.CLAIMS_IAT));
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "createTime"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "createTime"));
 			createTime = null;
 		}
 		return createTime;
@@ -291,7 +303,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			expiration = new Date(payload.getLong(JwtUtil.CLAIMS_EXP));
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "expiration"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "expiration"));
 			expiration = null;
 		}
 		return expiration;
@@ -309,7 +321,7 @@ public class TokenUtil {
 			final JSONObject payload = JwtUtil.getPayload(token);
 			audience = payload.getString(JwtUtil.CLAIMS_AUD);
 		} catch (Exception e) {
-			LOGGER.info(MessageFormat.format(errMsg, token, "audience"));
+			LOGGER.debug(MessageFormat.format(errMsg, token, "audience"));
 			audience = null;
 		}
 		return audience;

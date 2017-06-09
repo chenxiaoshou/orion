@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.polaris.common.exception.AuthException;
 import com.polaris.manage.model.mysql.auth.User;
-import com.polaris.manage.service.srv.auth.UserService;
+import com.polaris.manage.service.mysql.auth.UserService;
 import com.polaris.security.factory.SecurityUserFactory;
 import com.polaris.security.service.SecurityService;
 
-@Service
+@Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired

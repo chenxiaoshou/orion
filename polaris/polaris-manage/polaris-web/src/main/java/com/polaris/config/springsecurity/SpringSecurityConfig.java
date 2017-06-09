@@ -56,21 +56,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 不创建session
-				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**")
-				.permitAll().antMatchers(HttpMethod.GET, "/static/**", "/*.html", "/favicon.ico", "/**/*.html",
-						"/**/*.css", "/**/*.js", extractRootBase() + "/ping")
-				.permitAll().antMatchers(extractRootBase() + "auth/**").permitAll().anyRequest().authenticated();
+				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/static/**", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css",
+						"/**/*.js", PolarisConstants.SECURITY_MAPPING_URL_PATTERN + "/ping")
+				.permitAll().antMatchers(PolarisConstants.SECURITY_MAPPING_URL_PATTERN + "/auth/**").permitAll()
+				.anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
-	private String extractRootBase() {
-		String url = PolarisConstants.POLARIS_API_MAPPING_URL_PATTERN;
-		if (url.endsWith("\\*")) {
-			url = url.substring(0, url.length() - 1);
-		}
-		return url;
-	}
-	
+
 	@Bean
 	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
 		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
@@ -80,13 +73,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		return authenticationTokenFilter;
 	}
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-	
-    @Bean
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
 		return new UserDetailsServiceImpl();
@@ -98,7 +91,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * ???
+	 * 开启Spring Security认证和授权日志监听器
 	 * 
 	 * @return
 	 */
@@ -108,7 +101,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * ???
+	 * 开启Spring Security访问日志监听器
 	 * 
 	 * @return
 	 */
@@ -117,9 +110,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new org.springframework.security.access.event.LoggerListener();
 	}
 
-	/*
+	/**
 	 * 
-	 * 这里可以增加自定义的投票器
+	 * 增加自定义的投票器
 	 */
 	@Bean(name = "accessDecisionManager")
 	public AccessDecisionManager accessDecisionManager() {
@@ -130,7 +123,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new AffirmativeBased(decisionVoters);
 	}
 
-	/*
+	/**
 	 * 表达式控制器
 	 */
 	@Bean(name = "expressionHandler")
@@ -138,7 +131,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new DefaultWebSecurityExpressionHandler();
 	}
 
-	/*
+	/**
 	 * 表达式投票器
 	 */
 	@Bean(name = "expressionVoter")

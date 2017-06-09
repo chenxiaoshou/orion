@@ -79,7 +79,7 @@ public class PolarisInitializer extends AbstractAnnotationConfigDispatcherServle
 	 */
 
 	/**
-	 * 创建一个可以在非spring管理bean中获得spring管理的相关bean的上下文对象: BeanUtil.getBean(beanName);
+	 * 创建一个可以在非spring管理bean中获得spring管理的相关bean的上下文对象: SpringUtil.getBean(beanName);
 	 */
 	@Override
 	protected WebApplicationContext createRootApplicationContext() {

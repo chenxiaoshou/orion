@@ -4,7 +4,11 @@ import java.sql.Timestamp;
 
 import javax.persistence.MappedSuperclass;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import com.polaris.common.base.BaseObject;
 
@@ -32,6 +36,7 @@ public class BaseMongoObject extends BaseObject {
 		this.id = id;
 	}
 
+	@CreatedBy
 	public String getCreator() {
 		return creator;
 	}
@@ -40,6 +45,7 @@ public class BaseMongoObject extends BaseObject {
 		this.creator = creator;
 	}
 
+	@CreatedDate
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -48,6 +54,7 @@ public class BaseMongoObject extends BaseObject {
 		this.createTime = createTime;
 	}
 
+	@LastModifiedBy
 	public String getUpdater() {
 		return updater;
 	}
@@ -56,6 +63,7 @@ public class BaseMongoObject extends BaseObject {
 		this.updater = updater;
 	}
 
+	@LastModifiedDate
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}

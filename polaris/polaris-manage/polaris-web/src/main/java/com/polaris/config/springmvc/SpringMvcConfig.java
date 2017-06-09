@@ -49,6 +49,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.exception.PolarisExceptionResolver;
 import com.polaris.common.utils.JsonUtil;
 
 /**
@@ -299,17 +300,11 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	 * 
 	 * @return
 	 */
-	/*
-	 * @Bean public PolarisExceptionResolver polarisExceptionResolver() {
-	 * PolarisExceptionResolver polarisExceptionResolver = new
-	 * PolarisExceptionResolver();
-	 * polarisExceptionResolver.setDefaultErrorView("common_error");
-	 * polarisExceptionResolver.setExceptionAttribute("exception"); Properties
-	 * properties = new Properties();
-	 * properties.setProperty("java.lang.RuntimeException", "common_error");
-	 * polarisExceptionResolver.setExceptionMappings(properties); return
-	 * polarisExceptionResolver; }
-	 */
+
+	@Bean
+	public PolarisExceptionResolver polarisExceptionResolver() {
+		return new PolarisExceptionResolver();
+	}
 
 	/**
 	 * 注册通用属性编辑器

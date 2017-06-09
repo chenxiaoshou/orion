@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.polaris.manage.model.mysql.auth.MapUserRole;
 import com.polaris.manage.model.mysql.auth.Role;
-import com.polaris.manage.service.srv.auth.MapUserRoleService;
-import com.polaris.manage.service.srv.auth.RoleService;
+import com.polaris.manage.service.mysql.auth.MapUserRoleService;
+import com.polaris.manage.service.mysql.auth.RoleService;
 import com.polaris.security.service.SecurityService;
 
-@Service
+@Service("securityService")
 public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired

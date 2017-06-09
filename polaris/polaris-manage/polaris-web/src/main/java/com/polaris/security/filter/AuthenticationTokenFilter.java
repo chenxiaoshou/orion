@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import com.polaris.common.constant.PolarisConstants;
-import com.polaris.manage.service.srv.component.RedisService;
+import com.polaris.manage.service.mysql.component.RedisService;
 import com.polaris.security.util.TokenUtil;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
@@ -40,10 +40,12 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 
 		String username = TokenUtil.getUsernameFromToken(authToken);
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			LOG.info("Checking authentication for user [" + username + "] token [" + authToken + "]");
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Checking authentication for user [" + username + "] token [" + authToken + "]");
+			}
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 			// 如果验证token无误，并且在redis服务器中存有相关用户信息的话，视为认证通过
-			if (TokenUtil.validateToken(authToken, userDetails) && inRedis(authToken)) {
+			if (TokenUtil.isTokenAvailable(authToken, userDetails) && inRedis(authToken)) {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));

@@ -3,14 +3,21 @@ package com.polaris.manage.model.mysql;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polaris.common.base.BaseObject;
 
+@EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public class BaseMysqlObject extends BaseObject {
 
@@ -21,7 +28,7 @@ public class BaseMysqlObject extends BaseObject {
 	protected String creator; // 创建者
 
 	protected Timestamp createTime; // 创建时间
-
+	
 	protected String updater; // 更新者
 
 	protected Timestamp updateTime; // 更新时间
@@ -38,6 +45,7 @@ public class BaseMysqlObject extends BaseObject {
 		this.id = id;
 	}
 
+	@CreatedBy
 	@Column(name = "creator", nullable = false, columnDefinition = "varchar(64) default '' comment '创建者ID'")
 	public String getCreator() {
 		return creator;
@@ -47,6 +55,7 @@ public class BaseMysqlObject extends BaseObject {
 		this.creator = creator;
 	}
 
+	@CreatedDate
 	@Column(name = "create_time", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
 	public Timestamp getCreateTime() {
 		return createTime;
@@ -56,6 +65,7 @@ public class BaseMysqlObject extends BaseObject {
 		this.createTime = createTime;
 	}
 
+	@LastModifiedBy
 	@Column(name = "updater", nullable = false, columnDefinition = "varchar(64) default '' comment '更新者ID'")
 	public String getUpdater() {
 		return updater;
@@ -66,6 +76,7 @@ public class BaseMysqlObject extends BaseObject {
 	}
 
 	@Column(name = "update_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
+	@LastModifiedDate
 	public Timestamp getUpdateTime() {
 		return updateTime;
 	}

@@ -23,6 +23,11 @@ public final class PolarisConstants {
 	public static final String POLARIS_API_MAPPING_URL_PATTERN = "/api/v1/*";
 	
 	/**
+	 * API请求路径前缀
+	 */
+	public static final String SECURITY_MAPPING_URL_PATTERN = "/**/api/v1";
+	
+	/**
 	 * 管理系统请求路径前缀
 	 */
 	public static final String POLARIS_ADMIN_MAPPING_URL_PATTERN = "/admin/v1/*";
@@ -147,5 +152,12 @@ public final class PolarisConstants {
 	public static final String PUBLIC_KEY_FILE_PATH = "keystore/publicKey.keystore";
 
 	public static final String PRIVATE_KEY_FILE_PATH = "keystore/privateKey.keystore";
-
+	
+	/**
+	 * Audit - 系统做出的创建和更新，数据库中的审计字段（creater, updater）统一填写System
+	 */
+	public static final String AUDIT_CREATOR_SYSTEM = "System";
+	
+	public static final String AUDIT_UPDATER_SYSTEM = "System";
+	
 }

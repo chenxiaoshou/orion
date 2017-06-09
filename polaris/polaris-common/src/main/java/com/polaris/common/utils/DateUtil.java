@@ -877,6 +877,10 @@ public final class DateUtil {
 		return new Timestamp(date.getTime());
 	}
 
+	public static Calendar calendar() {
+		return Calendar.getInstance();
+	}
+	
 	/**
 	 * 时间戳格式化
 	 * 

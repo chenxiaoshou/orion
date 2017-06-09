@@ -27,9 +27,10 @@ import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.common.utils.DateUtil;
+import com.polaris.manage.model.mysql.auth.User;
 import com.polaris.manage.service.dto.component.UserInfoCache;
-import com.polaris.manage.service.srv.auth.UserService;
-import com.polaris.manage.service.srv.component.RedisService;
+import com.polaris.manage.service.mysql.auth.UserService;
+import com.polaris.manage.service.mysql.component.RedisService;
 import com.polaris.manage.web.controller.BaseController;
 import com.polaris.manage.web.vo.auth.Auth4Login;
 import com.polaris.manage.web.vo.auth.AuthInfo;
@@ -50,7 +51,7 @@ public class AuthController extends BaseController {
 
 	@Autowired
 	private RedisService redisService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -73,8 +74,9 @@ public class AuthController extends BaseController {
 
 		// 如果认证通过，这里为其生成token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(auth4Login.getUsername());
-		AuthInfo authInfo = TokenUtil.generateTokenAndBuildAuthInfo(userDetails, request.getRequestURL().toString(),
-				device);
+		String remoteHost = getRemoteHost(request);
+		AuthInfo authInfo = TokenUtil.generateTokenAndBuildAuthInfo(userDetails, remoteHost,
+				request.getRequestURL().toString(), device);
 
 		LOGGER.info("user [" + authInfo.getUsername() + "] login successful, token [" + authInfo.getToken() + "]");
 
@@ -88,9 +90,10 @@ public class AuthController extends BaseController {
 		this.redisService.storeUserInfo(authInfo.getToken(), userInfoCache);
 
 		// 更新数据库User表的最后登录时间
-		securityUser.getUser().setLastLoginTime(DateUtil.timestamp());
+		User user = securityUser.getUser();
+		user.setLastLoginTime(DateUtil.timestamp());
 		this.userService.modify(securityUser.getUser());
-		
+
 		// 将token返回给前端
 		return authInfo;
 	}

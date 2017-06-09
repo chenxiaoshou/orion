@@ -39,7 +39,9 @@ public class EntryPointUnauthorizedHandler implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			AuthenticationException e) throws IOException, ServletException {
-		LOGGER.warn("Auth failure [" + e.getMessage() + "]");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.warn("Auth failure [" + e.getMessage() + "]");
+		}
 		String message = messageSource.getMessage(ExceptionConstants.UNAUTHORIZED_EXCEPTION, null, null);
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		appMessage.setMoreInfo(e.getMessage());
