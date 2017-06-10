@@ -1,10 +1,12 @@
 package com.polaris.manage.web.vo.order;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.polaris.common.constant.PatternConstants;
+import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
+import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
 
 public class Order4Get implements Serializable {
 
@@ -12,22 +14,22 @@ public class Order4Get implements Serializable {
 
 	private String orderId; // 订单Id
 
-	private Integer status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
+	private OrderStatusEnum status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 
 	private Double totalPrice; // 订单总金额
 
 	private Double paymentAmount; // 实际已支付金额
 
-	private String saleChannel; // 订单来源渠道
+	private SaleChannelEnum saleChannel; // 订单来源渠道
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp createTime; // 创建时间
+	private LocalDateTime createTime; // 创建时间
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp updateTime; // 更新时间
+	private LocalDateTime updateTime; // 更新时间
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp completeTime; // 完成时间
+	private LocalDateTime completeTime; // 完成时间
 
 	public String getOrderId() {
 		return orderId;
@@ -37,11 +39,11 @@ public class Order4Get implements Serializable {
 		this.orderId = orderId;
 	}
 
-	public Integer getStatus() {
+	public OrderStatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(OrderStatusEnum status) {
 		this.status = status;
 	}
 
@@ -61,35 +63,35 @@ public class Order4Get implements Serializable {
 		this.paymentAmount = paymentAmount;
 	}
 
-	public String getSaleChannel() {
+	public SaleChannelEnum getSaleChannel() {
 		return saleChannel;
 	}
 
-	public void setSaleChannel(String saleChannel) {
+	public void setSaleChannel(SaleChannelEnum saleChannel) {
 		this.saleChannel = saleChannel;
 	}
 
-	public Timestamp getCreateTime() {
+	public LocalDateTime getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
 	}
 
-	public Timestamp getUpdateTime() {
+	public LocalDateTime getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
+	public void setUpdateTime(LocalDateTime updateTime) {
 		this.updateTime = updateTime;
 	}
 
-	public Timestamp getCompleteTime() {
+	public LocalDateTime getCompleteTime() {
 		return completeTime;
 	}
 
-	public void setCompleteTime(Timestamp completeTime) {
+	public void setCompleteTime(LocalDateTime completeTime) {
 		this.completeTime = completeTime;
 	}
 

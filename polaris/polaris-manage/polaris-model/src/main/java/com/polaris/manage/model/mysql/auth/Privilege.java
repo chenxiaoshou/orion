@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.polaris.manage.model.mysql.BaseMysqlObject;
+import com.polaris.manage.model.tools.dic.auth.PrivilegeEnum;
 
 /**
  * 权限表
@@ -18,16 +19,16 @@ public class Privilege extends BaseMysqlObject {
 
 	private static final long serialVersionUID = 5240662074365174587L;
 
-	private String type; // 权限类型
+	private PrivilegeEnum type; // 权限类型
 
 	private String description; // 权限描述
 
 	@Column(name = "type", nullable = false, length = 16, columnDefinition = "varchar(16) default '' comment '权限类型(menu, element, file, operation等)'")
-	public String getType() {
+	public PrivilegeEnum getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(PrivilegeEnum type) {
 		this.type = type;
 	}
 

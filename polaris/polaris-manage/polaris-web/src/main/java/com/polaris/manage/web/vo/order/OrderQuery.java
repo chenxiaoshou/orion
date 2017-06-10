@@ -1,11 +1,12 @@
 package com.polaris.manage.web.vo.order;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.polaris.common.constant.PatternConstants;
-import com.polaris.common.paging.PageInfo;
+import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
+import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
 
 public class OrderQuery implements Serializable {
 
@@ -15,56 +16,66 @@ public class OrderQuery implements Serializable {
 
 	private String[] orderIds;
 
-	private Integer minStatus;
+	private OrderStatusEnum status;
 
-	private Integer maxStatus;
+	private OrderStatusEnum[] statuses;
 
 	private Double minTotalPrice;
 
 	private Double maxTotalPrice;
 
-	private String saleChannel;
+	private SaleChannelEnum saleChannel;
 
-	private String[] saleChannels;
-
-	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp startCreateTime;
+	private SaleChannelEnum[] saleChannels;
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp endCreateTime;
+	private LocalDateTime createStartTime;
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp startUpdateTime;
+	private LocalDateTime createEndTime;
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp endUpdateTime;
+	private LocalDateTime updateStartTime;
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp startCompleteTime;
+	private LocalDateTime updateEndTime;
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
-	private Timestamp endCompleteTime;
+	private LocalDateTime completeStartTime;
 
-	private PageInfo pageInfo;
+	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
+	private LocalDateTime completeEndTime;
 
-	public PageInfo getPageInfo() {
-		return pageInfo;
+	public String getOrderId() {
+		return orderId;
 	}
 
-	public Integer getMinStatus() {
-		return minStatus;
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
-	public void setMinStatus(Integer minStatus) {
-		this.minStatus = minStatus;
+	public String[] getOrderIds() {
+		return orderIds;
 	}
 
-	public Integer getMaxStatus() {
-		return maxStatus;
+	public void setOrderIds(String[] orderIds) {
+		this.orderIds = orderIds;
 	}
 
-	public void setMaxStatus(Integer maxStatus) {
-		this.maxStatus = maxStatus;
+	public OrderStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatusEnum status) {
+		this.status = status;
+	}
+
+	public OrderStatusEnum[] getStatuses() {
+		return statuses;
+	}
+
+	public void setStatuses(OrderStatusEnum[] statuses) {
+		this.statuses = statuses;
 	}
 
 	public Double getMinTotalPrice() {
@@ -83,88 +94,68 @@ public class OrderQuery implements Serializable {
 		this.maxTotalPrice = maxTotalPrice;
 	}
 
-	public String getSaleChannel() {
+	public SaleChannelEnum getSaleChannel() {
 		return saleChannel;
 	}
 
-	public void setSaleChannel(String saleChannel) {
+	public void setSaleChannel(SaleChannelEnum saleChannel) {
 		this.saleChannel = saleChannel;
 	}
 
-	public String[] getSaleChannels() {
+	public SaleChannelEnum[] getSaleChannels() {
 		return saleChannels;
 	}
 
-	public void setSaleChannels(String[] saleChannels) {
+	public void setSaleChannels(SaleChannelEnum[] saleChannels) {
 		this.saleChannels = saleChannels;
 	}
 
-	public Timestamp getStartCreateTime() {
-		return startCreateTime;
+	public LocalDateTime getCreateStartTime() {
+		return createStartTime;
 	}
 
-	public void setStartCreateTime(Timestamp startCreateTime) {
-		this.startCreateTime = startCreateTime;
+	public void setCreateStartTime(LocalDateTime createStartTime) {
+		this.createStartTime = createStartTime;
 	}
 
-	public Timestamp getEndCreateTime() {
-		return endCreateTime;
+	public LocalDateTime getCreateEndTime() {
+		return createEndTime;
 	}
 
-	public void setEndCreateTime(Timestamp endCreateTime) {
-		this.endCreateTime = endCreateTime;
+	public void setCreateEndTime(LocalDateTime createEndTime) {
+		this.createEndTime = createEndTime;
 	}
 
-	public Timestamp getStartUpdateTime() {
-		return startUpdateTime;
+	public LocalDateTime getUpdateStartTime() {
+		return updateStartTime;
 	}
 
-	public void setStartUpdateTime(Timestamp startUpdateTime) {
-		this.startUpdateTime = startUpdateTime;
+	public void setUpdateStartTime(LocalDateTime updateStartTime) {
+		this.updateStartTime = updateStartTime;
 	}
 
-	public Timestamp getEndUpdateTime() {
-		return endUpdateTime;
+	public LocalDateTime getUpdateEndTime() {
+		return updateEndTime;
 	}
 
-	public void setEndUpdateTime(Timestamp endUpdateTime) {
-		this.endUpdateTime = endUpdateTime;
+	public void setUpdateEndTime(LocalDateTime updateEndTime) {
+		this.updateEndTime = updateEndTime;
 	}
 
-	public Timestamp getStartCompleteTime() {
-		return startCompleteTime;
+	public LocalDateTime getCompleteStartTime() {
+		return completeStartTime;
 	}
 
-	public void setStartCompleteTime(Timestamp startCompleteTime) {
-		this.startCompleteTime = startCompleteTime;
+	public void setCompleteStartTime(LocalDateTime completeStartTime) {
+		this.completeStartTime = completeStartTime;
 	}
 
-	public Timestamp getEndCompleteTime() {
-		return endCompleteTime;
+	public LocalDateTime getCompleteEndTime() {
+		return completeEndTime;
 	}
 
-	public void setEndCompleteTime(Timestamp endCompleteTime) {
-		this.endCompleteTime = endCompleteTime;
-	}
-
-	public void setPageInfo(PageInfo pageInfo) {
-		this.pageInfo = pageInfo;
-	}
-
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String[] getOrderIds() {
-		return orderIds;
-	}
-
-	public void setOrderIds(String[] orderIds) {
-		this.orderIds = orderIds;
+	public void setCompleteEndTime(LocalDateTime completeEndTime) {
+		this.completeEndTime = completeEndTime;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.polaris.common.utils;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,12 +71,12 @@ public final class JwtUtil {
 	 * 访问用户的角色字符串
 	 */
 	public static final String CLAIMS_ROLES = "roles";
-	
+
 	/**
 	 * 客户端的设备类型
 	 */
 	public static final String CLAIMS_DEVICE = "device";
-	
+
 	private static RsaSigner signer;
 
 	private static RsaVerifier verifier;
@@ -127,7 +128,7 @@ public final class JwtUtil {
 	 */
 	public static Map<String, Object> buildNormalJwtPayloads() {
 		Map<String, Object> payloads = new HashMap<>();
-		long createTime = DateUtil.now().getTime();
+		long createTime = Instant.now().toEpochMilli();
 		payloads.put(CLAIMS_IAT, createTime);
 		long expirationTime = createTime + PolarisConstants.JWT_EXPIRATION;
 		payloads.put(CLAIMS_EXP, expirationTime);

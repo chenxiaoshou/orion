@@ -8,6 +8,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,18 +39,20 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
 
-		String username = TokenUtil.getUsernameFromToken(authToken);
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Checking authentication for user [" + username + "] token [" + authToken + "]");
-			}
-			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-			// 如果验证token无误，并且在redis服务器中存有相关用户信息的话，视为认证通过
-			if (TokenUtil.isTokenAvailable(authToken, userDetails) && inRedis(authToken)) {
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+		if (StringUtils.isNoneBlank(authToken)) {
+			String username = TokenUtil.getUsernameFromToken(authToken);
+			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Checking authentication for user [" + username + "] token [" + authToken + "]");
+				}
+				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+				// 如果验证token无误，并且在redis服务器中存有相关用户信息的话，视为认证通过
+				if (TokenUtil.isTokenAvailable(authToken, userDetails) && inRedis(authToken)) {
+					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+							userDetails, null, userDetails.getAuthorities());
+					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
 			}
 		}
 

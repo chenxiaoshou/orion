@@ -2,6 +2,8 @@ package com.polaris.manage.web.vo.auth;
 
 import java.io.Serializable;
 
+import com.polaris.security.util.DeviceEnum;
+
 /**
  * 用户认证成功之后，返回一些必要的信息，供前端使用
  * 
@@ -22,12 +24,12 @@ public class AuthInfo implements Serializable {
 
 	private String username;
 
-	private String device; // 客户端设备
+	private DeviceEnum device; // 客户端设备
 
 	private String publicKey; // 加密公钥
 
 	private String roles; // 角色拼接字符串
-	
+
 	public String getToken() {
 		return token;
 	}
@@ -68,11 +70,11 @@ public class AuthInfo implements Serializable {
 		this.username = username;
 	}
 
-	public String getDevice() {
+	public DeviceEnum getDevice() {
 		return device;
 	}
 
-	public void setDevice(String device) {
+	public void setDevice(DeviceEnum device) {
 		this.device = device;
 	}
 

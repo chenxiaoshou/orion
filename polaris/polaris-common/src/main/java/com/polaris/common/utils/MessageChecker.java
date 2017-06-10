@@ -5,11 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Properties;
 
 import com.polaris.common.exception.AppMessage;
-import com.polaris.common.utils.JsonUtil;
 
 /**
  * 检查message资源文件中的json格式符不符合规范
@@ -18,9 +18,9 @@ import com.polaris.common.utils.JsonUtil;
  *
  */
 public class MessageChecker {
-	
-	private MessageChecker () {
-		
+
+	private MessageChecker() {
+
 	}
 
 	// 国际化资源文件路径，需根据实际情况自己配置。
@@ -33,13 +33,11 @@ public class MessageChecker {
 			prop.load(inStream);
 			for (Map.Entry<Object, Object> e : prop.entrySet()) {
 				String source = (String) e.getValue();
-				try {
-					JsonUtil.fromJSON(source, AppMessage.class);
-				} catch (Exception e2) {
-					if (!hasError) {
-						hasError = true;
-					}
-					System.err.println("[" + e.getKey() + "] has a json syntax error");
+				if (!source.matches(".*\\{\\d\\}.*")) {
+					hasError = checkJson(hasError, e, source);
+				} else {
+					System.out.println(source);
+					MessageFormat.format(source, new Object[] { 401, "未认证错误" });
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -50,6 +48,18 @@ public class MessageChecker {
 		if (!hasError) {
 			System.out.println("文件没有检查到语法错误，请继续保持！");
 		}
+	}
+
+	private static boolean checkJson(boolean hasError, Map.Entry<Object, Object> e, String source) {
+		try {
+			JsonUtil.fromJSON(source, AppMessage.class);
+		} catch (Exception e2) {
+			if (!hasError) {
+				hasError = true;
+			}
+			System.err.println("[" + e.getKey() + "] has a json syntax error");
+		}
+		return hasError;
 	}
 
 }

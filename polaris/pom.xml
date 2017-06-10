@@ -26,16 +26,19 @@
 	</pluginRepositories>
 
 	<properties>
-		<servletApiVersion>3.1.0</servletApiVersion>
-		<springVersion>4.3.7.RELEASE</springVersion>
-		<springSecurityVersion>4.2.2.RELEASE</springSecurityVersion>
-		<springBootVersion>1.5.2.RELEASE</springBootVersion>
-		<gsonVersion>2.8.0</gsonVersion>
-		<jacksonVersion>2.8.8</jacksonVersion>
-		<hibernateVersion>5.2.9.Final</hibernateVersion>
-		<freemarkerVersion>2.3.23</freemarkerVersion>
-		<junitVersion>4.12</junitVersion>
-		<log4jVersion>2.8.2</log4jVersion>
+		<servlet.api.version>3.1.0</servlet.api.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		<spring.security.version>4.2.2.RELEASE</spring.security.version>
+		<spring.boot.version>1.5.2.RELEASE</spring.boot.version>
+		<druid.version>1.0.29</druid.version>
+		<aspectj.version>1.8.9</aspectj.version>
+		<gson.version>2.8.0</gson.version>
+		<jackson.version>2.8.8</jackson.version>
+		<hibernate.version>5.2.9.Final</hibernate.version>
+		<mysql.connector.version>6.0.6</mysql.connector.version>
+		<freemarker.version>2.3.23</freemarker.version>
+		<junit.version>4.12</junit.version>
+		<log4j2.version>2.8.2</log4j2.version>
 		<poi.version>3.16</poi.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skipTests>true</skipTests>
@@ -109,7 +112,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>${servletApiVersion}</version>
+			<version>${servlet.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -124,79 +127,79 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
-			<version>${springVersion}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		
 		<!-- spring security -->
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-core</artifactId>
-		    <version>${springSecurityVersion}</version>
+		    <version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${springSecurityVersion}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${springSecurityVersion}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
@@ -281,28 +284,27 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>2.9.0</version>
-			<!--<optional>true</optional> -->
 		</dependency>
 
 		<!-- aspectjrt -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.8.9</version>
+			<version>${aspectj.version}</version>
 		</dependency>
 
 		<!-- aspectjweaver -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.8.9</version>
+			<version>${aspectj.version}</version>
 		</dependency>
 
 		<!-- hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernateVersion}</version>
+			<version>${hibernate.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>xml-apis</artifactId>
@@ -320,16 +322,16 @@
 
 		<!-- mysql connector java -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.25</version>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>${mysql.connector.version}</version>
 		</dependency>
 
 		<!-- druid数据库连接池 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.0.29</version>
+			<version>${druid.version}</version>
 		</dependency>
 		
 		<!-- dbhelper 自定义jar包 -->
@@ -371,25 +373,45 @@
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>${freemarkerVersion}</version>
+			<version>${freemarker.version}</version>
 		</dependency>
 		
 		<!-- ###JSON处理相关### -->
 		<!-- jackson JSON解析器 -->
 		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>${jackson.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>${jacksonVersion}</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jacksonVersion}</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
-			<version>${jacksonVersion}</version>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.jaxrs</groupId>
+		    <artifactId>jackson-jaxrs-json-provider</artifactId>
+		    <version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jsr310</artifactId>
+		    <version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-joda</artifactId>
+		    <version>${jackson.version}</version>
 		</dependency>
 		
 		<!-- google.guava -->
@@ -513,7 +535,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junitVersion}</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -545,17 +567,17 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${log4jVersion}</version>
+			<version>${log4j2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>${log4jVersion}</version>
+			<version>${log4j2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-web</artifactId>
-			<version>${log4jVersion}</version>
+			<version>${log4j2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -565,7 +587,7 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4jVersion}</version>
+			<version>${log4j2.version}</version>
 		</dependency>
 
 	</dependencies>

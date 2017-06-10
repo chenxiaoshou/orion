@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.polaris.MockBaseTest;
 import com.polaris.manage.model.mysql.order.Order;
+import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
+import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
 import com.polaris.manage.service.mysql.order.OrderService;
 
 /**
@@ -59,8 +61,8 @@ public class MockOrderControllerTest extends MockBaseTest {
 		Order order = new Order();
 		order.setId(orderId);
 		order.setPaymentAmount(paymentAmount);
-		order.setSaleChannel(saleChannel);
-		order.setStatus(status);
+		order.setSaleChannel(SaleChannelEnum.Amazon);
+		order.setStatus(OrderStatusEnum.STEP_AWAIT_PROCESSING);
 		order.setTotalPrice(totalPrice);
 		when(mockOrderService.find(orderId)).thenReturn(order);
 		mockMvc.perform(get("/order/{orderId}", orderId).accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andDo(print())

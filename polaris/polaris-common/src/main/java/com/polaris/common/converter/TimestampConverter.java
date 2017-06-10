@@ -15,13 +15,10 @@ import org.springframework.core.convert.converter.Converter;
 public enum TimestampConverter implements Converter<Date, Timestamp> {
 
 	INSTANCE;
-	
+
 	@Override
-	public Timestamp convert(Date date) {
-		if (date != null) {
-			return new Timestamp(date.getTime());
-		}
-		return null;
+	public Timestamp convert(Date source) {
+		return source == null ? null : new Timestamp(source.getTime());
 	}
 
 }

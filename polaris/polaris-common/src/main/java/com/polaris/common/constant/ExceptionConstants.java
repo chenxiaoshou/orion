@@ -49,5 +49,10 @@ public final class ExceptionConstants {
 	 * 403 - Forbidden Exception
 	 */
 	public static final String FORBIDDEN_EXCEPTION = "global.permission_denied";
+
+	/**
+	 * 全局异常处理程序抛出的异常
+	 */
+	public static final String RESOLVE_EXCEPTION = "global.resolver.exception";
 	
 }

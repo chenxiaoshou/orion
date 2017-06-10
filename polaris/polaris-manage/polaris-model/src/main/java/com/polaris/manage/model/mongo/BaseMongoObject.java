@@ -1,6 +1,6 @@
 package com.polaris.manage.model.mongo;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.MappedSuperclass;
 
@@ -21,11 +21,11 @@ public class BaseMongoObject extends BaseObject {
 
 	protected String creator; // 创建者
 
-	protected Timestamp createTime; // 创建时间
+	protected LocalDateTime createTime; // 创建时间
 
 	protected String updater; // 更新者
 
-	protected Timestamp updateTime; // 更新时间
+	protected LocalDateTime updateTime; // 更新时间
 
 	@Id
 	public String getId() {
@@ -46,11 +46,11 @@ public class BaseMongoObject extends BaseObject {
 	}
 
 	@CreatedDate
-	public Timestamp getCreateTime() {
+	public LocalDateTime getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
 	}
 
@@ -64,11 +64,11 @@ public class BaseMongoObject extends BaseObject {
 	}
 
 	@LastModifiedDate
-	public Timestamp getUpdateTime() {
+	public LocalDateTime getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
+	public void setUpdateTime(LocalDateTime updateTime) {
 		this.updateTime = updateTime;
 	}
 

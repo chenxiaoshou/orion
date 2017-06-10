@@ -1,6 +1,7 @@
 package com.polaris.config.springdata;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.data.auditing.DateTimeProvider;
@@ -26,6 +28,10 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.polaris.audit.UserAuditorAware;
+import com.polaris.common.converter.DateToLocalDateConverter;
+import com.polaris.common.converter.DateToLocalDateTimeConverter;
+import com.polaris.common.converter.LocalDateTimeToDateConverter;
+import com.polaris.common.converter.LocalDateToDateConverter;
 import com.polaris.common.converter.TimestampConverter;
 import com.polaris.config.datasource.DataSourceConfig;
 
@@ -64,7 +70,13 @@ public class MongodbConfig extends AbstractMongoConfiguration {
 	 */
 	@Override
 	public CustomConversions customConversions() {
-		return new CustomConversions(Collections.singletonList(TimestampConverter.INSTANCE));
+		List<Converter<?, ?>> converters = new ArrayList<>();
+		converters.add(TimestampConverter.INSTANCE);
+		converters.add(DateToLocalDateConverter.INSTANCE);
+		converters.add(DateToLocalDateTimeConverter.INSTANCE);
+		converters.add(LocalDateTimeToDateConverter.INSTANCE);
+		converters.add(LocalDateToDateConverter.INSTANCE);
+		return new CustomConversions(converters);
 	}
 
 	@PreDestroy

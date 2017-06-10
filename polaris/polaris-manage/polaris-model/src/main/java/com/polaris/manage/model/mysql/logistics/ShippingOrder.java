@@ -1,6 +1,6 @@
 package com.polaris.manage.model.mysql.logistics;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,9 +28,9 @@ public class ShippingOrder extends BaseMysqlObject {
 
 	private String FreightForwarderNumber; // 货代单号
 
-	private Timestamp deliveryTime; // 发货时间
+	private LocalDateTime deliveryTime; // 发货时间
 
-	private Timestamp completeTime; // 完成时间
+	private LocalDateTime completeTime; // 完成时间
 
 	@Column(name = "freight", nullable = false, precision = 2, columnDefinition = "double(11,2) default 0.00 comment '运费'")
 	public Double getFreight() {
@@ -60,20 +60,20 @@ public class ShippingOrder extends BaseMysqlObject {
 	}
 
 	@Column(name = "delivery_time", nullable = true, columnDefinition = "DATETIME default NULL comment '交运时间'")
-	public Timestamp getDeliveryTime() {
+	public LocalDateTime getDeliveryTime() {
 		return deliveryTime;
 	}
 
-	public void setDeliveryTime(Timestamp deliveryTime) {
+	public void setDeliveryTime(LocalDateTime deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 
 	@Column(name = "complete_time", nullable = true, columnDefinition = "DATETIME default NULL comment '完成时间'")
-	public Timestamp getCompleteTime() {
+	public LocalDateTime getCompleteTime() {
 		return completeTime;
 	}
 
-	public void setCompleteTime(Timestamp completeTime) {
+	public void setCompleteTime(LocalDateTime completeTime) {
 		this.completeTime = completeTime;
 	}
 

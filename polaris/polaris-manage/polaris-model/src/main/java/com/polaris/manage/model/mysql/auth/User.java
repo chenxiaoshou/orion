@@ -1,11 +1,12 @@
 package com.polaris.manage.model.mysql.auth;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -14,8 +15,11 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.polaris.common.utils.ArrayUtil;
 import com.polaris.manage.model.mysql.BaseMysqlObject;
+import com.polaris.manage.model.tools.attributeconverter.GenderAttributeConverter;
+import com.polaris.manage.model.tools.dic.order.GenderEnum;
 
 /**
  * 用户表
@@ -36,7 +40,7 @@ public class User extends BaseMysqlObject {
 
 	private String realName; // 员工姓名
 
-	private Integer gender; // 性别
+	private GenderEnum gender; // 性别
 
 	private String roles; // role角色字符串拼接，冗余字段
 
@@ -50,9 +54,9 @@ public class User extends BaseMysqlObject {
 
 	private Boolean locked;
 
-	private Timestamp lastLoginTime;
+	private LocalDateTime lastLoginTime;
 
-	private Timestamp lastPasswordResetTime;
+	private LocalDateTime lastPasswordResetTime;
 
 	@Column(name = "username", nullable = false, length = 255, unique = true, columnDefinition = "varchar(255) default '' comment '用户名'")
 	public String getUsername() {
@@ -103,20 +107,21 @@ public class User extends BaseMysqlObject {
 	}
 
 	@Column(name = "last_login_time", nullable = true, columnDefinition = "DATETIME default NULL comment '最后登录时间'")
-	public Timestamp getLastLoginTime() {
+	public LocalDateTime getLastLoginTime() {
 		return lastLoginTime;
 	}
 
-	public void setLastLoginTime(Timestamp lastLoginTime) {
+	public void setLastLoginTime(LocalDateTime lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-	@Column(name = "gender", nullable = false, columnDefinition = "TINYINT(2) default 0 comment '性别(0：不明，1：女性， 2：男性)'")
-	public Integer getGender() {
+	@Convert(converter = GenderAttributeConverter.class)
+	@Column(name = "gender", nullable = false, length = 10, columnDefinition = "varchar(10) default '' comment '性别'")
+	public GenderEnum getGender() {
 		return gender;
 	}
 
-	public void setGender(Integer gender) {
+	public void setGender(GenderEnum gender) {
 		this.gender = gender;
 	}
 
@@ -139,11 +144,11 @@ public class User extends BaseMysqlObject {
 	}
 
 	@Column(name = "last_password_reset_time", nullable = true, columnDefinition = "DATETIME default NULL comment '最后一次密码重置的时间'")
-	public Timestamp getLastPasswordResetTime() {
+	public LocalDateTime getLastPasswordResetTime() {
 		return lastPasswordResetTime;
 	}
 
-	public void setLastPasswordResetTime(Timestamp lastPasswordResetTime) {
+	public void setLastPasswordResetTime(LocalDateTime lastPasswordResetTime) {
 		this.lastPasswordResetTime = lastPasswordResetTime;
 	}
 
@@ -169,6 +174,7 @@ public class User extends BaseMysqlObject {
 	}
 
 	@Transient
+	@JsonIgnore
 	public List<String> getRoleList() {
 		List<String> roleList = new ArrayList<>();
 		if (StringUtils.isNotBlank(roles)) {

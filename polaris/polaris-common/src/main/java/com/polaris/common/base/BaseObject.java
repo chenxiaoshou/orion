@@ -1,7 +1,10 @@
 package com.polaris.common.base;
 
+import java.beans.Transient;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.polaris.common.utils.JsonUtil;
 import com.polaris.common.utils.ToStringUtil;
 
 public class BaseObject implements Serializable {
@@ -11,6 +14,18 @@ public class BaseObject implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringUtil.toJSON(this);
+	}
+
+	@Transient
+	@JsonIgnore
+	public String toJson() {
+		return JsonUtil.toJSON(this);
+	}
+
+	@Transient
+	@JsonIgnore
+	public BaseObject fromJson(String json) {
+		return JsonUtil.fromJSON(json, this.getClass());
 	}
 
 }

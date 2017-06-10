@@ -1,4 +1,4 @@
-package com.polaris.manage.model.mysql.auth.dic;
+package com.polaris.manage.model.tools.dic.auth;
 
 /**
  * 操作的类型
@@ -6,7 +6,7 @@ package com.polaris.manage.model.mysql.auth.dic;
  * @author John
  *
  */
-public enum OperationType {
+public enum OperationEnum {
 
 	ADD, MODIFY, VIEW, DELETE, EXECUTE;
 	

@@ -1,4 +1,4 @@
-package com.polaris.manage.model.mysql.auth.dic;
+package com.polaris.manage.model.tools.dic.auth;
 
 /**
  * 权限类型
@@ -6,7 +6,7 @@ package com.polaris.manage.model.mysql.auth.dic;
  * @author John
  *
  */
-public enum PrivilegeType {
+public enum PrivilegeEnum {
 
 	MENU, ELEMENT, FILE, OPERATION;
 

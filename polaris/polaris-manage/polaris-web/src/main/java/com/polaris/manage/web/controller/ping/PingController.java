@@ -1,4 +1,4 @@
-package com.polaris.manage.web.controller.test;
+package com.polaris.manage.web.controller.ping;
 
 import java.util.Locale;
 

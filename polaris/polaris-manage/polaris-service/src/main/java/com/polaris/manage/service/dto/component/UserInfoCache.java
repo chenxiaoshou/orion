@@ -1,6 +1,6 @@
 package com.polaris.manage.service.dto.component;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.polaris.common.base.BaseObject;
 
@@ -24,7 +24,7 @@ public class UserInfoCache extends BaseObject {
 
 	private Boolean locked;
 
-	private Timestamp lastLoginTime;
+	private LocalDateTime lastLoginTime;
 
 	private String roles; // role角色字符串拼接，冗余字段
 
@@ -92,11 +92,11 @@ public class UserInfoCache extends BaseObject {
 		this.locked = locked;
 	}
 
-	public Timestamp getLastLoginTime() {
+	public LocalDateTime getLastLoginTime() {
 		return lastLoginTime;
 	}
 
-	public void setLastLoginTime(Timestamp lastLoginTime) {
+	public void setLastLoginTime(LocalDateTime lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
 

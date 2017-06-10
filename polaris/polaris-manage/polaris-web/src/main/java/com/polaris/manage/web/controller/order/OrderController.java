@@ -2,7 +2,6 @@ package com.polaris.manage.web.controller.order;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -13,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +20,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polaris.common.exception.ApiException;
-import com.polaris.common.paging.PagingSupport;
+import com.polaris.common.supports.PagingSupport;
+import com.polaris.common.supports.QuerySupport;
 import com.polaris.common.utils.BeanUtil;
-import com.polaris.common.utils.DateUtil;
-import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.service.mysql.order.OrderService;
@@ -59,25 +56,11 @@ public class OrderController extends BaseController {
 	public String save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request) {
 		Order order = new Order();
 		BeanUtil.copyProperties(order4Add, order);
-		Timestamp now = DateUtil.timestamp();
-		order.setCreateTime(now);
 		Order savedOrder = this.orderService.save(order);
 		LOGGER.debug("save order [" + savedOrder.getId() + "]");
 		return order.getId();
 	}
-	
-	public static void main(String[] args) {
-		Order4Add add = new Order4Add();
-		add.setPaymentAmount(189.9d);
-		add.setSaleChannel("SMT");
-		add.setStatus(1);
-		add.setTotalPrice(189.9d);
-		System.out.println(JsonUtil.toJSON(add));
-		
-		System.out.println(new BCryptPasswordEncoder().encode("1990912"));
-		
-	}
-	
+
 	/**
 	 * 更新Order
 	 * 
@@ -126,7 +109,8 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public PagingSupport<Order> search(@RequestBody @Valid OrderQuery orderQuery, HttpServletRequest request) {
+	public PagingSupport<Order> search(@RequestBody @Valid QuerySupport<OrderQuery> orderQuery,
+			HttpServletRequest request) {
 		LOGGER.debug("search orders ... ");
 		SearchOrderCriteria criteria = new SearchOrderCriteria();
 		BeanUtil.copyProperties(orderQuery, criteria);

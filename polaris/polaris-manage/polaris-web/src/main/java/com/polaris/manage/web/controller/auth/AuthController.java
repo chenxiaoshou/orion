@@ -1,5 +1,7 @@
 package com.polaris.manage.web.controller.auth;
 
+import java.time.LocalDateTime;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polaris.common.constant.PolarisConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.utils.BeanUtil;
-import com.polaris.common.utils.DateUtil;
 import com.polaris.manage.model.mysql.auth.User;
 import com.polaris.manage.service.dto.component.UserInfoCache;
 import com.polaris.manage.service.mysql.auth.UserService;
@@ -91,7 +92,7 @@ public class AuthController extends BaseController {
 
 		// 更新数据库User表的最后登录时间
 		User user = securityUser.getUser();
-		user.setLastLoginTime(DateUtil.timestamp());
+		user.setLastLoginTime(LocalDateTime.now());
 		this.userService.modify(securityUser.getUser());
 
 		// 将token返回给前端

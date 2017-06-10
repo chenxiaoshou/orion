@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polaris.common.exception.PolarisException;
-import com.polaris.common.paging.PagingSupport;
-import com.polaris.common.utils.DateUtil;
+import com.polaris.common.supports.PagingSupport;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 import com.polaris.manage.persist.mysql.order.pub.OrderDao;
@@ -25,7 +24,6 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class, RuntimeException.class })
 	public Order save(Order order) {
-		order.setUpdateTime(DateUtil.timestamp());
 		return this.orderDao.save(order);
 	}
 
@@ -62,7 +60,6 @@ public class OrderServiceImpl implements OrderService {
 		if (StringUtils.isBlank(order.getId())) {
 			throw new PolarisException("目标对象的ID字段为空，无法执行数据库修改操作！[" + order.toString() + "]");
 		}
-		order.setUpdateTime(DateUtil.timestamp());
 		return this.orderDao.save(order);
 	}
 

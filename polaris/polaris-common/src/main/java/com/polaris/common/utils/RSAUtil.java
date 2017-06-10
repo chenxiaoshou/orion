@@ -102,7 +102,7 @@ public class RSAUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getBase64PublicKey() throws Exception {
+	public static String getBase64PublicKey() {
 		Key key = (Key) keyMap.get(PUBLIC_KEY);
 		if (key != null) {
 			return CodecUtil.toBase64(key.getEncoded());
@@ -116,7 +116,7 @@ public class RSAUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getBase64PrivateKey() throws Exception {
+	public static String getBase64PrivateKey() {
 		Key key = (Key) keyMap.get(PRIVATE_KEY);
 		if (key != null) {
 			return CodecUtil.toBase64(key.getEncoded());

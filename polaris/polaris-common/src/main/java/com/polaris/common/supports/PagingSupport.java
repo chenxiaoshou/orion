@@ -1,4 +1,4 @@
-package com.polaris.common.paging;
+package com.polaris.common.supports;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ public class PagingSupport<T> {
 
 	private List<T> results = new ArrayList<>();
 
-	private PageInfo pageInfo;
+	private PagingInfo pagingInfo;
 
 	public List<T> getResults() {
 		return results;
@@ -17,12 +17,12 @@ public class PagingSupport<T> {
 		this.results = results;
 	}
 
-	public PageInfo getPageInfo() {
-		return pageInfo;
+	public PagingInfo getPagingInfo() {
+		return pagingInfo;
 	}
 
-	public void setPageInfo(PageInfo pageInfo) {
-		this.pageInfo = pageInfo;
+	public void setPagingInfo(PagingInfo pagingInfo) {
+		this.pagingInfo = pagingInfo;
 	}
 
 }

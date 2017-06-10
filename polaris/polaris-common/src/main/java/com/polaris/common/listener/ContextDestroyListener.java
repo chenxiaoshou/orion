@@ -11,7 +11,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mysql.jdbc.AbandonedConnectionCleanupThread;
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import com.polaris.common.utils.SpringUtil;
 
 /**

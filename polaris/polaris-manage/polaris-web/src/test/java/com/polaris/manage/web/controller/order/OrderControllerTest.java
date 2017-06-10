@@ -21,9 +21,10 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.polaris.NormalBaseTest;
 import com.polaris.common.constant.SymbolicConstants;
-import com.polaris.common.utils.DateUtil;
 import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.mysql.order.Order;
+import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
+import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
 
 public class OrderControllerTest extends NormalBaseTest {
 
@@ -32,9 +33,9 @@ public class OrderControllerTest extends NormalBaseTest {
 		// 增加
 		Order order = new Order();
 		order.setPaymentAmount(18.88d);
-		order.setSaleChannel("SMT");
+		order.setSaleChannel(SaleChannelEnum.Amazon);
 		order.setTotalPrice(18.88d);
-		order.setStatus(0);
+		order.setStatus(OrderStatusEnum.STEP_AWAIT_PROCESSING);
 		Order savedOrder;
 		savedOrder = saveOrder(order);
 		assertNotNull(savedOrder);
@@ -51,10 +52,9 @@ public class OrderControllerTest extends NormalBaseTest {
 		orderId = getOrder.getId();
 		assertNotNull(orderId);
 		assertNotEquals(orderId, SymbolicConstants.EMPTY);
-		getOrder.setUpdateTime(DateUtil.timestamp());
 		getOrder.setPaymentAmount(48.8d);
 		getOrder.setTotalPrice(48.8d);
-		getOrder.setStatus(3);
+		getOrder.setStatus(OrderStatusEnum.STEP_COMPLETED_ORDER);
 		updateOrder(getOrder);
 
 		// 再次查找

@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import com.polaris.NormalBaseTest;
 import com.polaris.common.constant.RabbitmqConstants;
 import com.polaris.manage.model.mysql.order.Order;
+import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
 
 public class ConfigTest extends NormalBaseTest {
 
@@ -43,7 +44,7 @@ public class ConfigTest extends NormalBaseTest {
 		for (int i = 0; i < 5; i++) {
 			Order obj = new Order();
 			obj.setId("OD" + i);
-			obj.setStatus(i % 5);
+			obj.setStatus(OrderStatusEnum.STEP_COMPLETED_ORDER);
 			rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 			rabbitTemplate.convertAndSend(RabbitmqConstants.EXCHANGE_PMS, RabbitmqConstants.ROUTINGKEY_PMS_ORDER, obj);
 		}

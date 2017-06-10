@@ -1,6 +1,6 @@
 package com.polaris.manage.model.mysql;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -27,11 +27,11 @@ public class BaseMysqlObject extends BaseObject {
 
 	protected String creator; // 创建者
 
-	protected Timestamp createTime; // 创建时间
-	
+	protected LocalDateTime createTime; // 创建时间
+
 	protected String updater; // 更新者
 
-	protected Timestamp updateTime; // 更新时间
+	protected LocalDateTime updateTime; // 更新时间
 
 	@Id
 	@GeneratedValue(generator = "idGenerator")
@@ -57,11 +57,11 @@ public class BaseMysqlObject extends BaseObject {
 
 	@CreatedDate
 	@Column(name = "create_time", nullable = false, updatable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP comment '创建时间'")
-	public Timestamp getCreateTime() {
+	public LocalDateTime getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
 	}
 
@@ -77,11 +77,11 @@ public class BaseMysqlObject extends BaseObject {
 
 	@Column(name = "update_time", nullable = true, columnDefinition = "DATETIME default NULL comment '更新时间'")
 	@LastModifiedDate
-	public Timestamp getUpdateTime() {
+	public LocalDateTime getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
+	public void setUpdateTime(LocalDateTime updateTime) {
 		this.updateTime = updateTime;
 	}
 
