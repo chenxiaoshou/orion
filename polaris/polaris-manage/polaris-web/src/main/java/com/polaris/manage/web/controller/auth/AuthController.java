@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.utils.BeanUtil;
 import com.polaris.manage.model.mysql.auth.User;
@@ -36,7 +35,8 @@ import com.polaris.manage.web.controller.BaseController;
 import com.polaris.manage.web.vo.auth.Auth4Login;
 import com.polaris.manage.web.vo.auth.AuthInfo;
 import com.polaris.security.model.SecurityUser;
-import com.polaris.security.util.TokenUtil;
+import com.polaris.security.service.SecurityService;
+import com.polaris.security.tools.TokenHelper;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,6 +55,9 @@ public class AuthController extends BaseController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private SecurityService securityService;
 
 	/**
 	 * 登录认证
@@ -76,22 +79,28 @@ public class AuthController extends BaseController {
 		// 如果认证通过，这里为其生成token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(auth4Login.getUsername());
 		String remoteHost = getRemoteHost(request);
-		AuthInfo authInfo = TokenUtil.generateTokenAndBuildAuthInfo(userDetails, remoteHost,
+		AuthInfo authInfo = TokenHelper.generateTokenAndBuildAuthInfo(userDetails, remoteHost,
 				request.getRequestURL().toString(), device);
 
 		LOGGER.info("user [" + authInfo.getUsername() + "] login successful, token [" + authInfo.getToken() + "]");
 
-		// 将token以及用户相关信息保存在redis中
 		SecurityUser securityUser = (SecurityUser) userDetails;
 		if (securityUser.getUser() == null) {
 			throw new ApiException("auth.login_failed");
 		}
+		User user = securityUser.getUser();
+		String token = authInfo.getToken();
+		// 将用户id和token对应关系保存在Redis中，
+		// 做到一个用户只保留一份合法有效的token，其他token虽然jwt那边验证可以通过，但是在redis中如果不存在的话，也会判定为非法
+		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(user.getId(), token);
+
+		// 将token:userinfo以顶级key-value结构表保存到redis中，并设置过期时间
 		UserInfoCache userInfoCache = new UserInfoCache();
-		BeanUtil.copyProperties(securityUser.getUser(), userInfoCache);
-		this.redisService.storeUserInfo(authInfo.getToken(), userInfoCache);
+		BeanUtil.copyProperties(user, userInfoCache);
+		LocalDateTime expiration = TokenHelper.getExpirationDateFromToken(token);
+		this.redisService.storeTokenUserInfo(token, userInfoCache, expiration);
 
 		// 更新数据库User表的最后登录时间
-		User user = securityUser.getUser();
 		user.setLastLoginTime(LocalDateTime.now());
 		this.userService.modify(securityUser.getUser());
 
@@ -106,16 +115,17 @@ public class AuthController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
-	public ResponseEntity<AuthInfo> authenticationRequest(HttpServletRequest request) {
-		String token = request.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
-		String username = TokenUtil.getUsernameFromToken(token);
-		SecurityUser securityUser = (SecurityUser) this.userDetailsService.loadUserByUsername(username);
-		// 不符合刷新条件的话，抛出异常
-		if (!TokenUtil.canTokenBeRefreshed(token, securityUser.getUser().getLastPasswordResetTime())) {
-			throw new ApiException("auth.cannnot_refresh_token");
-		}
-		AuthInfo authInfo = TokenUtil.refreshTokenAndBuildAuthInfo(token);
-		return ResponseEntity.ok(authInfo);
+	@ResponseStatus(HttpStatus.CREATED)
+	public AuthInfo authenticationRequest(HttpServletRequest request) {
+		String oldToken = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
+		String username = TokenHelper.getUsernameFromToken(oldToken);
+		String userId = TokenHelper.getUserIdFromToken(oldToken);
+		AuthInfo authInfo = TokenHelper.refreshTokenAndBuildAuthInfo(oldToken);
+		String newToken = authInfo.getToken();
+		LOGGER.debug("username [" + username + "] refresh token successful!");
+		// refresh redis中的用户会话和用户信息
+		this.securityService.refreshRedisToken(userId, oldToken, newToken);
+		return authInfo;
 	}
 
 	/**
@@ -130,11 +140,14 @@ public class AuthController extends BaseController {
 	@ResponseStatus(HttpStatus.OK)
 	public void logout(Device device, HttpServletRequest request) {
 		// 根据token获取用户的信息
-		String token = request.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
-		String userName = TokenUtil.getUsernameFromToken(token);
-		LOGGER.info("userName [" + userName + "] logout");
+		String token = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
+		String userName = TokenHelper.getUsernameFromToken(token);
+		String userId = TokenHelper.getUserIdFromToken(token);
+		// 删除userIdToken
+		this.redisService.removeUserIdToken(userId);
 		// 将token以及用户相关信息从redis中删除
-		this.redisService.removeUserInfo(token);
+		this.redisService.removeTokenUserInfo(token);
+		LOGGER.info("userName [" + userName + "] logout successful!");
 	}
 
 }

@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.polaris.common.base.BaseObject;
 import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
 import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
@@ -21,7 +19,6 @@ public class Order4Add extends BaseObject implements Serializable {
 
 	private Double paymentAmount; // 实际已支付金额
 
-	@NotBlank(message = "order.salechannel.is_blank")
 	private SaleChannelEnum saleChannel; // 订单来源渠道
 
 	public Double getTotalPrice() {

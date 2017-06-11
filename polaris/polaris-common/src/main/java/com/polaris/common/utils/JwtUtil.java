@@ -13,7 +13,7 @@ import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 
-import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
 import com.polaris.common.exception.PolarisException;
 
 import net.sf.json.JSONObject;
@@ -130,7 +130,7 @@ public final class JwtUtil {
 		Map<String, Object> payloads = new HashMap<>();
 		long createTime = Instant.now().toEpochMilli();
 		payloads.put(CLAIMS_IAT, createTime);
-		long expirationTime = createTime + PolarisConstants.JWT_EXPIRATION;
+		long expirationTime = createTime + SecurityConstants.JWT_EXPIRATION;
 		payloads.put(CLAIMS_EXP, expirationTime);
 		return payloads;
 	}

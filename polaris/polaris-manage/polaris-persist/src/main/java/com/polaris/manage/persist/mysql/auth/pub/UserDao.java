@@ -7,6 +7,8 @@ import com.polaris.manage.persist.mysql.auth.custom.UserCustomDao;
 
 public interface UserDao extends JpaRepository<User, String>, UserCustomDao {
 
+	User findByUsernameAndEnableTrueAndLockedFalse(String username);
+
 	User findByUsername(String username);
 
 }

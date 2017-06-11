@@ -11,7 +11,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
+import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 import com.polaris.common.utils.SpringUtil;
 
 /**
@@ -39,18 +39,18 @@ public class ContextDestroyListener implements ServletContextListener {
 	private void cleanSpringUtil() {
 		try {
 			SpringUtil.getInstance().close();
-			LOGGER.debug("Destroy ApplicationContext in SpringUtil successful");
+			LOGGER.trace("Destroy ApplicationContext in SpringUtil successful");
 		} catch (Exception e) {
-			LOGGER.warn("Destroy ApplicationContext in SpringUtil error", e);
+			LOGGER.error("Destroy ApplicationContext in SpringUtil error", e);
 		}
 	}
 
 	private void shutdownCleanupThread() {
 		try {
-			AbandonedConnectionCleanupThread.shutdown();
-			LOGGER.debug("Destroy abandonedConnectionCleanupThread successful");
+			AbandonedConnectionCleanupThread.checkedShutdown();
+			LOGGER.trace("Destroy abandonedConnectionCleanupThread successful");
 		} catch (Exception e) {
-			LOGGER.warn("Destroy abandonedConnectionCleanupThread error", e);
+			LOGGER.error("Destroy abandonedConnectionCleanupThread error", e);
 		}
 	}
 
@@ -61,9 +61,9 @@ public class ContextDestroyListener implements ServletContextListener {
 			driver = drivers.nextElement();
 			try {
 				DriverManager.deregisterDriver(driver);
-				LOGGER.debug(String.format("Deregister JDBC driver %s successful", driver));
+				LOGGER.trace(String.format("Deregister JDBC driver %s successful", driver));
 			} catch (SQLException e) {
-				LOGGER.warn(String.format("Deregister JDBC driver %s error", driver), e);
+				LOGGER.error(String.format("Deregister JDBC driver %s error", driver), e);
 			}
 		}
 	}

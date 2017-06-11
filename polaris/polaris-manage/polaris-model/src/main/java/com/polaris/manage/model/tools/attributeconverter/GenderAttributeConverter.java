@@ -4,9 +4,7 @@ import javax.persistence.AttributeConverter;
 
 import com.polaris.manage.model.tools.dic.order.GenderEnum;
 
-public enum GenderAttributeConverter implements AttributeConverter<GenderEnum, String> {
-
-	INSTANCE;
+public class GenderAttributeConverter implements AttributeConverter<GenderEnum, String> {
 
 	@Override
 	public String convertToDatabaseColumn(GenderEnum attribute) {

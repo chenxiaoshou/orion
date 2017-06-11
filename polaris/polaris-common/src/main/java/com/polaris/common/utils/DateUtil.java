@@ -3,6 +3,8 @@ package com.polaris.common.utils;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -880,19 +882,16 @@ public final class DateUtil {
 	public static Calendar calendar() {
 		return Calendar.getInstance();
 	}
-	
-	/**
-	 * 时间戳格式化
-	 * 
-	 * @param args
-	 */
 
-	public static void main(String[] args) {
-		Date date1 = str2date("1990-09-08 12:00:00");
-		Date date2 = str2date("1990-09-08 11:00:00");
-		System.out.println(getDaysBetween(date1, date2));
-		System.out.println(getHoursBetween(date1, date2));
-		System.out.println(getSecondsBetween(date1, date2));
+	/**
+	 * 计算过期时间到当下这一秒之间间隔的秒数
+	 */
+	public static long getIntervalSeconds(LocalDateTime startTime, LocalDateTime endTime) {
+		if (startTime != null && endTime != null) {
+			return endTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond()
+					- startTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+		}
+		return 0;
 	}
 
 }

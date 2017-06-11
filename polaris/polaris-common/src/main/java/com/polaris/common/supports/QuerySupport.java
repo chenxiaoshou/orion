@@ -1,7 +1,11 @@
 package com.polaris.common.supports;
 
-public class QuerySupport<T> {
-	
+import com.polaris.common.base.BaseObject;
+
+public class QuerySupport<T> extends BaseObject {
+
+	private static final long serialVersionUID = 8693629725304838157L;
+
 	private T query;
 
 	private PagingInfo paging;

@@ -8,7 +8,7 @@ public class UserInfoCache extends BaseObject {
 
 	private static final long serialVersionUID = -2558811170236583387L;
 
-	private String userId;
+	private String id;
 
 	private String username;
 
@@ -28,12 +28,12 @@ public class UserInfoCache extends BaseObject {
 
 	private String roles; // role角色字符串拼接，冗余字段
 
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getUsername() {

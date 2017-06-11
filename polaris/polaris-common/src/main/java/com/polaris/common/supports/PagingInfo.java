@@ -24,12 +24,10 @@ public class PagingInfo implements Serializable {
 	public PagingInfo() {
 	}
 
-	public PagingInfo(Integer pageSize, Integer offset, Integer totalPages, Integer totalCount, List<SortInfo> sorts) {
+	public PagingInfo(Integer pageSize, Integer offset, List<SortInfo> sorts) {
 		super();
 		this.pageSize = pageSize;
 		this.offset = offset;
-		this.totalPages = totalPages;
-		this.totalCount = totalCount;
 		this.setSorts(sorts);
 	}
 

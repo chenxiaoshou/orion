@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -53,9 +54,7 @@ public class PolarisExceptionResolver implements HandlerExceptionResolver, Order
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
 			Exception ex) {
 		try {
-			AppMessage appMessage = appMessageSource.getAppMessage(ExceptionConstants.RESOLVE_EXCEPTION,
-					new Object[] { determineHttpStatus(request, response, ex), ex.getMessage() });
-			appMessage.setMoreInfo(ex.getMessage());
+			AppMessage appMessage = generateAppMessage(request, response, ex);
 			response.addHeader("Content-type", MediaType.APPLICATION_JSON_UTF8_VALUE);
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter printWriter;
@@ -70,7 +69,7 @@ public class PolarisExceptionResolver implements HandlerExceptionResolver, Order
 	}
 
 	@SuppressWarnings("deprecation")
-	private static int determineHttpStatus(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+	private AppMessage generateAppMessage(HttpServletRequest request, HttpServletResponse response, Exception ex) {
 		int code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 		if (ex instanceof org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException
 				|| ex instanceof NoHandlerFoundException) {
@@ -98,8 +97,13 @@ public class PolarisExceptionResolver implements HandlerExceptionResolver, Order
 			code = HttpServletResponse.SC_BAD_REQUEST;
 		} else if (ex instanceof AsyncRequestTimeoutException && !response.isCommitted()) {
 			code = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
+		} else if (ex instanceof AuthenticationException) {
+			code = HttpServletResponse.SC_UNAUTHORIZED;
 		}
-		return code;
+		AppMessage appMessage = this.appMessageSource.getAppMessage(ExceptionConstants.RESOLVE_EXCEPTION,
+				new Object[] { code, ex.getMessage() });
+		appMessage.setMoreInfo(ex.getMessage());
+		return appMessage;
 	}
 
 }

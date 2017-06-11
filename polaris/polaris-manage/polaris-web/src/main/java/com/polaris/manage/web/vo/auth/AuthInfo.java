@@ -2,7 +2,7 @@ package com.polaris.manage.web.vo.auth;
 
 import java.io.Serializable;
 
-import com.polaris.security.util.DeviceEnum;
+import com.polaris.security.tools.DeviceEnum;
 
 /**
  * 用户认证成功之后，返回一些必要的信息，供前端使用

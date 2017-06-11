@@ -40,9 +40,8 @@ public class Order extends BaseMysqlObject {
 
 	@Column(name = "order_no", nullable = false, updatable = false, insertable = false, unique = true, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
 	public String getOrderNo() {
-		// 初始化orderNo
 		if (StringUtils.isBlank(this.orderNo)) {
-			orderNo = CodeGenerator.generateOrderNo(ORDER_NO_PERFIX, ORDER_NO_LENGTH);
+			this.setOrderNo(CodeGenerator.generateOrderNo(ORDER_NO_PERFIX, ORDER_NO_LENGTH));
 		}
 		return orderNo;
 	}

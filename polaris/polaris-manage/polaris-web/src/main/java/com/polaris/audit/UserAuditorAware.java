@@ -4,7 +4,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.polaris.security.model.SecurityUser;
+import com.polaris.manage.model.mysql.security.SecurityUser;
 
 public class UserAuditorAware implements AuditorAware<String> {
 

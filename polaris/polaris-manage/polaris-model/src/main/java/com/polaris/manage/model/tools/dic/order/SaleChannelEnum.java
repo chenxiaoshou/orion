@@ -4,16 +4,10 @@ public enum SaleChannelEnum {
 	Amazon("亚马逊"), Taobao("淘宝"), Tianmao("天猫"), JD("京东"), Ebay("Ebay"), SMT("速卖通"), Wish("Wish"), Linio(
 			"Linio"), Lazada("Lazada");
 
-	private String code;
-
 	private String desc;
 
 	private SaleChannelEnum(String desc) {
 		this.desc = desc;
-	}
-
-	public String getCode() {
-		return this.code;
 	}
 
 	public String getDesc() {

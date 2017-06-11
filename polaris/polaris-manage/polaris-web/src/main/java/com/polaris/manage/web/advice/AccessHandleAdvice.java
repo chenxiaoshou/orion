@@ -21,15 +21,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
 import com.polaris.common.exception.ApiException;
-import com.polaris.common.exception.PolarisException;
 import com.polaris.common.utils.DateUtil;
 import com.polaris.common.utils.ReflectionUtils;
 import com.polaris.common.utils.ToStringUtil;
 import com.polaris.manage.web.advice.advicebean.AccessAdviceInfo;
 import com.polaris.manage.web.advice.advicebean.AdviceException;
-import com.polaris.security.util.TokenUtil;
+import com.polaris.security.tools.TokenHelper;
 
 /**
  * 记录请求日志信息的切面
@@ -48,7 +47,7 @@ public class AccessHandleAdvice {
 	private static final String IP_ZERO = "0:0:0:0:0:0:0:1";
 
 	private static final String IP_LOCALHOST = "127.0.0.1";
-	
+
 	private static final String CONTROLLER_EXECUTION = "execution(public * com.polaris.manage.web.controller..*.*(..))";
 
 	private static final String EXCEPTION_ADVICE_EXECUTION = "execution(public * com.polaris.manage.web.advice.ExceptionHandleAdvice.*(..))";
@@ -63,7 +62,7 @@ public class AccessHandleAdvice {
 	private void pointcutInControllerLayer() {
 		// do nothing
 	}
-	
+
 	/**
 	 * 记录方法执行前的请求路径,请求人信息,并使用日志打印出来
 	 * 
@@ -80,8 +79,8 @@ public class AccessHandleAdvice {
 		String returnType = methodSignature.getReturnType().getSimpleName();
 		AccessAdviceInfo accessAdviceInfo = new AccessAdviceInfo();
 		// visitor
-		String token = request.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
-		String username = TokenUtil.getUsernameFromToken(token);
+		String token = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
+		String username = TokenHelper.getUsernameFromToken(token);
 		accessAdviceInfo.setVisitor(username);
 		// token
 		accessAdviceInfo.setToken(token);
@@ -117,12 +116,8 @@ public class AccessHandleAdvice {
 			tookMillSeconds = System.currentTimeMillis() - start;
 			errMsg = getErrMsg(e);
 			adviceException = new AdviceException(errMsg, e);
-			LOGGER.error(e.getMessage(), e);
-			if (PolarisException.class.isAssignableFrom(e.getClass())) { // 如果是polarisException的子类，直接抛出子类
-				throw e;
-			} else { // 否则，包装成polarisException再抛出
-				throw new PolarisException(e.getMessage(), e);
-			}
+			LOGGER.error(e.getMessage());
+			throw e;
 		} finally {
 			// response
 			if (accessAdviceInfo.isReturned() && object != null) {
@@ -207,5 +202,5 @@ public class AccessHandleAdvice {
 		}
 		return IP_ZERO.equals(ip) ? IP_LOCALHOST : ip;
 	}
-	
+
 }

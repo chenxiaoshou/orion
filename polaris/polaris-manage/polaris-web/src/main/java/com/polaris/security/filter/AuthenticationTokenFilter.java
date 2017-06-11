@@ -2,11 +2,13 @@ package com.polaris.security.filter;
 
 import java.io.IOException;
 
+import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -19,9 +21,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
+import com.polaris.manage.model.mysql.auth.User;
+import com.polaris.manage.model.mysql.security.SecurityUser;
 import com.polaris.manage.service.mysql.component.RedisService;
-import com.polaris.security.util.TokenUtil;
+import com.polaris.manage.service.mysql.security.SecurityService;
+import com.polaris.manage.service.mysql.security.TokenService;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -33,25 +38,33 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	@Autowired
 	private RedisService redisService;
 
+	@Autowired
+	private SecurityService securityService;
+
+	@Autowired
+	private TokenService tokenService;
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		String authToken = httpRequest.getHeader(PolarisConstants.HEADER_AUTH_TOKEN);
-
-		if (StringUtils.isNoneBlank(authToken)) {
-			String username = TokenUtil.getUsernameFromToken(authToken);
+		String authToken = httpRequest.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
+		// 检查在redis服务器中是否存有该用户的信息
+		if (StringUtils.isNotBlank(authToken) && existsInRedis(authToken)) {
+			String username = this.tokenService.getUsernameFromToken(authToken);
 			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Checking authentication for user [" + username + "] token [" + authToken + "]");
 				}
 				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-				// 如果验证token无误，并且在redis服务器中存有相关用户信息的话，视为认证通过
-				if (TokenUtil.isTokenAvailable(authToken, userDetails) && inRedis(authToken)) {
+				// 如果验证token无误，视为认证通过
+				if (this.tokenService.isTokenAvailable(authToken, userDetails)) {
 					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 							userDetails, null, userDetails.getAuthorities());
 					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 					SecurityContextHolder.getContext().setAuthentication(authentication);
+					// 检查token是否快到过期时间，如果快到的话，自动刷新token；
+					checkRefreshToken(authToken, userDetails, response);
 				}
 			}
 		}
@@ -59,13 +72,36 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		chain.doFilter(request, response);
 	}
 
+	private void checkRefreshToken(String authToken, UserDetails userDetails, ServletResponse response) {
+		SecurityUser securityUser = (SecurityUser) userDetails;
+		User user = securityUser.getUser();
+		boolean needRefresh = this.tokenService.canTokenBeRefreshed(authToken, user.getLastPasswordResetTime());
+		if (needRefresh) { // 需要刷新
+			String newToken = this.tokenService.refreshToken(authToken);
+			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+			httpServletResponse.addHeader(SecurityConstants.HEADER_NEW_AUTH_TOKEN, newToken);
+			LOG.debug("Refresh token for user [" + user.getUsername() + "] newToken [" + newToken + "]");
+			// 刷新redis中的保存的用户会话和信息
+			this.securityService.refreshRedisToken(user.getId(), authToken, newToken);
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param userDetails
 	 * @return
+	 * @throws AuthenticationException
 	 */
-	private boolean inRedis(String authToken) {
-		return redisService.getUserInfo(authToken) != null;
+	private boolean existsInRedis(String authToken) throws AuthenticationException {
+		String userId = this.tokenService.getUserIdFromToken(authToken);
+		String tokenInRedis = redisService.getUserIdToken(userId);
+		boolean existsInRedis = StringUtils.isNoneBlank(tokenInRedis) && tokenInRedis.equalsIgnoreCase(authToken)
+				&& this.redisService.getTokenUserInfo(authToken) != null;
+		if (LOG.isDebugEnabled() && !existsInRedis) {
+			LOG.debug("Token not exists in redis!");
+		}
+		return existsInRedis;
 	}
 
 }

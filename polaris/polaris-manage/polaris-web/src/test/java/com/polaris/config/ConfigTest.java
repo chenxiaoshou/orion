@@ -1,5 +1,8 @@
 package com.polaris.config;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -10,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.polaris.NormalBaseTest;
 import com.polaris.common.constant.RabbitmqConstants;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
+import com.polaris.manage.service.dto.component.UserInfoCache;
+import com.polaris.manage.service.mysql.component.RedisService;
 
 public class ConfigTest extends NormalBaseTest {
 
@@ -29,6 +35,12 @@ public class ConfigTest extends NormalBaseTest {
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+	
+	@Autowired
+	private RedisService redisService;
 
 	// @Test
 	public void testConfig() {
@@ -63,10 +75,31 @@ public class ConfigTest extends NormalBaseTest {
 		System.out.println(new String(jedisConnectionFactory.getClusterConnection().lPop("polaris".getBytes())));
 	}
 
-	@Test
+	// @Test
 	public void testRedisTemplate() {
 		System.out.println(redisTemplate.getHashKeySerializer());
 		System.out.println(redisTemplate.getHashValueSerializer());
+	}
+
+	@Test
+	public void testToken() {
+		String token = this.redisService.getUserIdToken("1");
+		System.out.println(token);
+		UserInfoCache userInfo = this.redisService.getTokenUserInfo(token);
+		System.out.println(userInfo);
+	}
+	
+//	@Test
+	public void clearRedis() {
+		Set<String> keys = stringRedisTemplate.keys("*");
+		for (String key : keys) {
+			System.out.println("key [" + key + "]");
+			stringRedisTemplate.delete(key);
+		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1497192781760L), ZoneId.systemDefault()));
 	}
 
 }

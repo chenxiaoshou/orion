@@ -32,6 +32,7 @@ public final class CodeGenerator {
 
 	/**
 	 * 生成订单单号
+	 * 
 	 * @param perfix
 	 * @param length
 	 * @return

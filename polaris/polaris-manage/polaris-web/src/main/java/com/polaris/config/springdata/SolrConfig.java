@@ -62,9 +62,9 @@ public class SolrConfig {
 	public void destroy() throws Exception {
 		try {
 			solrClient.close();
-			LOGGER.debug(String.format("Destroy solrClient %s successful", solrClient));
+			LOGGER.trace(String.format("Destroy solrClient %s successful", solrClient));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy solrClient %s error", solrClient), e);
+			LOGGER.error(String.format("Destroy solrClient %s error", solrClient), e);
 		}
 	}
 

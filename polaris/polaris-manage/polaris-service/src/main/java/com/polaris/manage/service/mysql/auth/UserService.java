@@ -17,6 +17,8 @@ public interface UserService {
 
 	List<User> list();
 
-	User findByUsername(String username);
+	User finaByUsername(String username);
+	
+	User findByUsernameAndEnableTrueAndLockedFalse(String username);
 
 }

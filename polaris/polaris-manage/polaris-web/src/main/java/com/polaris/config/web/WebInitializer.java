@@ -17,6 +17,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
 import com.polaris.common.filter.AccessControlFilter;
 import com.polaris.common.listener.ContextDestroyListener;
 
@@ -70,12 +71,12 @@ public class WebInitializer implements WebApplicationInitializer {
 		 * AccessControlFilter,自定义的过滤器，用来处理Ajax跨域请求的问题
 		 */
 		Map<String, String> initParameters = new HashMap<>();
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS);
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_HEADERS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_HEADERS);
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_METHODS, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_METHODS);
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_ORIGIN, PolarisConstants.VALUE_ACCESS_CONTROL_ALLOW_ORIGIN);
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_EXPOSE_HEADERS, PolarisConstants.VALUE_ACCESS_CONTROL_EXPOSE_HEADERS);
-		initParameters.put(AccessControlFilter.ACCESS_CONTROL_MAX_AGE, PolarisConstants.VALUE_ACCESS_CONTROL_MAX_AGE);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS, SecurityConstants.VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_HEADERS, SecurityConstants.VALUE_ACCESS_CONTROL_ALLOW_HEADERS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_METHODS, SecurityConstants.VALUE_ACCESS_CONTROL_ALLOW_METHODS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_ALLOW_ORIGIN, SecurityConstants.VALUE_ACCESS_CONTROL_ALLOW_ORIGIN);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_EXPOSE_HEADERS, SecurityConstants.VALUE_ACCESS_CONTROL_EXPOSE_HEADERS);
+		initParameters.put(AccessControlFilter.ACCESS_CONTROL_MAX_AGE, SecurityConstants.VALUE_ACCESS_CONTROL_MAX_AGE);
 		FilterRegistration.Dynamic accessControlFilter = servletContext.addFilter("accessControlFilter", new AccessControlFilter());
 		accessControlFilter.setInitParameters(initParameters);
 		accessControlFilter.addMappingForUrlPatterns(

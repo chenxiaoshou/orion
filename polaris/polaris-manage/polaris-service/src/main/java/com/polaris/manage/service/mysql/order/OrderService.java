@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.supports.PagingSupport;
+import com.polaris.common.supports.QuerySupport;
 import com.polaris.manage.model.mysql.order.Order;
 import com.polaris.manage.persist.mysql.order.dto.SearchOrderCriteria;
 
@@ -17,9 +18,9 @@ public interface OrderService {
 
 	List<Order> list();
 
-	List<Order> list(SearchOrderCriteria criteria);
-	
-	PagingSupport<Order> search(SearchOrderCriteria criteria);
+	List<Order> list(QuerySupport<SearchOrderCriteria> criteria);
+
+	PagingSupport<Order> search(QuerySupport<SearchOrderCriteria> criteria);
 
 	Order modify(Order order) throws ApiException;
 

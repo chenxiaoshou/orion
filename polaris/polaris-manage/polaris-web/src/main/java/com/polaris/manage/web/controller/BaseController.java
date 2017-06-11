@@ -1,5 +1,11 @@
 package com.polaris.manage.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * 提供所有Controller中的通用方法
  * 
@@ -7,6 +13,8 @@ package com.polaris.manage.web.controller;
  *
  */
 public class BaseController {
+
+	private static final Logger LOGGER = LogManager.getLogger(BaseController.class);
 
 	private static final String IP_UNKNOWN = "Unknown";
 
@@ -36,6 +44,24 @@ public class BaseController {
 			}
 		}
 		return IP_ZERO.equals(ip) ? IP_LOCALHOST : ip;
+	}
+
+	/**
+	 * 新增操作之后，在response的header中添加新增资源的url地址。
+	 * 
+	 * @param response
+	 * @param id
+	 */
+	public void buildRedirectUrl(HttpServletRequest request, HttpServletResponse response, String id) {
+		String requestUrl = request.getRequestURL().toString();
+		String location = "";
+		if (requestUrl.endsWith("/")) {
+			location = requestUrl + id;
+		} else {
+			location = requestUrl + "/" + id;
+		}
+		LOGGER.trace("location url [" + location + "]");
+		response.addHeader("Location", location);
 	}
 
 }

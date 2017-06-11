@@ -25,6 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.polaris.common.constant.PolarisConstants;
+import com.polaris.common.constant.SecurityConstants;
 
 /**
  * RSA公钥/私钥/签名工具包
@@ -54,12 +55,12 @@ public class RSAUtil {
 	/**
 	 * 公钥文件存储路径
 	 */
-	private static final String PUBLIC_KEY_FILE_PATH = getBaseClassPath() + PolarisConstants.PUBLIC_KEY_FILE_PATH;
+	private static final String PUBLIC_KEY_FILE_PATH = getBaseClassPath() + SecurityConstants.PUBLIC_KEY_FILE_PATH;
 
 	/**
 	 * 私钥文件存储路径
 	 */
-	private static final String PRIVATE_KEY_FILE_PATH = getBaseClassPath() + PolarisConstants.PRIVATE_KEY_FILE_PATH;
+	private static final String PRIVATE_KEY_FILE_PATH = getBaseClassPath() + SecurityConstants.PRIVATE_KEY_FILE_PATH;
 
 	/**
 	 * RSA最大加密明文大小
@@ -86,7 +87,7 @@ public class RSAUtil {
 		try {
 			keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
 			initKey();
-			LOGGER.info("RSA Public Key [" + getBase64PublicKey() + "] Private Key [" + getBase64PrivateKey() + "]");
+			LOGGER.trace("RSA Public Key [" + getBase64PublicKey() + "] Private Key [" + getBase64PrivateKey() + "]");
 		} catch (Exception e) {
 			keyMap.clear();
 			LOGGER.error("Init RSA key failure!", e);

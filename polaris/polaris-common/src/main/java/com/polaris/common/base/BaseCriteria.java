@@ -4,21 +4,16 @@ import java.beans.Transient;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.polaris.common.supports.PagingInfo;
 import com.polaris.common.utils.JsonUtil;
+import com.polaris.common.utils.ToStringUtil;
 
 public class BaseCriteria implements Serializable {
 
-	private static final long serialVersionUID = -5496693067504600628L;
+	private static final long serialVersionUID = 8591142014745925855L;
 
-	private PagingInfo pagingInfo;
-
-	public PagingInfo getPagingInfo() {
-		return pagingInfo;
-	}
-
-	public void setPagingInfo(PagingInfo pagingInfo) {
-		this.pagingInfo = pagingInfo;
+	@Override
+	public String toString() {
+		return ToStringUtil.toJSON(this);
 	}
 
 	@Transient

@@ -4,9 +4,7 @@ import javax.persistence.AttributeConverter;
 
 import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
 
-public enum OrderStatusAttributeConverter implements AttributeConverter<OrderStatusEnum, Integer> {
-
-	INSTANCE;
+public class OrderStatusAttributeConverter implements AttributeConverter<OrderStatusEnum, Integer> {
 
 	@Override
 	public Integer convertToDatabaseColumn(OrderStatusEnum attribute) {

@@ -154,9 +154,9 @@ public class RedisConfig {
 	public void destroy() throws Exception {
 		try {
 			jedisConnectionFactory.destroy();
-			LOGGER.debug(String.format("Destroy jedisConnectionFactory %s successful", jedisConnectionFactory));
+			LOGGER.trace(String.format("Destroy jedisConnectionFactory %s successful", jedisConnectionFactory));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy jedisConnectionFactory %s error", jedisConnectionFactory), e);
+			LOGGER.error(String.format("Destroy jedisConnectionFactory %s error", jedisConnectionFactory), e);
 		}
 	}
 

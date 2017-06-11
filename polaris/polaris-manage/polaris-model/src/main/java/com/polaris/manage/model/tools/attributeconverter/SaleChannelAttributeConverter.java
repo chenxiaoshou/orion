@@ -10,13 +10,11 @@ import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
  * @author John
  *
  */
-public enum SaleChannelAttributeConverter implements AttributeConverter<SaleChannelEnum, String> {
-
-	INSTANCE;
+public class SaleChannelAttributeConverter implements AttributeConverter<SaleChannelEnum, String> {
 
 	@Override
 	public String convertToDatabaseColumn(SaleChannelEnum attribute) {
-		return attribute.getCode();
+		return attribute.name();
 	}
 
 	@Override

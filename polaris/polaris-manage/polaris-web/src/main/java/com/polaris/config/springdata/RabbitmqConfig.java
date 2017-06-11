@@ -128,9 +128,9 @@ public class RabbitmqConfig {
 		try {
 			CachingConnectionFactory factory = (CachingConnectionFactory) rabbitConnectionFactory;
 			factory.destroy();
-			LOGGER.debug(String.format("Destroy rabbitConnectionFactory %s successful", rabbitConnectionFactory));
+			LOGGER.trace(String.format("Destroy rabbitConnectionFactory %s successful", rabbitConnectionFactory));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy rabbitConnectionFactory %s error", rabbitConnectionFactory), e);
+			LOGGER.error(String.format("Destroy rabbitConnectionFactory %s error", rabbitConnectionFactory), e);
 		}
 	}
 

@@ -109,9 +109,9 @@ public class JpaConfig {
 	public void destroy() throws Exception {
 		try {
 			entityManagerFactory.close();
-			LOGGER.debug(String.format("Destroy entityManagerFactory %s successful", entityManagerFactory));
+			LOGGER.trace(String.format("Destroy entityManagerFactory %s successful", entityManagerFactory));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy entityManagerFactory %s error", entityManagerFactory), e);
+			LOGGER.error(String.format("Destroy entityManagerFactory %s error", entityManagerFactory), e);
 		}
 	}
 

@@ -123,37 +123,6 @@ public final class PolarisConstants {
 	public static final String PERSISTENCE_UNIT_NAME = "Polaris";
 
 	/**
-	 * CROS跨域请求
-	 */
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS = "true";
-
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token";
-
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,DELETE,OPTIONS,HEAD";
-
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_ORIGIN = ".polaris.com";
-
-	public static final String VALUE_ACCESS_CONTROL_EXPOSE_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token";
-
-	public static final String VALUE_ACCESS_CONTROL_MAX_AGE = String.valueOf(60 * 60 * 24); // 预请求有效期保留一天
-	
-	/**
-	 * 认证授权使用的数据库schema 
-	 */
-	public static final String POLARIS_AUTH_DB = "polaris_auth";
-	
-	/**
-	 * Spring Security
-	 */
-	public static final String HEADER_AUTH_TOKEN = "X-Auth-Token"; // header中保存的JWT的key
-	
-	public static final long JWT_EXPIRATION = 2 * 60 * 60 * 1000L; // JWT过期时间 - 2小时(表示到毫秒)
-
-	public static final String PUBLIC_KEY_FILE_PATH = "keystore/publicKey.keystore";
-
-	public static final String PRIVATE_KEY_FILE_PATH = "keystore/privateKey.keystore";
-	
-	/**
 	 * Audit - 系统做出的创建和更新，数据库中的审计字段（creater, updater）统一填写System
 	 */
 	public static final String AUDIT_CREATOR_SYSTEM = "System";

@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.polaris.common.constant.ExceptionConstants;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.exception.AppMessage;
-import com.polaris.common.exception.AuthException;
 import com.polaris.common.exception.PolarisException;
 import com.polaris.common.utils.JsonUtil;
 
@@ -45,19 +44,6 @@ public class ExceptionHandleAdvice {
 
 	@Autowired
 	private MessageSource messageSource;
-
-	/**
-	 * 登录认证异常
-	 */
-	@ExceptionHandler(AuthException.class)
-	public ResponseEntity<AppMessage> handleUnauthorizedException(AuthException e) {
-		String message = messageSource.getMessage(e.getErrorKey(), e.getArgs(), null);
-		if (StringUtils.isBlank(message)) {
-			message = messageSource.getMessage(ExceptionConstants.UNAUTHORIZED_EXCEPTION, null, null);
-		}
-		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
-		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
-	}
 
 	/**
 	 * 处理Controller层主动抛出的API异常

@@ -22,10 +22,4 @@ public class BaseObject implements Serializable {
 		return JsonUtil.toJSON(this);
 	}
 
-	@Transient
-	@JsonIgnore
-	public BaseObject fromJson(String json) {
-		return JsonUtil.fromJSON(json, this.getClass());
-	}
-
 }

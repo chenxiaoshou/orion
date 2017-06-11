@@ -122,9 +122,9 @@ public class DataSourceConfig {
 		DruidDataSource druidDataSource = (DruidDataSource) dataSource;
 		try {
 			druidDataSource.close();
-			LOGGER.debug(String.format("Destroy druidDataSource %s successful", druidDataSource));
+			LOGGER.trace(String.format("Destroy druidDataSource %s successful", druidDataSource));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy druidDataSource %s error", druidDataSource), e);
+			LOGGER.error(String.format("Destroy druidDataSource %s error", druidDataSource), e);
 		}
 	}
 

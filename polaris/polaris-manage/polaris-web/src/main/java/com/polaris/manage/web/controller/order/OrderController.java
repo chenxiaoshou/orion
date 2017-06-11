@@ -1,9 +1,9 @@
 package com.polaris.manage.web.controller.order;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonObject;
 import com.polaris.common.exception.ApiException;
 import com.polaris.common.supports.PagingSupport;
 import com.polaris.common.supports.QuerySupport;
@@ -43,22 +45,22 @@ public class OrderController extends BaseController {
 	/**
 	 * 新增Order
 	 * 
-	 * @param dataBean
+	 * @param order4Add
 	 * @param request
+	 * @param response
 	 * @return
-	 * @throws BeanCopyException
-	 * @throws URISyntaxException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public String save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request) {
+	public ResponseEntity<String> save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request,
+			HttpServletResponse response) {
 		Order order = new Order();
 		BeanUtil.copyProperties(order4Add, order);
 		Order savedOrder = this.orderService.save(order);
 		LOGGER.debug("save order [" + savedOrder.getId() + "]");
-		return order.getId();
+		JsonObject body = new JsonObject();
+		body.addProperty("id", savedOrder.getId());
+		super.buildRedirectUrl(request, response, savedOrder.getId());
+		return new ResponseEntity<>(body.toString(), HttpStatus.CREATED);
 	}
 
 	/**
@@ -111,8 +113,7 @@ public class OrderController extends BaseController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public PagingSupport<Order> search(@RequestBody @Valid QuerySupport<OrderQuery> orderQuery,
 			HttpServletRequest request) {
-		LOGGER.debug("search orders ... ");
-		SearchOrderCriteria criteria = new SearchOrderCriteria();
+		QuerySupport<SearchOrderCriteria> criteria = new QuerySupport<>();
 		BeanUtil.copyProperties(orderQuery, criteria);
 		return orderService.search(criteria);
 	}

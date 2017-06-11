@@ -1,5 +1,7 @@
 package common;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.polaris.common.utils.JsonUtil;
 import com.polaris.manage.model.tools.dic.order.OrderStatusEnum;
 import com.polaris.manage.model.tools.dic.order.SaleChannelEnum;
@@ -19,8 +21,9 @@ public class BuildTestData {
 		order.setSaleChannel(SaleChannelEnum.Amazon);
 		order.setStatus(OrderStatusEnum.STEP_AWAIT_PROCESSING);
 		order.setTotalPrice(19.9d);
-
 		System.out.println(getJson(order));
+		
+		System.out.println(new BCryptPasswordEncoder().encode("1990912"));
 
 	}
 

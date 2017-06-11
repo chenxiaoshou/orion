@@ -54,6 +54,9 @@ public class MongodbConfig extends AbstractMongoConfiguration {
 	@Autowired
 	private Mongo mongo;
 
+	@Autowired
+	private MongoDbFactory mongoDbFactory;
+
 	@Override
 	protected String getDatabaseName() {
 		return env.getProperty("mongo.dbname");
@@ -84,23 +87,21 @@ public class MongodbConfig extends AbstractMongoConfiguration {
 		try {
 			mongo.close();
 			closeMongoDbFactory();
-			LOGGER.debug(String.format("Destroy mongo %s successful", mongo));
+			LOGGER.trace(String.format("Destroy mongo %s successful", mongo));
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy mongo %s error", mongo), e);
+			LOGGER.error(String.format("Destroy mongo %s error", mongo), e);
 		}
 	}
 
 	private void closeMongoDbFactory() {
-		MongoDbFactory mongoDbFactory = null;
 		try {
-			mongoDbFactory = mongoDbFactory();
-			if (mongoDbFactory instanceof SimpleMongoDbFactory) {
-				SimpleMongoDbFactory simpleMongoDbFactory = (SimpleMongoDbFactory) mongoDbFactory;
+			if (this.mongoDbFactory instanceof SimpleMongoDbFactory) {
+				SimpleMongoDbFactory simpleMongoDbFactory = (SimpleMongoDbFactory) this.mongoDbFactory;
 				simpleMongoDbFactory.destroy();
-				LOGGER.debug(String.format("Destroy simpleMongoDbFactory %s successful", simpleMongoDbFactory));
+				LOGGER.trace(String.format("Destroy simpleMongoDbFactory %s successful", simpleMongoDbFactory));
 			}
 		} catch (Exception e) {
-			LOGGER.debug(String.format("Destroy simpleMongoDbFactory %s error", mongoDbFactory), e);
+			LOGGER.error(String.format("Destroy simpleMongoDbFactory %s error", mongoDbFactory), e);
 		}
 	}
 

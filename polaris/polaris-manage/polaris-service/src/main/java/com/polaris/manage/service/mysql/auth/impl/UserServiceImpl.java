@@ -55,7 +55,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findByUsername(String username) {
+	public User findByUsernameAndEnableTrueAndLockedFalse(String username) {
+		return this.userDao.findByUsernameAndEnableTrueAndLockedFalse(username);
+	}
+
+	@Override
+	public User finaByUsername(String username) {
 		return this.userDao.findByUsername(username);
 	}
 
