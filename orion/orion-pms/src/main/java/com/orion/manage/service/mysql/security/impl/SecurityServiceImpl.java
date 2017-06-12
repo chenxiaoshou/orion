@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.orion.common.utils.BeanUtil;
 import com.orion.manage.model.mysql.auth.MapUserRole;
 import com.orion.manage.model.mysql.auth.Role;
+import com.orion.manage.model.mysql.auth.User;
 import com.orion.manage.service.dto.component.UserInfoCache;
 import com.orion.manage.service.mysql.auth.MapUserRoleService;
 import com.orion.manage.service.mysql.auth.RoleService;
+import com.orion.manage.service.mysql.auth.UserService;
 import com.orion.manage.service.mysql.component.RedisService;
 import com.orion.manage.service.mysql.security.SecurityService;
 import com.orion.manage.service.mysql.security.TokenService;
@@ -30,9 +33,12 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
 	private RedisService redisService;
-	
+
 	@Autowired
 	private TokenService tokenService;
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities(String userId) {
@@ -55,20 +61,21 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Override
 	public void refreshRedisToken(String userId, String oldToken, String newToken) {
-		String token = this.redisService.getUserIdToken(userId);
-		UserInfoCache userInfoCache = this.redisService.getTokenUserInfo(token);
-		if (StringUtils.isNotBlank(token) && userInfoCache != null) {
-			this.redisService.removeUserIdToken(userId);
-			if (!token.equalsIgnoreCase(oldToken)) { // 检查垃圾数据，如果存在，删除掉
-				String garbageDataUserId = this.tokenService.getUserIdFromToken(oldToken);
-				this.redisService.removeUserIdToken(garbageDataUserId);
-			}
-
-			// 存入新的
-			this.redisService.storeUserIdToken(userId, token);
-			LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(newToken);
-			this.redisService.storeTokenUserInfo(token, userInfoCache, expiration);
+		LocalDateTime timeout = this.tokenService.getExpirationDateFromToken(newToken);
+		String oldToken2 = this.redisService.storeUserIdToken(userId, newToken, timeout);
+		UserInfoCache userInfoCache = null;
+		if (StringUtils.isNotBlank(oldToken2)) {
+			userInfoCache = this.redisService.removeTokenUserInfo(oldToken2);
 		}
+		if (StringUtils.isNotBlank(oldToken) && !oldToken.equals(oldToken2)) {
+			this.redisService.removeTokenUserInfo(oldToken);
+		}
+		if (userInfoCache == null) {
+			User user = this.userService.find(userId);
+			BeanUtil.copyProperties(user, userInfoCache);
+		}
+		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(newToken);
+		this.redisService.storeTokenUserInfo(newToken, userInfoCache, expiration);
 	}
 
 }

@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.orion.common.constant.SecurityConstants;
 import com.orion.common.exception.ApiException;
 import com.orion.common.utils.BeanUtil;
+import com.orion.common.utils.JwtUtil;
+import com.orion.common.utils.RSAUtil;
 import com.orion.manage.model.mysql.auth.User;
 import com.orion.manage.model.mysql.security.SecurityUser;
 import com.orion.manage.service.dto.component.UserInfoCache;
@@ -37,6 +39,9 @@ import com.orion.manage.service.mysql.security.TokenService;
 import com.orion.manage.web.controller.BaseController;
 import com.orion.manage.web.vo.auth.Auth4Login;
 import com.orion.manage.web.vo.auth.AuthInfo;
+import com.orion.security.DeviceEnum;
+
+import net.sf.json.JSONObject;
 
 @RestController
 @RequestMapping("/auth")
@@ -81,26 +86,24 @@ public class AuthController extends BaseController {
 
 		// 如果认证通过，这里为其生成token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(auth4Login.getUsername());
-		String remoteHost = getRemoteHost(request);
-		AuthInfo authInfo = this.tokenService.generateTokenAndBuildAuthInfo(userDetails, remoteHost,
-				request.getRequestURL().toString(), device);
-
-		LOGGER.info("user [" + authInfo.getUsername() + "] login successful, token [" + authInfo.getToken() + "]");
-
 		SecurityUser securityUser = (SecurityUser) userDetails;
 		if (securityUser.getUser() == null) {
 			throw new ApiException("auth.login_failed");
 		}
 		User user = securityUser.getUser();
-		String token = authInfo.getToken();
+		String remoteHost = getRemoteHost(request);
+		String token = this.tokenService.generateToken(userDetails, remoteHost, request.getRequestURL().toString(),
+				device);
+		LOGGER.info("user [" + user.getUsername() + "] login successful, token [" + token + "]");
+
 		// 将用户id和token对应关系保存在Redis中，
 		// 做到一个用户只保留一份合法有效的token，其他token虽然jwt那边验证可以通过，但是在redis中如果不存在的话，也会判定为非法
-		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(user.getId(), token);
+		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
+		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(user.getId(), token, expiration);
 
 		// 将token:userinfo以顶级key-value结构表保存到redis中，并设置过期时间
 		UserInfoCache userInfoCache = new UserInfoCache();
 		BeanUtil.copyProperties(user, userInfoCache);
-		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
 		this.redisService.storeTokenUserInfo(token, userInfoCache, expiration);
 
 		// 更新数据库User表的最后登录时间
@@ -108,7 +111,7 @@ public class AuthController extends BaseController {
 		this.userService.modify(securityUser.getUser());
 
 		// 将token返回给前端
-		return authInfo;
+		return buildAuthInfo(token);
 	}
 
 	/**
@@ -119,15 +122,41 @@ public class AuthController extends BaseController {
 	 */
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.CREATED)
-	public AuthInfo authenticationRequest(HttpServletRequest request) {
+	public AuthInfo refresh(HttpServletRequest request) {
 		String oldToken = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
 		String username = this.tokenService.getUsernameFromToken(oldToken);
 		String userId = this.tokenService.getUserIdFromToken(oldToken);
-		AuthInfo authInfo = this.tokenService.refreshTokenAndBuildAuthInfo(oldToken);
-		String newToken = authInfo.getToken();
+		User user = this.userService.find(userId);
+		boolean canBeRefreshedToken = this.tokenService.canTokenBeRefreshed(oldToken, user.getLastPasswordResetTime());
+		if (!canBeRefreshedToken) {
+			throw new ApiException("auth.cannot_refresh_token");
+		}
+		String newToken = this.tokenService.refreshToken(oldToken);
 		LOGGER.debug("username [" + username + "] refresh token successful!");
 		// refresh redis中的用户会话和用户信息
 		this.securityService.refreshRedisToken(userId, oldToken, newToken);
+		return buildAuthInfo(newToken);
+	}
+
+	/**
+	 * 根据token构建authinfo
+	 * 
+	 * @param newToken
+	 * @return
+	 */
+	private AuthInfo buildAuthInfo(String token) {
+		JSONObject payload = JwtUtil.getPayload(token);
+		AuthInfo authInfo = new AuthInfo();
+		if (payload != null) {
+			authInfo.setCreateTime(payload.getLong(JwtUtil.CLAIMS_IAT));
+			authInfo.setDevice(DeviceEnum.valueOf(String.valueOf(payload.get(JwtUtil.CLAIMS_DEVICE))));
+			authInfo.setExpiration(payload.getLong(JwtUtil.CLAIMS_EXP));
+			authInfo.setPublicKey(RSAUtil.getBase64PublicKey());
+			authInfo.setToken(token);
+			authInfo.setUserId(payload.getString(JwtUtil.CLAIMS_SUB));
+			authInfo.setUsername(payload.getString(JwtUtil.CLAIMS_USERNAME));
+			authInfo.setRoles(payload.getString(JwtUtil.CLAIMS_ROLES));
+		}
 		return authInfo;
 	}
 

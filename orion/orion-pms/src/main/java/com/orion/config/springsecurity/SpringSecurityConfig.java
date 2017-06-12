@@ -62,6 +62,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().antMatchers(AppConstants.SECURITY_MAPPING_URL_PATTERN + "/auth/**").permitAll()
 				.anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.headers().cacheControl();
 	}
 
 	@Bean
