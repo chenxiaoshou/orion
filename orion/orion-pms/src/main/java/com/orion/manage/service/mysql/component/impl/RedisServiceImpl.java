@@ -14,7 +14,6 @@ import com.orion.common.utils.DateUtil;
 import com.orion.common.utils.JsonUtil;
 import com.orion.manage.service.dto.component.UserInfoCache;
 import com.orion.manage.service.mysql.component.RedisService;
-import com.orion.manage.service.mysql.security.TokenService;
 
 @Service("redisService")
 public class RedisServiceImpl implements RedisService {
@@ -22,19 +21,24 @@ public class RedisServiceImpl implements RedisService {
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	@Autowired
-	private TokenService tokenService;
-
 	@Override
 	public void storeTokenUserInfo(String token, UserInfoCache userInfoCache, LocalDateTime expiration) {
-		this.stringRedisTemplate.boundValueOps(RedisConstants.KEY_TOKEN_USERINFO + token).set(userInfoCache.toJson());
-		long timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration);
-		this.stringRedisTemplate.expire(RedisConstants.KEY_TOKEN_USERINFO + token, timeout, TimeUnit.SECONDS);
+		long timeout = 0;
+		if (expiration != null
+				&& (timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration)) > 0) {
+			this.stringRedisTemplate.boundValueOps(RedisConstants.KEY_TOKEN_USERINFO + token)
+					.set(userInfoCache.toJson(), timeout, TimeUnit.SECONDS);
+		} else {
+			this.stringRedisTemplate.boundValueOps(RedisConstants.KEY_TOKEN_USERINFO + token)
+					.set(userInfoCache.toJson());
+		}
 	}
 
 	@Override
-	public void removeTokenUserInfo(String token) {
+	public UserInfoCache removeTokenUserInfo(String token) {
+		UserInfoCache userInfoCache = this.getTokenUserInfo(RedisConstants.KEY_TOKEN_USERINFO + token);
 		this.stringRedisTemplate.delete(RedisConstants.KEY_TOKEN_USERINFO + token);
+		return userInfoCache;
 	}
 
 	@Override
@@ -47,45 +51,38 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	@Override
-	public String storeUserIdToken(String userId, String token) {
-		// 取出旧数据，用户第一次登录时，此处可能为null
-		Object data = this.stringRedisTemplate.opsForHash().get(RedisConstants.KEY_USERID_TOKEN, userId);
-		// 存入新数据，覆盖旧数据
-		this.stringRedisTemplate.opsForHash().put(RedisConstants.KEY_USERID_TOKEN, userId, token);
-		return data == null ? null : (String) data;
+	public String storeUserIdToken(String userId, String token, LocalDateTime expiration) {
+		Object oldToken = this.stringRedisTemplate.opsForValue().get(RedisConstants.KEY_USERID_TOKEN + userId);
+		long timeout = 0;
+		if (expiration != null
+				&& (timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration)) > 0) {
+			this.stringRedisTemplate.opsForValue().set(RedisConstants.KEY_USERID_TOKEN + userId, token, timeout,
+					TimeUnit.SECONDS);
+		} else {
+			this.stringRedisTemplate.opsForValue().set(RedisConstants.KEY_USERID_TOKEN + userId, token);
+		}
+		return oldToken == null ? null : (String) oldToken;
 	}
 
 	@Override
-	public void removeUserIdToken(String userId) {
-		this.stringRedisTemplate.opsForHash().delete(RedisConstants.KEY_USERID_TOKEN, userId);
+	public String removeUserIdToken(String userId) {
+		String token = this.getUserIdToken(RedisConstants.KEY_USERID_TOKEN + userId);
+		this.stringRedisTemplate.delete(RedisConstants.KEY_USERID_TOKEN + userId);
+		return token;
 	}
 
 	@Override
 	public String getUserIdToken(String userId) {
-		Object value = this.stringRedisTemplate.opsForHash().get(RedisConstants.KEY_USERID_TOKEN, userId);
-		return value == null ? null : (String) value;
+		Object token = this.stringRedisTemplate.opsForValue().get(RedisConstants.KEY_USERID_TOKEN + userId);
+		return token == null ? null : (String) token;
 	}
 
 	@Override
-	public void storeUserIdTokenAndClearOldTokenUserInfo(String userId, String token) {
-		String oldToken = storeUserIdToken(userId, token);
+	public void storeUserIdTokenAndClearOldTokenUserInfo(String userId, String token, LocalDateTime expiration) {
+		String oldToken = storeUserIdToken(userId, token, expiration);
 		if (StringUtils.isNotBlank(oldToken)) {
 			removeTokenUserInfo(oldToken);
 		}
-	}
-
-	@Override
-	public void storeToBeExpiredToken(String token) {
-		this.stringRedisTemplate.boundValueOps(RedisConstants.KEY_TO_BE_EXPIRED_TOKEN + token).set("ToBeExpired");
-		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
-		long timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration);
-		this.stringRedisTemplate.expire(RedisConstants.KEY_TO_BE_EXPIRED_TOKEN + token, timeout, TimeUnit.SECONDS);
-	}
-
-	@Override
-	public String getToBeExpiredToken(String token) {
-		Object value = this.stringRedisTemplate.boundValueOps(RedisConstants.KEY_TO_BE_EXPIRED_TOKEN + token).get();
-		return value == null ? null : (String) value;
 	}
 
 }

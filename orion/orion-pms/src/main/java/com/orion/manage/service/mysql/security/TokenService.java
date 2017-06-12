@@ -6,8 +6,6 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.orion.manage.web.vo.auth.AuthInfo;
-
 @Service("tokenService")
 public interface TokenService {
 
@@ -27,22 +25,6 @@ public interface TokenService {
 	public String generateToken(UserDetails userDetails, String tokenSigner, String remoteHost, Device device);
 
 	/**
-	 * 生成token并组装一个AuthInfo返回
-	 * 
-	 * @param userDetails
-	 *            用户信息
-	 * @param tokenSigner
-	 *            token的签发者
-	 * @param remoteHost
-	 *            客户端IP
-	 * @param device
-	 *            客户端设备
-	 * @return
-	 */
-	public AuthInfo generateTokenAndBuildAuthInfo(UserDetails userDetails, String tokenSigner, String remoteHost,
-			Device device);
-
-	/**
 	 * 判断当前用户是否能够刷新token
 	 * 
 	 * @param token
@@ -51,14 +33,6 @@ public interface TokenService {
 	 * @return
 	 */
 	public Boolean canTokenBeRefreshed(String token, LocalDateTime lastPasswordResetTime);
-
-	/**
-	 * 刷新token并组装成AuthIfo返回
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public AuthInfo refreshTokenAndBuildAuthInfo(String oldToken);
 
 	/**
 	 * 刷新token
@@ -125,4 +99,13 @@ public interface TokenService {
 	 */
 	public String getRemoteHostFromToken(String token);
 
+	public Boolean isTabletOrMobile(String token);
+	
+	public Boolean isTokenWillExpire(String token);
+	
+	public Boolean isTokenExpired(String token);
+	
+	public Boolean isCreateTimeBeforeLastPasswordResetTime(LocalDateTime createTime, LocalDateTime lastPasswordReset);
+	
+	public boolean isRefrehedTimeValid(String token);
 }

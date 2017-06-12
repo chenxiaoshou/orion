@@ -29,7 +29,7 @@ public final class RedisConstants {
 	/**
 	 * 保存新的useid:token键值对，同时根据旧token清理token:useinfo表中的旧数据
 	 */
-	public static final String KEY_USERID_TOKEN = "userid:token";
+	public static final String KEY_USERID_TOKEN = "userid:";
 
 	public static final String KEY_TO_BE_EXPIRED_TOKEN = "expired_token:";
 

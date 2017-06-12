@@ -34,10 +34,12 @@ public final class SecurityConstants {
 
 	public static final long JWT_EXPIRATION = 4 * 60 * 1000L; // JWT过期时间：10分钟(表示到毫秒)
 
-	public static final long LEFT_TIME_FOR_TOKEN_EXPIRATION = 2 * 60 * 1000L; // 距离过期还剩的时间毫秒数，用来确定自动刷新token的时间点
+	public static final long LEFT_TIME_FOR_TOKEN_EXPIRATION = 2 * 60 * 1000L; // 距离过期还剩的时间毫秒数，用来确定自动刷新token的时间点:2分钟
 
 	public static final String PUBLIC_KEY_FILE_PATH = "keystore/publicKey.keystore";
 
 	public static final String PRIVATE_KEY_FILE_PATH = "keystore/privateKey.keystore";
+
+	public static final long JWT_REFRESH_END_TIME = 7 * 24 * 60 * 60 * 1000L; // 可以使用过期token换取新token的最长时间区间:7天
 
 }

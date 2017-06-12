@@ -43,6 +43,11 @@ public final class JwtUtil {
 	public static final String CLAIMS_EXP = "exp";
 
 	/**
+	 * 刷新过期时间，在该时间段之内，可以使用旧token换取新token
+	 */
+	public static final String CLAIMS_REF = "ref";
+	
+	/**
 	 * 定义一个时间，在该时间之前，此token都不可用
 	 */
 	public static final String CLAIMS_NBF = "nbf";
@@ -56,11 +61,6 @@ public final class JwtUtil {
 	 * jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
 	 */
 	public static final String CLAIMS_JTI = "jti";
-
-	/**
-	 * 传输到客户端的RSA公钥,供客户端加密数据使用
-	 */
-	public static final String CLAIMS_PUBLICKEY = "puk";
 
 	/**
 	 * 访问用户的username
@@ -129,9 +129,11 @@ public final class JwtUtil {
 	public static Map<String, Object> buildNormalJwtPayloads() {
 		Map<String, Object> payloads = new HashMap<>();
 		long createTime = Instant.now().toEpochMilli();
-		payloads.put(CLAIMS_IAT, createTime);
+		payloads.put(CLAIMS_IAT, createTime); // 签发时间
 		long expirationTime = createTime + SecurityConstants.JWT_EXPIRATION;
-		payloads.put(CLAIMS_EXP, expirationTime);
+		payloads.put(CLAIMS_EXP, expirationTime); // 过期截止时间
+		long refreshEndTime = createTime + SecurityConstants.JWT_REFRESH_END_TIME;
+		payloads.put(CLAIMS_REF, refreshEndTime); // 刷新截止时间
 		return payloads;
 	}
 
