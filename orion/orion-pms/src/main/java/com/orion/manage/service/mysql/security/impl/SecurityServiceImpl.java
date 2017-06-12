@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.orion.common.dic.SourceTypeEnum;
 import com.orion.common.utils.BeanUtil;
 import com.orion.manage.model.mysql.auth.MapUserRole;
 import com.orion.manage.model.mysql.auth.Role;
@@ -60,22 +61,23 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
-	public void refreshRedisToken(String userId, String oldToken, String newToken) {
+	public void refreshRedisToken(SourceTypeEnum source, String userId, String oldToken, String newToken) {
 		LocalDateTime timeout = this.tokenService.getExpirationDateFromToken(newToken);
-		String oldToken2 = this.redisService.storeUserIdToken(userId, newToken, timeout);
+		String oldToken2 = this.redisService.storeUserIdToken(source, userId, newToken, timeout);
 		UserInfoCache userInfoCache = null;
 		if (StringUtils.isNotBlank(oldToken2)) {
-			userInfoCache = this.redisService.removeTokenUserInfo(oldToken2);
+			userInfoCache = this.redisService.removeTokenUserInfo(source, oldToken2);
 		}
+		// 如果有垃圾数据，剔除掉
 		if (StringUtils.isNotBlank(oldToken) && !oldToken.equals(oldToken2)) {
-			this.redisService.removeTokenUserInfo(oldToken);
+			this.redisService.removeTokenUserInfo(source, oldToken);
 		}
 		if (userInfoCache == null) {
 			User user = this.userService.find(userId);
 			BeanUtil.copyProperties(user, userInfoCache);
 		}
 		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(newToken);
-		this.redisService.storeTokenUserInfo(newToken, userInfoCache, expiration);
+		this.redisService.storeTokenUserInfo(source, newToken, userInfoCache, expiration);
 	}
 
 }

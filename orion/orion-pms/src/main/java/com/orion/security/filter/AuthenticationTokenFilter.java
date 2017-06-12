@@ -19,7 +19,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
+import com.orion.common.constant.AppConstants;
 import com.orion.common.constant.SecurityConstants;
+import com.orion.common.dic.SourceTypeEnum;
 import com.orion.manage.service.mysql.security.TokenService;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
@@ -36,6 +38,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		SourceTypeEnum sourceTypeEnum = getSourceType(httpRequest);
 		String authToken = httpRequest.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
 		// 检查在redis服务器中是否存有该用户的信息
 		if (StringUtils.isNotBlank(authToken)) {
@@ -46,7 +49,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 				}
 				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 				// 如果验证token无误，视为认证通过
-				if (this.tokenService.isTokenAvailable(authToken, userDetails)) {
+				if (userDetails != null && this.tokenService.isTokenAvailable(sourceTypeEnum, authToken, userDetails)) {
 					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 							userDetails, null, userDetails.getAuthorities());
 					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
@@ -58,4 +61,12 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		chain.doFilter(request, response);
 	}
 
+	private SourceTypeEnum getSourceType(HttpServletRequest request) {
+		String sourceStr = request.getHeader(AppConstants.HEADER_SOURCE);
+		if (StringUtils.isNotBlank(sourceStr)) {
+			return SourceTypeEnum.getSourceTypeByCode(Integer.valueOf(sourceStr));
+		}
+		return null;
+	}
+	
 }

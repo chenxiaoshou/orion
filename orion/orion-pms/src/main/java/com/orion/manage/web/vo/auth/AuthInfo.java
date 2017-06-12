@@ -2,7 +2,7 @@ package com.orion.manage.web.vo.auth;
 
 import java.io.Serializable;
 
-import com.orion.security.DeviceEnum;
+import com.orion.common.dic.SourceTypeEnum;
 
 /**
  * 用户认证成功之后，返回一些必要的信息，供前端使用
@@ -19,14 +19,16 @@ public class AuthInfo implements Serializable {
 	private Long createTime; // token创建时间
 
 	private Long expiration; // 过期时间
+	
+	private Long refreshTime; // 可换取新token的截止时间
 
 	private String userId;
 
 	private String username;
 
-	private DeviceEnum device; // 客户端设备
+	private SourceTypeEnum source; // 客户端编号（Desktop，Android，IOS，H5）
 
-	private String publicKey; // 加密公钥
+	private String publicKey; // 加密公钥(客户端可以用来加密敏感数据，然后传回到客户端)
 
 	private String roles; // 角色拼接字符串
 
@@ -70,14 +72,6 @@ public class AuthInfo implements Serializable {
 		this.username = username;
 	}
 
-	public DeviceEnum getDevice() {
-		return device;
-	}
-
-	public void setDevice(DeviceEnum device) {
-		this.device = device;
-	}
-
 	public String getPublicKey() {
 		return publicKey;
 	}
@@ -92,6 +86,22 @@ public class AuthInfo implements Serializable {
 
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public SourceTypeEnum getSource() {
+		return source;
+	}
+
+	public void setSource(SourceTypeEnum source) {
+		this.source = source;
+	}
+
+	public Long getRefreshTime() {
+		return refreshTime;
+	}
+
+	public void setRefreshTime(Long refreshTime) {
+		this.refreshTime = refreshTime;
 	}
 
 }

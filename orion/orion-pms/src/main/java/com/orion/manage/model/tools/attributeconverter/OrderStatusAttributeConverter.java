@@ -4,16 +4,16 @@ import javax.persistence.AttributeConverter;
 
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 
-public class OrderStatusAttributeConverter implements AttributeConverter<OrderStatusEnum, Integer> {
+public class OrderStatusAttributeConverter implements AttributeConverter<OrderStatusEnum, String> {
 
 	@Override
-	public Integer convertToDatabaseColumn(OrderStatusEnum attribute) {
+	public String convertToDatabaseColumn(OrderStatusEnum attribute) {
 		return attribute.getStatus();
 	}
 
 	@Override
-	public OrderStatusEnum convertToEntityAttribute(Integer dbData) {
-		return OrderStatusEnum.getOrderStatusByStatus(dbData.intValue());
+	public OrderStatusEnum convertToEntityAttribute(String dbData) {
+		return OrderStatusEnum.getOrderStatusByStatus(dbData);
 	}
 
 }

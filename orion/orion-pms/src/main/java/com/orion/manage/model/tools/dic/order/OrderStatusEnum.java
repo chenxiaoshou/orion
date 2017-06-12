@@ -5,27 +5,34 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OrderStatusEnum {
 
-	STEP_AWAIT_PROCESSING(1), // 待处理
-	STEP_AWAIT_SHIPPING(2), // 待发货
-	STEP_SHIPPING_FINISHED(3), // 已发货
-	STEP_COMPLETED_ORDER(4), // 已发货
-	STEP_ISSUE_ORDER(5); // 问题订单
+	STEP_AWAIT_PROCESSING("step_await_processing", "待处理"), 
+	STEP_AWAIT_SHIPPING("step_await_shipping","待发货"), 
+	STEP_SHIPPING_FINISHED("step_shipping_finished", "已发货"), 
+	STEP_COMPLETED_ORDER("step_completed_order", "已完成"), 
+	STEP_ISSUE_ORDER("step_issue_order", "问题订单");
 
-	private int status;
+	private String status;
 
-	private OrderStatusEnum(int status) {
+	private String desc;
+
+	private OrderStatusEnum(String status, String desc) {
 		this.status = status;
+		this.desc = desc;
 	}
 
 	@JsonValue // Json序列化时，显示的是自定义的status值，并不是name()方法之后的值
-	public int getStatus() {
-		return status;
+	public String getStatus() {
+		return this.status;
+	}
+
+	public String getDesc() {
+		return this.desc;
 	}
 
 	@JsonCreator // Json反序列化
-	public static OrderStatusEnum getOrderStatusByStatus(int status) {
+	public static OrderStatusEnum getOrderStatusByStatus(String status) {
 		for (OrderStatusEnum orderStatus : OrderStatusEnum.values()) {
-			if (orderStatus.getStatus() == status) {
+			if (orderStatus.getStatus().equalsIgnoreCase(status)) {
 				return orderStatus;
 			}
 		}

@@ -2,9 +2,10 @@ package com.orion.manage.service.mysql.security;
 
 import java.time.LocalDateTime;
 
-import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.orion.common.dic.SourceTypeEnum;
 
 @Service("tokenService")
 public interface TokenService {
@@ -22,7 +23,7 @@ public interface TokenService {
 	 *            客户端设备
 	 * @return
 	 */
-	public String generateToken(UserDetails userDetails, String tokenSigner, String remoteHost, Device device);
+	public String generateToken(UserDetails userDetails, String tokenSigner, String remoteHost, SourceTypeEnum source);
 
 	/**
 	 * 判断当前用户是否能够刷新token
@@ -49,7 +50,7 @@ public interface TokenService {
 	 * @param userDetails
 	 * @return
 	 */
-	public Boolean isTokenAvailable(String token, UserDetails userDetails);
+	public Boolean isTokenAvailable(SourceTypeEnum source, String token, UserDetails userDetails);
 
 	/**
 	 * 从JWT中获取username
@@ -99,13 +100,13 @@ public interface TokenService {
 	 */
 	public String getRemoteHostFromToken(String token);
 
-	public Boolean isTabletOrMobile(String token);
+	public SourceTypeEnum getSourceTypeFromToken(String token);
 	
 	public Boolean isTokenWillExpire(String token);
-	
+
 	public Boolean isTokenExpired(String token);
-	
+
 	public Boolean isCreateTimeBeforeLastPasswordResetTime(LocalDateTime createTime, LocalDateTime lastPasswordReset);
-	
+
 	public boolean isRefrehedTimeValid(String token);
 }

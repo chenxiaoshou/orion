@@ -3,8 +3,12 @@ package com.orion.manage.web.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.orion.common.constant.AppConstants;
+import com.orion.common.dic.SourceTypeEnum;
 
 /**
  * 提供所有Controller中的通用方法
@@ -62,6 +66,20 @@ public class BaseController {
 		}
 		LOGGER.trace("location url [" + location + "]");
 		response.addHeader("Location", location);
+	}
+
+	/**
+	 * 从Source请求头中提取请求方的标识（Desktop, Android, IOS, H5...）
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public SourceTypeEnum getSourceType(HttpServletRequest request) {
+		String sourceStr = request.getHeader(AppConstants.HEADER_SOURCE);
+		if (StringUtils.isNotBlank(sourceStr)) {
+			return SourceTypeEnum.getSourceTypeByCode(Integer.valueOf(sourceStr));
+		}
+		return null;
 	}
 
 }

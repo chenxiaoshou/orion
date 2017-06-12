@@ -10,15 +10,15 @@ public final class SecurityConstants {
 	 */
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_CREDENTIALS = "true";
 
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token";
+	public static final String VALUE_ACCESS_CONTROL_ALLOW_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token,Source";
 
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,DELETE,OPTIONS,HEAD";
 
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_ORIGIN = ".orion.com";
 
-	public static final String VALUE_ACCESS_CONTROL_EXPOSE_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control,X-Auth-Token";
+	public static final String VALUE_ACCESS_CONTROL_EXPOSE_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control";
 
-	public static final String VALUE_ACCESS_CONTROL_MAX_AGE = String.valueOf(60 * 60 * 24); // 预请求有效期保留一天
+	public static final String VALUE_ACCESS_CONTROL_MAX_AGE = String.valueOf(60 * 60 * 24); // 预请求有效期保留一天(单位秒)
 
 	/**
 	 * 认证授权使用的数据库schema
@@ -32,14 +32,14 @@ public final class SecurityConstants {
 
 	public static final String HEADER_NEW_AUTH_TOKEN = "X-New-Auth-Token"; // reponse的header中保存自动续期之后新生成的Token头信息
 
-	public static final long JWT_EXPIRATION = 4 * 60 * 1000L; // JWT过期时间：10分钟(表示到毫秒)
+	public static final long JWT_EXPIRATION = 12 * 60 * 60 * 1000L; // JWT过期时间：12小时(单位毫秒)
 
-	public static final long LEFT_TIME_FOR_TOKEN_EXPIRATION = 2 * 60 * 1000L; // 距离过期还剩的时间毫秒数，用来确定自动刷新token的时间点:2分钟
+	public static final long LEFT_TIME_FOR_TOKEN_EXPIRATION = 30 * 60 * 1000L; // 距离过期还剩的时间(单位毫秒)，用来确定自动刷新token的时间点:30分钟
 
 	public static final String PUBLIC_KEY_FILE_PATH = "keystore/publicKey.keystore";
 
 	public static final String PRIVATE_KEY_FILE_PATH = "keystore/privateKey.keystore";
 
-	public static final long JWT_REFRESH_END_TIME = 7 * 24 * 60 * 60 * 1000L; // 可以使用过期token换取新token的最长时间区间:7天
+	public static final long JWT_REFRESH_END_TIME = 7 * 24 * 60 * 60 * 1000L; // 可以使用过期token换取新token的最长时间区间:7天(单位毫秒)
 
 }

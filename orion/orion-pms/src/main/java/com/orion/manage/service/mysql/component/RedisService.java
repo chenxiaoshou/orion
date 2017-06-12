@@ -2,6 +2,7 @@ package com.orion.manage.service.mysql.component;
 
 import java.time.LocalDateTime;
 
+import com.orion.common.dic.SourceTypeEnum;
 import com.orion.manage.service.dto.component.UserInfoCache;
 
 public interface RedisService {
@@ -12,14 +13,14 @@ public interface RedisService {
 	 * @param token
 	 * @param userInfoCache
 	 */
-	void storeTokenUserInfo(String token, UserInfoCache userInfoCache, LocalDateTime expiration);
+	void storeTokenUserInfo(SourceTypeEnum source, String token, UserInfoCache userInfoCache, LocalDateTime expiration);
 
 	/**
 	 * 从Redis服务器删除指定Token的用户信息缓存,并返回删除的数据
 	 * 
 	 * @param token
 	 */
-	UserInfoCache removeTokenUserInfo(String token);
+	UserInfoCache removeTokenUserInfo(SourceTypeEnum source, String token);
 
 	/**
 	 * 从Redis服务器查找指定Token的用户信息缓存
@@ -27,7 +28,7 @@ public interface RedisService {
 	 * @param token
 	 * @return
 	 */
-	UserInfoCache getTokenUserInfo(String token);
+	UserInfoCache getTokenUserInfo(SourceTypeEnum source, String token);
 
 	/**
 	 * key=userid:token, value=token
@@ -37,16 +38,22 @@ public interface RedisService {
 	 * @param userId
 	 * @param token
 	 */
-	String storeUserIdToken(String userId, String token, LocalDateTime expiration);
+	String storeUserIdToken(SourceTypeEnum source, String userId, String token, LocalDateTime expiration);
 
-	String getUserIdToken(String userId);
+	/**
+	 * 获取usedIdToken
+	 * @param source
+	 * @param userId
+	 * @return
+	 */
+	String getUserIdToken(SourceTypeEnum source, String userId);
 
 	/**
 	 * 删除UserIdToken,并返回删除的数据
 	 * @param userId
 	 * @return
 	 */
-	String removeUserIdToken(String userId);
+	String removeUserIdToken(SourceTypeEnum source, String userId);
 
 	/**
 	 * 
@@ -54,6 +61,6 @@ public interface RedisService {
 	 * @param token
 	 * @param expiration
 	 */
-	void storeUserIdTokenAndClearOldTokenUserInfo(String userId, String token, LocalDateTime expiration);
+	void storeUserIdTokenAndClearOldTokenUserInfo(SourceTypeEnum source, String userId, String token, LocalDateTime expiration);
 
 }

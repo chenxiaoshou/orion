@@ -10,8 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mobile.device.Device;
-import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orion.common.constant.SecurityConstants;
+import com.orion.common.dic.SourceTypeEnum;
 import com.orion.common.exception.ApiException;
 import com.orion.common.utils.BeanUtil;
 import com.orion.common.utils.JwtUtil;
@@ -39,7 +38,6 @@ import com.orion.manage.service.mysql.security.TokenService;
 import com.orion.manage.web.controller.BaseController;
 import com.orion.manage.web.vo.auth.Auth4Login;
 import com.orion.manage.web.vo.auth.AuthInfo;
-import com.orion.security.DeviceEnum;
 
 import net.sf.json.JSONObject;
 
@@ -78,7 +76,10 @@ public class AuthController extends BaseController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public AuthInfo login(@RequestBody @Valid Auth4Login auth4Login, HttpServletRequest request) {
-		Device device = DeviceUtils.getCurrentDevice(request);
+		SourceTypeEnum sourceTypeEnum = super.getSourceType(request); // 获取请求来源（Desktop/Andriod/IOS/H5）
+		if (sourceTypeEnum == null) {
+			throw new ApiException("global.source.is_null");
+		}
 		// 调用spring security认证逻辑
 		Authentication authentication = this.authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(auth4Login.getUsername(), auth4Login.getPassword()));
@@ -91,20 +92,19 @@ public class AuthController extends BaseController {
 			throw new ApiException("auth.login_failed");
 		}
 		User user = securityUser.getUser();
+		String tokenSigner = request.getRequestURL().toString();
 		String remoteHost = getRemoteHost(request);
-		String token = this.tokenService.generateToken(userDetails, remoteHost, request.getRequestURL().toString(),
-				device);
+		String token = this.tokenService.generateToken(userDetails, tokenSigner, remoteHost, sourceTypeEnum);
 		LOGGER.info("user [" + user.getUsername() + "] login successful, token [" + token + "]");
 
-		// 将用户id和token对应关系保存在Redis中，
-		// 做到一个用户只保留一份合法有效的token，其他token虽然jwt那边验证可以通过，但是在redis中如果不存在的话，也会判定为非法
+		// 保存为source||userid = token的结构，保证一个请求源一个用户只会有一个token是有效的
 		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
-		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(user.getId(), token, expiration);
+		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(sourceTypeEnum, user.getId(), token, expiration);
 
-		// 将token:userinfo以顶级key-value结构表保存到redis中，并设置过期时间
+		// 保存为source||token=userInfo结构，并设置redis的过期时间为token的过期时间
 		UserInfoCache userInfoCache = new UserInfoCache();
 		BeanUtil.copyProperties(user, userInfoCache);
-		this.redisService.storeTokenUserInfo(token, userInfoCache, expiration);
+		this.redisService.storeTokenUserInfo(sourceTypeEnum, token, userInfoCache, expiration);
 
 		// 更新数据库User表的最后登录时间
 		user.setLastLoginTime(LocalDateTime.now());
@@ -123,6 +123,7 @@ public class AuthController extends BaseController {
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.CREATED)
 	public AuthInfo refresh(HttpServletRequest request) {
+		SourceTypeEnum sourceTypeEnum = super.getSourceType(request); // 获取请求来源（Desktop/Andriod/IOS/H5）
 		String oldToken = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
 		String username = this.tokenService.getUsernameFromToken(oldToken);
 		String userId = this.tokenService.getUserIdFromToken(oldToken);
@@ -133,8 +134,8 @@ public class AuthController extends BaseController {
 		}
 		String newToken = this.tokenService.refreshToken(oldToken);
 		LOGGER.debug("username [" + username + "] refresh token successful!");
-		// refresh redis中的用户会话和用户信息
-		this.securityService.refreshRedisToken(userId, oldToken, newToken);
+		// 刷新redis中的用户会话和用户信息
+		this.securityService.refreshRedisToken(sourceTypeEnum, userId, oldToken, newToken);
 		return buildAuthInfo(newToken);
 	}
 
@@ -149,13 +150,17 @@ public class AuthController extends BaseController {
 		AuthInfo authInfo = new AuthInfo();
 		if (payload != null) {
 			authInfo.setCreateTime(payload.getLong(JwtUtil.CLAIMS_IAT));
-			authInfo.setDevice(DeviceEnum.valueOf(String.valueOf(payload.get(JwtUtil.CLAIMS_DEVICE))));
 			authInfo.setExpiration(payload.getLong(JwtUtil.CLAIMS_EXP));
+			authInfo.setRefreshTime(payload.getLong(JwtUtil.CLAIMS_REF));
 			authInfo.setPublicKey(RSAUtil.getBase64PublicKey());
 			authInfo.setToken(token);
-			authInfo.setUserId(payload.getString(JwtUtil.CLAIMS_SUB));
+			authInfo.setUserId(payload.getString(JwtUtil.CLAIMS_USERID));
 			authInfo.setUsername(payload.getString(JwtUtil.CLAIMS_USERNAME));
 			authInfo.setRoles(payload.getString(JwtUtil.CLAIMS_ROLES));
+			Integer code = payload.getInt(JwtUtil.CLAIMS_SUB);
+			if (code != null) {
+				authInfo.setSource(SourceTypeEnum.getSourceTypeByCode(code));
+			}
 		}
 		return authInfo;
 	}
@@ -170,15 +175,16 @@ public class AuthController extends BaseController {
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public void logout(Device device, HttpServletRequest request) {
+	public void logout(HttpServletRequest request) {
+		SourceTypeEnum sourceTypeEnum = super.getSourceType(request);
 		// 根据token获取用户的信息
 		String token = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
 		String userName = this.tokenService.getUsernameFromToken(token);
 		String userId = this.tokenService.getUserIdFromToken(token);
 		// 删除userIdToken
-		this.redisService.removeUserIdToken(userId);
+		this.redisService.removeUserIdToken(sourceTypeEnum, userId);
 		// 将token以及用户相关信息从redis中删除
-		this.redisService.removeTokenUserInfo(token);
+		this.redisService.removeTokenUserInfo(sourceTypeEnum, token);
 		LOGGER.info("userName [" + userName + "] logout successful!");
 	}
 

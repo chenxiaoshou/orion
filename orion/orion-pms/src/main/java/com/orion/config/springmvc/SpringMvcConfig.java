@@ -49,7 +49,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import com.orion.common.constant.AppConstants;
-import com.orion.common.exception.PolarisExceptionResolver;
+import com.orion.common.exception.AppExceptionResolver;
 import com.orion.common.utils.JsonUtil;
 
 /**
@@ -301,8 +301,8 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	 */
 
 	@Bean
-	public PolarisExceptionResolver polarisExceptionResolver() {
-		return new PolarisExceptionResolver();
+	public AppExceptionResolver polarisExceptionResolver() {
+		return new AppExceptionResolver();
 	}
 
 	/**
@@ -310,14 +310,15 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	 * 
 	 * @return
 	 */
-	/*
-	 * @Override protected ConfigurableWebBindingInitializer
-	 * getConfigurableWebBindingInitializer() {
-	 * ConfigurableWebBindingInitializer initializer =
-	 * super.getConfigurableWebBindingInitializer(); PolarisEditorRegistrar
-	 * register = new PolarisEditorRegistrar();
-	 * register.setFormat("yyyy-MM-dd");
-	 * initializer.setPropertyEditorRegistrar(register); return initializer; }
-	 */
+	// @Override
+	// protected ConfigurableWebBindingInitializer
+	// getConfigurableWebBindingInitializer() {
+	// ConfigurableWebBindingInitializer initializer =
+	// super.getConfigurableWebBindingInitializer();
+	// AppEditorRegistrar register = new AppEditorRegistrar();
+	// register.setFormat("yyyy-MM-dd");
+	// initializer.setPropertyEditorRegistrar(register);
+	// return initializer;
+	// }
 
 }

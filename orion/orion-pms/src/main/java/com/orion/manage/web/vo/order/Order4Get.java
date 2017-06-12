@@ -12,8 +12,10 @@ public class Order4Get implements Serializable {
 
 	private static final long serialVersionUID = -1994953916375628438L;
 
-	private String orderId; // 订单Id
+	private String id; // 订单Id
 
+	private String orderNo;
+	
 	private OrderStatusEnum status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 
 	private Double totalPrice; // 订单总金额
@@ -30,14 +32,6 @@ public class Order4Get implements Serializable {
 
 	@JsonFormat(pattern = PatternConstants.DATE_FORMAT_PATTERN_1)
 	private LocalDateTime completeTime; // 完成时间
-
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
 
 	public OrderStatusEnum getStatus() {
 		return status;
@@ -93,6 +87,22 @@ public class Order4Get implements Serializable {
 
 	public void setCompleteTime(LocalDateTime completeTime) {
 		this.completeTime = completeTime;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 }

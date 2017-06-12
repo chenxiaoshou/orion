@@ -38,7 +38,7 @@ public class Order extends BaseMysqlObject {
 
 	private LocalDateTime completeTime; // 完成时间
 
-	@Column(name = "order_no", nullable = false, updatable = false, insertable = false, unique = true, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
+	@Column(name = "order_no", nullable = false, updatable = false, unique = true, length = 24, columnDefinition = "varchar(24) default '' comment '订单编号'")
 	public String getOrderNo() {
 		if (StringUtils.isBlank(this.orderNo)) {
 			this.setOrderNo(CodeGenerator.generateOrderNo(ORDER_NO_PERFIX, ORDER_NO_LENGTH));
@@ -51,7 +51,7 @@ public class Order extends BaseMysqlObject {
 	}
 
 	@Convert(converter = OrderStatusAttributeConverter.class)
-	@Column(name = "status", nullable = false, columnDefinition = "int(2) default 0 comment '订单状态'")
+	@Column(name = "status", nullable = false, columnDefinition = "varchar(30) default '' comment '订单状态'")
 	public OrderStatusEnum getStatus() {
 		return status;
 	}

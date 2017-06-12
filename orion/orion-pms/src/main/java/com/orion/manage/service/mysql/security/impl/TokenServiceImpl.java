@@ -13,17 +13,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.orion.common.constant.SecurityConstants;
+import com.orion.common.dic.SourceTypeEnum;
+import com.orion.common.exception.AppException;
 import com.orion.common.utils.JwtUtil;
+import com.orion.manage.model.mysql.auth.User;
 import com.orion.manage.model.mysql.security.SecurityUser;
 import com.orion.manage.service.mysql.component.RedisService;
 import com.orion.manage.service.mysql.security.TokenService;
-import com.orion.security.DeviceEnum;
 
 import net.sf.json.JSONObject;
 
@@ -37,14 +38,14 @@ public class TokenServiceImpl implements TokenService {
 	@Autowired
 	private RedisService redisService;
 
-	public String generateToken(UserDetails userDetails, String tokenSigner, String remoteHost, Device device) {
+	public String generateToken(UserDetails userDetails, String tokenSigner, String remoteHost, SourceTypeEnum source) {
 		Map<String, Object> payloads = JwtUtil.buildNormalJwtPayloads();
 		SecurityUser securityUser = (SecurityUser) userDetails;
 		payloads.put(JwtUtil.CLAIMS_ISS, tokenSigner);
-		payloads.put(JwtUtil.CLAIMS_SUB, securityUser.getUser().getId());
+		payloads.put(JwtUtil.CLAIMS_SUB, source.getCode());
 		payloads.put(JwtUtil.CLAIMS_AUD, remoteHost);
 		payloads.put(JwtUtil.CLAIMS_USERNAME, securityUser.getUser().getUsername());
-		payloads.put(JwtUtil.CLAIMS_DEVICE, generateClientDevice(device));
+		payloads.put(JwtUtil.CLAIMS_USERID, securityUser.getUser().getId());
 		String roles = generateRoles(securityUser);
 		payloads.put(JwtUtil.CLAIMS_ROLES, roles);
 		String token;
@@ -69,8 +70,7 @@ public class TokenServiceImpl implements TokenService {
 			payload.put(JwtUtil.CLAIMS_EXP, generateExpirationDate());
 			refreshedToken = JwtUtil.encode(payload.toString());
 		} catch (Exception e) {
-			LOGGER.error("刷新Token失败！", e);
-			refreshedToken = null;
+			throw new AppException("刷新Token失败", e);
 		}
 		return refreshedToken;
 	}
@@ -85,61 +85,39 @@ public class TokenServiceImpl implements TokenService {
 				ZoneId.systemDefault());
 	}
 
-	private String generateClientDevice(Device device) {
-		String clientDevice = DeviceEnum.Unknown.name();
-		if (device.isNormal()) {
-			clientDevice = DeviceEnum.PC.name();
-		} else if (device.isTablet()) {
-			clientDevice = DeviceEnum.Tablet.name();
-		} else if (device.isMobile()) {
-			clientDevice = DeviceEnum.Mobile.name();
-		}
-		return clientDevice;
-	}
-
-	public Boolean isTokenAvailable(String token, UserDetails userDetails) {
+	public Boolean isTokenAvailable(SourceTypeEnum source, String token, UserDetails userDetails) {
 		SecurityUser securityUser = (SecurityUser) userDetails;
+		User user = securityUser.getUser();
 		final String userId = getUserIdFromToken(token);
 		final String username = getUsernameFromToken(token);
 		final LocalDateTime createTime = getCreateTimeFromToken(token);
 		final LocalDateTime expiration = getExpirationDateFromToken(token);
-		boolean subResult1 = StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(username) && createTime != null
-				&& expiration != null;
-		if (!subResult1) {
-			return false;
-		}
-		// 验证token中相关信息是否和security中存储的认证信息一致
-		boolean subResult2 = username.equals(securityUser.getUser().getUsername())
-				&& userId.equals(securityUser.getUser().getId());
-		// 验证jwt签名合法性
-		boolean subResult3 = JwtUtil.verifyJwtToken(token);
-		if (!subResult3 && LOGGER.isDebugEnabled()) {
+		boolean isTokenAvailable = true;
+		boolean isNull = StringUtils.isBlank(userId) || StringUtils.isBlank(username) || createTime == null
+				|| expiration == null;
+		if (isNull || !username.equals(user.getUsername()) || !userId.equals(user.getId())) {
+			isTokenAvailable = false;
+		} else if (!JwtUtil.verifyJwtToken(token)) {
+			isTokenAvailable = false;
 			LOGGER.debug("username [" + username + "] token is illegal.");
-		}
-		boolean subResult4 = !isTokenExpired(token);
-		if (!subResult4 && LOGGER.isDebugEnabled()) {
+		} else if (isTokenExpired(token)) {
+			isTokenAvailable = false;
 			LOGGER.debug("username [" + username + "] token is expired.");
-		}
-		boolean subResult5 = true;
-		if (securityUser.getUser().getLastPasswordResetTime() != null) {
-			subResult5 = !isCreateTimeBeforeLastPasswordResetTime(createTime,
-					securityUser.getUser().getLastPasswordResetTime());
-			if (!subResult5 && LOGGER.isDebugEnabled()) {
-				LOGGER.debug("username [" + username + "] create time before last password reset time.");
-			}
-		}
-		boolean subReuslt6 = existsInRedis(token);
-		if (LOGGER.isDebugEnabled() && !subReuslt6) {
+		} else if (isCreateTimeBeforeLastPasswordResetTime(createTime, user.getLastPasswordResetTime())) {
+			isTokenAvailable = false;
+			LOGGER.debug("username [" + username + "] create time before last password reset time.");
+		} else if (!existsInRedis(source, token)) {
+			isTokenAvailable = false;
 			LOGGER.debug("username [" + username + "] token not exists in redis!");
 		}
-		return subResult2 && subResult3 && subResult4 && subResult5 && subReuslt6;
+		return isTokenAvailable;
 	}
 
-	private boolean existsInRedis(String authToken) {
+	private boolean existsInRedis(SourceTypeEnum source, String authToken) {
 		String userId = this.getUserIdFromToken(authToken);
-		String tokenInRedis = this.redisService.getUserIdToken(userId);
+		String tokenInRedis = this.redisService.getUserIdToken(source, userId);
 		return StringUtils.isNoneBlank(tokenInRedis) && tokenInRedis.equalsIgnoreCase(authToken)
-				&& this.redisService.getTokenUserInfo(authToken) != null;
+				&& this.redisService.getTokenUserInfo(source, authToken) != null;
 	}
 
 	public String getUsernameFromToken(String token) {
@@ -150,7 +128,7 @@ public class TokenServiceImpl implements TokenService {
 				username = payload.getString(JwtUtil.CLAIMS_USERNAME);
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "username", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "username", token), e);
 			username = null;
 		}
 		return username;
@@ -164,7 +142,7 @@ public class TokenServiceImpl implements TokenService {
 				roles = payload.getString(JwtUtil.CLAIMS_ROLES);
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "roles", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "roles", token), e);
 			roles = null;
 		}
 		return roles;
@@ -175,10 +153,10 @@ public class TokenServiceImpl implements TokenService {
 		try {
 			if (StringUtils.isNotBlank(token)) {
 				final JSONObject payload = JwtUtil.getPayload(token);
-				userId = payload.getString(JwtUtil.CLAIMS_SUB);
+				userId = payload.getString(JwtUtil.CLAIMS_USERID);
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "userId", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "userId", token), e);
 			userId = null;
 		}
 		return userId;
@@ -193,7 +171,7 @@ public class TokenServiceImpl implements TokenService {
 						ZoneId.systemDefault());
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "createTime", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "createTime", token), e);
 			createTime = null;
 		}
 		return createTime;
@@ -208,7 +186,7 @@ public class TokenServiceImpl implements TokenService {
 						ZoneId.systemDefault());
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "refreshTime", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "refreshTime", token), e);
 			refreshTime = null;
 		}
 		return refreshTime;
@@ -223,7 +201,7 @@ public class TokenServiceImpl implements TokenService {
 						ZoneId.systemDefault());
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "expiration", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "expiration", token), e);
 			expiration = null;
 		}
 		return expiration;
@@ -237,24 +215,23 @@ public class TokenServiceImpl implements TokenService {
 				remoteHost = payload.getString(JwtUtil.CLAIMS_AUD);
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "remoteHost", token));
+			LOGGER.debug(MessageFormat.format(errMsg, "remoteHost", token), e);
 			remoteHost = null;
 		}
 		return remoteHost;
 	}
 
-	private String getDeviceFromToken(String token) {
-		String device = null;
+	public SourceTypeEnum getSourceTypeFromToken(String token) {
+		int code = 0;
 		try {
 			if (StringUtils.isNotBlank(token)) {
 				final JSONObject payload = JwtUtil.getPayload(token);
-				device = payload.getString(JwtUtil.CLAIMS_DEVICE);
+				code = payload.getInt(JwtUtil.CLAIMS_SUB);
 			}
 		} catch (Exception e) {
-			LOGGER.debug(MessageFormat.format(errMsg, "device", token));
-			device = null;
+			LOGGER.debug(MessageFormat.format(errMsg, "sourceType", token), e);
 		}
-		return device;
+		return SourceTypeEnum.getSourceTypeByCode(code);
 	}
 
 	// 生成用户角色字符串拼接
@@ -267,12 +244,6 @@ public class TokenServiceImpl implements TokenService {
 			}
 		}
 		return StringUtils.join(roles, ",");
-	}
-
-	// 如果是移动设备的话不考虑token过期的问题，即使没有过期，也可以刷新
-	public Boolean isTabletOrMobile(String token) {
-		String device = getDeviceFromToken(token);
-		return (DeviceEnum.Tablet.name().equals(device) || DeviceEnum.Mobile.name().equals(device));
 	}
 
 	// 判断token是否快要过期（距离过期时间半小时以内，即可判定快要过期）

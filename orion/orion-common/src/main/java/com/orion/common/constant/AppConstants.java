@@ -128,5 +128,7 @@ public final class AppConstants {
 	public static final String AUDIT_CREATOR_SYSTEM = "System";
 	
 	public static final String AUDIT_UPDATER_SYSTEM = "System";
+
+	public static final String HEADER_SOURCE = "Source"; // 请求头标识客户端类型的代号(Desktop, Android, IOS, H5...)
 	
 }

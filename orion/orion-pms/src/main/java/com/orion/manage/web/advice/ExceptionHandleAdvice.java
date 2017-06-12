@@ -3,6 +3,8 @@ package com.orion.manage.web.advice;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
@@ -118,10 +121,15 @@ public class ExceptionHandleAdvice {
 	 */
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<AppMessage> handleHttpRequestMethodNotSupportedException(
-			HttpRequestMethodNotSupportedException e) {
+			HttpRequestMethodNotSupportedException e, HttpServletResponse response) {
 		String message = messageSource.getMessage(ExceptionConstants.METHOD_NOT_ALLOWED, null, null);
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		appMessage.setMoreInfo(e.getMessage());
+		String[] supportedMethods = e.getSupportedMethods();
+		if (supportedMethods != null) {
+			response.setHeader("Allow",
+					org.springframework.util.StringUtils.arrayToDelimitedString(supportedMethods, ", "));
+		}
 		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
 	}
 
@@ -129,10 +137,15 @@ public class ExceptionHandleAdvice {
 	 * 415 - Unsupported Media Type
 	 */
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public ResponseEntity<AppMessage> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+	public ResponseEntity<AppMessage> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e,
+			HttpServletResponse response) {
 		String message = messageSource.getMessage(ExceptionConstants.CONTENT_TYPE_NOT_SUPPORTED, null, null);
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		appMessage.setMoreInfo(e.getMessage());
+		List<MediaType> mediaTypes = e.getSupportedMediaTypes();
+		if (!CollectionUtils.isEmpty(mediaTypes)) {
+			response.setHeader("Accept", MediaType.toString(mediaTypes));
+		}
 		return new ResponseEntity<>(appMessage, HttpStatus.valueOf(appMessage.getHttpStatus()));
 	}
 

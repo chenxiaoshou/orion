@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.orion.common.dic.SourceTypeEnum;
+
 public interface SecurityService {
 
 	/**
@@ -28,6 +30,6 @@ public interface SecurityService {
 	 * @param oldToken
 	 * @param newToken
 	 */
-	public void refreshRedisToken(String userId, String oldToken, String newToken);
+	public void refreshRedisToken(SourceTypeEnum source, String userId, String oldToken, String newToken);
 
 }

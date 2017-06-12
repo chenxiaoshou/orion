@@ -28,7 +28,7 @@ public final class JwtUtil {
 	public static final String CLAIMS_ISS = "iss";
 
 	/**
-	 * 面向的用户（此处用来存储user表唯一主键ID）
+	 * token面向的用户（此处用来存储请求方的标识，PC/Android/IOS/H5）
 	 */
 	public static final String CLAIMS_SUB = "sub";
 
@@ -63,6 +63,11 @@ public final class JwtUtil {
 	public static final String CLAIMS_JTI = "jti";
 
 	/**
+	 * userid
+	 */
+	public static final String CLAIMS_USERID = "uid";
+	
+	/**
 	 * 访问用户的username
 	 */
 	public static final String CLAIMS_USERNAME = "username";
@@ -75,7 +80,7 @@ public final class JwtUtil {
 	/**
 	 * 客户端的设备类型
 	 */
-	public static final String CLAIMS_DEVICE = "device";
+//	public static final String CLAIMS_DEVICE = "device";
 
 	private static RsaSigner signer;
 

@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.orion.NormalBaseTest;
 import com.orion.common.constant.RabbitmqConstants;
+import com.orion.common.dic.SourceTypeEnum;
 import com.orion.manage.model.mysql.order.Order;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 import com.orion.manage.service.dto.component.UserInfoCache;
@@ -38,7 +39,7 @@ public class ConfigTest extends NormalBaseTest {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
-	
+
 	@Autowired
 	private RedisService redisService;
 
@@ -83,23 +84,27 @@ public class ConfigTest extends NormalBaseTest {
 
 	@Test
 	public void testToken() {
-		String token = this.redisService.getUserIdToken("1");
-		System.out.println(token);
-		UserInfoCache userInfo = this.redisService.getTokenUserInfo(token);
-		System.out.println(userInfo);
+		String pctoken = redisService.getUserIdToken(SourceTypeEnum.Desktop, "1");
+		System.out.println(pctoken);
+		UserInfoCache info = redisService.getTokenUserInfo(SourceTypeEnum.Desktop, pctoken);
+		System.out.println(info);
+		System.out.println("++++++++++++++++++++++");
+		String androidToken = redisService.getUserIdToken(SourceTypeEnum.Android, "1");
+		System.out.println(androidToken);
+		UserInfoCache tokenInfo = redisService.getTokenUserInfo(SourceTypeEnum.Android, androidToken);
+		System.out.println(tokenInfo);
 	}
-	
-//	@Test
-	public void clearRedis() {
+
+	// @Test
+	public void showRedis() {
 		Set<String> keys = stringRedisTemplate.keys("*");
 		for (String key : keys) {
-			System.out.println("key [" + key + "]");
 			stringRedisTemplate.delete(key);
 		}
 	}
 
 	public static void main(String[] args) {
-		System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1497192781760L), ZoneId.systemDefault()));
+		System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1497280545551L), ZoneId.systemDefault()));
 	}
 
 }
