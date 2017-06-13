@@ -66,8 +66,10 @@ public class TokenServiceImpl implements TokenService {
 		String refreshedToken;
 		try {
 			final JSONObject payload = JwtUtil.getPayload(token);
-			payload.put(JwtUtil.CLAIMS_IAT, generateCurrentDate());
-			payload.put(JwtUtil.CLAIMS_EXP, generateExpirationDate());
+			payload.put(JwtUtil.CLAIMS_IAT,
+					generateCurrentDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+			payload.put(JwtUtil.CLAIMS_EXP,
+					generateExpirationDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 			refreshedToken = JwtUtil.encode(payload.toString());
 		} catch (Exception e) {
 			throw new AppException("刷新Token失败", e);

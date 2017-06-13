@@ -3,6 +3,7 @@ package com.orion.config.springmvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Charsets;
 import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.validator.HibernateValidator;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
@@ -42,6 +44,7 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -295,13 +298,28 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 异常处理器，系统运行时遇到指定的异常将会跳转到指定的页面
+	 * 复写父类方法，增加自定义异常处理类或者删除spring默认指定的异常处理类
 	 * 
 	 * @return
 	 */
+	@Override
+	protected void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+		super.extendHandlerExceptionResolvers(exceptionResolvers);
+		if (CollectionUtils.isNotEmpty(exceptionResolvers)) {
+			int targetIndex = 0;
+			for (int i = 0; i < exceptionResolvers.size(); i++) {
+				if (exceptionResolvers.get(i) instanceof DefaultHandlerExceptionResolver) {
+					targetIndex = i;
+					break;
+				}
+			}
+			// 在DefaultHandlerExceptionResolver异常解析器之前插入自定义的异常解析器，使得我们自定义的异常解析器优先执行
+			exceptionResolvers.add(targetIndex, appExceptionResolver());
+		}
+	}
 
 	@Bean
-	public AppExceptionResolver polarisExceptionResolver() {
+	public AppExceptionResolver appExceptionResolver() {
 		return new AppExceptionResolver();
 	}
 

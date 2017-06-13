@@ -149,7 +149,7 @@ public class RedisConfig {
 		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		return jackson2JsonRedisSerializer;
 	}
-
+	
 	@PreDestroy
 	public void destroy() throws Exception {
 		try {

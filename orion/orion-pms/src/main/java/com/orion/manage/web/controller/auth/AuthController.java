@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -119,10 +120,11 @@ public class AuthController extends BaseController {
 	 * 
 	 * @param request
 	 * @return
+	 * @throws HttpRequestMethodNotSupportedException
 	 */
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.CREATED)
-	public AuthInfo refresh(HttpServletRequest request) {
+	public AuthInfo refresh(HttpServletRequest request) throws HttpRequestMethodNotSupportedException {
 		SourceTypeEnum sourceTypeEnum = super.getSourceType(request); // 获取请求来源（Desktop/Andriod/IOS/H5）
 		String oldToken = request.getHeader(SecurityConstants.HEADER_AUTH_TOKEN);
 		String username = this.tokenService.getUsernameFromToken(oldToken);
@@ -133,7 +135,7 @@ public class AuthController extends BaseController {
 			throw new ApiException("auth.cannot_refresh_token");
 		}
 		String newToken = this.tokenService.refreshToken(oldToken);
-		LOGGER.debug("username [" + username + "] refresh token successful!");
+		LOGGER.debug("username [" + username + "] refresh token successful, new token [" + newToken + "]");
 		// 刷新redis中的用户会话和用户信息
 		this.securityService.refreshRedisToken(sourceTypeEnum, userId, oldToken, newToken);
 		return buildAuthInfo(newToken);
@@ -182,8 +184,9 @@ public class AuthController extends BaseController {
 		String userName = this.tokenService.getUsernameFromToken(token);
 		String userId = this.tokenService.getUserIdFromToken(token);
 		// 删除userIdToken
-		this.redisService.removeUserIdToken(sourceTypeEnum, userId);
+		String removeToken = this.redisService.removeUserIdToken(sourceTypeEnum, userId);
 		// 将token以及用户相关信息从redis中删除
+		this.redisService.removeTokenUserInfo(sourceTypeEnum, removeToken);
 		this.redisService.removeTokenUserInfo(sourceTypeEnum, token);
 		LOGGER.info("userName [" + userName + "] logout successful!");
 	}

@@ -73,6 +73,7 @@ public class SecurityServiceImpl implements SecurityService {
 			this.redisService.removeTokenUserInfo(source, oldToken);
 		}
 		if (userInfoCache == null) {
+			userInfoCache = new UserInfoCache();
 			User user = this.userService.find(userId);
 			BeanUtil.copyProperties(user, userInfoCache);
 		}
