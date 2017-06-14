@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class OperationServiceImpl implements OperationService {
 	@Override
 	public List<Operation> list() {
 		return this.operationDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<Operation> operations) {
+		if (CollectionUtils.isNotEmpty(operations)) {
+			this.operationDao.save(operations);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<Operation> operations) {
+		if (CollectionUtils.isNotEmpty(operations)) {
+			this.operationDao.deleteInBatch(operations);
+		}
 	}
 
 }

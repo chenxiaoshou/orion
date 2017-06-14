@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	@Override
 	public List<Privilege> list() {
 		return this.privilegeDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<Privilege> privileges) {
+		if (CollectionUtils.isNotEmpty(privileges)) {
+			this.privilegeDao.save(privileges);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<Privilege> privileges) {
+		if (CollectionUtils.isNotEmpty(privileges)) {
+			this.privilegeDao.deleteInBatch(privileges);
+		}
 	}
 
 }

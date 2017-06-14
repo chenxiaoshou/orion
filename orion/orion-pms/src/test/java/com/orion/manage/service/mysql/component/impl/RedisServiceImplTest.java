@@ -46,9 +46,16 @@ public class RedisServiceImplTest extends NormalBaseTest {
 					System.out.println("+++++++++++++++");
 				} catch (Exception e) {
 				}
+				// stringRedisTemplate.delete(key);
 			}
-			System.out.println("+++++++++++++++");
-//			stringRedisTemplate.delete(key);
+		}
+	}
+
+//	@Test
+	public void clearRedis() {
+		Set<String> keys = stringRedisTemplate.keys("*");
+		for (String key : keys) {
+			stringRedisTemplate.delete(key);
 		}
 	}
 

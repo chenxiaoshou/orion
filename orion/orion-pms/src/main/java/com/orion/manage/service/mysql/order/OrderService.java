@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.order;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -23,5 +24,9 @@ public interface OrderService {
 	PagingSupport<Order> search(QuerySupport<SearchOrderCriteria> criteria);
 
 	Order modify(Order order) throws ApiException;
+
+	void save(Collection<Order> orders);
+
+	void deleteInBatch(Collection<Order> orders);
 
 }

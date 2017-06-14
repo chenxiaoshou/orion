@@ -1,6 +1,7 @@
 package com.orion.manage.web.controller.order;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,11 +41,13 @@ public class OrderController extends BaseController {
 
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public String save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request) {
+	public String save(@RequestBody @Valid Order4Add order4Add, HttpServletRequest request,
+			HttpServletResponse response) {
 		Order order = new Order();
 		BeanUtil.copyProperties(order4Add, order);
 		Order savedOrder = this.orderService.save(order);
 		LOGGER.debug("save order [" + savedOrder.getId() + "]");
+		super.buildRedirectUrl(request, response, order.getId());
 		return order.getId();
 	}
 

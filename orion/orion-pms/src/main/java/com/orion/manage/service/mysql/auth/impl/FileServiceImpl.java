@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public List<File> list() {
 		return this.fileDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<File> files) {
+		if (CollectionUtils.isNotEmpty(files)) {
+			this.fileDao.save(files);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<File> files) {
+		if (CollectionUtils.isNotEmpty(files)) {
+			this.fileDao.deleteInBatch(files);
+		}
 	}
 
 }

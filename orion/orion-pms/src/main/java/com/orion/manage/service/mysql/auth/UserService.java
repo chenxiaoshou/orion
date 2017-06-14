@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.auth;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -18,7 +19,13 @@ public interface UserService {
 	List<User> list();
 
 	User finaByUsername(String username);
-	
+
 	User findByUsernameAndEnableTrueAndLockedFalse(String username);
+
+	User findByUsername(String username);
+
+	void save(Collection<User> users);
+
+	void deleteInBatch(Collection<User> users);
 
 }

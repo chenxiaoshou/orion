@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import com.orion.common.constant.AppConstants;
 import com.orion.common.constant.SecurityConstants;
 import com.orion.common.dic.SourceTypeEnum;
 import com.orion.manage.service.mysql.security.TokenService;
@@ -62,11 +61,11 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	}
 
 	private SourceTypeEnum getSourceType(HttpServletRequest request) {
-		String sourceStr = request.getHeader(AppConstants.HEADER_SOURCE);
+		String sourceStr = request.getHeader(SecurityConstants.HEADER_SOURCE);
 		if (StringUtils.isNotBlank(sourceStr)) {
 			return SourceTypeEnum.getSourceTypeByCode(Integer.valueOf(sourceStr));
 		}
 		return null;
 	}
-	
+
 }

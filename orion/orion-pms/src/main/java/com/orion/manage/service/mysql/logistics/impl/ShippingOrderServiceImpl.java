@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.logistics.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,20 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	@Override
 	public List<ShippingOrder> searchShippingOrders(QuerySupport<SearchShippingOrderCriteria> criteria) {
 		return this.shippingOrderDao.searchShippingOrders(criteria);
+	}
+
+	@Override
+	public void save(Collection<ShippingOrder> shippingOrders) {
+		if (CollectionUtils.isNotEmpty(shippingOrders)) {
+			this.shippingOrderDao.save(shippingOrders);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<ShippingOrder> shippingOrders) {
+		if (CollectionUtils.isNotEmpty(shippingOrders)) {
+			this.shippingOrderDao.deleteInBatch(shippingOrders);
+		}
 	}
 
 }

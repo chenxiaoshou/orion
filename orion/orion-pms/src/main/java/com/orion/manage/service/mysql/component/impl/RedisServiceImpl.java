@@ -27,14 +27,16 @@ public class RedisServiceImpl implements RedisService {
 	@Override
 	public void storeTokenUserInfo(SourceTypeEnum source, String token, UserInfoCache userInfoCache,
 			LocalDateTime expiration) {
-		long timeout = 0;
-		String key = buildTokenUserInfoKey(source, token);
-		if (expiration != null
-				&& (timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration)) > 0) {
-			this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
-			this.stringRedisTemplate.boundHashOps(key).expire(timeout, TimeUnit.SECONDS);
-		} else {
-			this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
+		if (source != null && StringUtils.isNotBlank(token) && userInfoCache != null) {
+			long timeout = 0;
+			String key = buildTokenUserInfoKey(source, token);
+			if (expiration != null
+					&& (timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration)) > 0) {
+				this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
+				this.stringRedisTemplate.boundHashOps(key).expire(timeout, TimeUnit.SECONDS);
+			} else {
+				this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
+			}
 		}
 	}
 

@@ -16,6 +16,16 @@ public class MapRolePrivilege extends BaseMysqlObject {
 
 	private String privilegeId;
 
+	public MapRolePrivilege(String roleId, String privilegeId) {
+		super();
+		this.roleId = roleId;
+		this.privilegeId = privilegeId;
+	}
+
+	public MapRolePrivilege() {
+		super();
+	}
+
 	@Column(name = "role_id", nullable = false, length = 64, columnDefinition = "varchar(64) default '' comment '外键-角色ID'")
 	public String getRoleId() {
 		return roleId;
@@ -32,6 +42,37 @@ public class MapRolePrivilege extends BaseMysqlObject {
 
 	public void setPrivilegeId(String privilegeId) {
 		this.privilegeId = privilegeId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((privilegeId == null) ? 0 : privilegeId.hashCode());
+		result = prime * result + ((roleId == null) ? 0 : roleId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MapRolePrivilege other = (MapRolePrivilege) obj;
+		if (privilegeId == null) {
+			if (other.privilegeId != null)
+				return false;
+		} else if (!privilegeId.equals(other.privilegeId))
+			return false;
+		if (roleId == null) {
+			if (other.roleId != null)
+				return false;
+		} else if (!roleId.equals(other.roleId))
+			return false;
+		return true;
 	}
 
 }

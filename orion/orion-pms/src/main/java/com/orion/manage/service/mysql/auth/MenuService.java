@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.auth;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -16,5 +17,9 @@ public interface MenuService {
 	Menu find(String menuId);
 
 	List<Menu> list();
+
+	void save(Collection<Menu> menus);
+
+	void deleteInBatch(Collection<Menu> menus);
 
 }

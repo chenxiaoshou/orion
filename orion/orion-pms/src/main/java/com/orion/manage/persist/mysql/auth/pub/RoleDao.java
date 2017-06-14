@@ -11,4 +11,6 @@ public interface RoleDao extends JpaRepository<Role, String>, RoleCustomDao {
 
 	List<Role> findByIdIn(List<String> roleIds);
 
+	List<Role> findByEnableTrueAndNameIn(List<String> roles);
+
 }

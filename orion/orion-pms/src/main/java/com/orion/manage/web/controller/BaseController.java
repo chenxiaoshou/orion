@@ -7,8 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.orion.common.constant.AppConstants;
+import com.orion.common.constant.SecurityConstants;
 import com.orion.common.dic.SourceTypeEnum;
+import com.orion.common.exception.ApiException;
 
 /**
  * 提供所有Controller中的通用方法
@@ -75,11 +76,15 @@ public class BaseController {
 	 * @return
 	 */
 	public SourceTypeEnum getSourceType(HttpServletRequest request) {
-		String sourceStr = request.getHeader(AppConstants.HEADER_SOURCE);
+		SourceTypeEnum sourceTypeEnum = null;
+		String sourceStr = request.getHeader(SecurityConstants.HEADER_SOURCE);
 		if (StringUtils.isNotBlank(sourceStr)) {
-			return SourceTypeEnum.getSourceTypeByCode(Integer.valueOf(sourceStr));
+			sourceTypeEnum = SourceTypeEnum.getSourceTypeByCode(Integer.valueOf(sourceStr));
 		}
-		return null;
+		if (sourceTypeEnum == null) {
+			throw new ApiException("global.source.is_null");
+		}
+		return sourceTypeEnum;
 	}
 
 }

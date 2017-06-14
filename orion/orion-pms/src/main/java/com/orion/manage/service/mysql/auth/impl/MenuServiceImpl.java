@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public List<Menu> list() {
 		return this.menuDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<Menu> menus) {
+		if (CollectionUtils.isNotEmpty(menus)) {
+			this.menuDao.save(menus);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<Menu> menus) {
+		if (CollectionUtils.isNotEmpty(menus)) {
+			this.menuDao.deleteInBatch(menus);
+		}
 	}
 
 }

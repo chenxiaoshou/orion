@@ -32,6 +32,8 @@ public final class SecurityConstants {
 
 	public static final String HEADER_NEW_AUTH_TOKEN = "X-New-Auth-Token"; // reponse的header中保存自动续期之后新生成的Token头信息
 
+	public static final String HEADER_SOURCE = "Source"; // 请求头标识客户端类型的代号(Desktop, Android, IOS, H5...)
+	
 	public static final long JWT_EXPIRATION = 12 * 60 * 60 * 1000L; // JWT过期时间：12小时(单位毫秒)
 
 	public static final long LEFT_TIME_FOR_TOKEN_EXPIRATION = 30 * 60 * 1000L; // 距离过期还剩的时间(单位毫秒)，用来确定自动刷新token的时间点:30分钟

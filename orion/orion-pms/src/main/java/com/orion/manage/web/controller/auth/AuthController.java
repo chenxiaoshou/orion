@@ -1,10 +1,14 @@
 package com.orion.manage.web.controller.auth;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,15 +35,20 @@ import com.orion.common.exception.ApiException;
 import com.orion.common.utils.BeanUtil;
 import com.orion.common.utils.JwtUtil;
 import com.orion.common.utils.RSAUtil;
+import com.orion.manage.model.mysql.auth.MapUserRole;
+import com.orion.manage.model.mysql.auth.Role;
 import com.orion.manage.model.mysql.auth.User;
 import com.orion.manage.model.mysql.security.SecurityUser;
 import com.orion.manage.service.dto.component.UserInfoCache;
+import com.orion.manage.service.mysql.auth.MapUserRoleService;
+import com.orion.manage.service.mysql.auth.RoleService;
 import com.orion.manage.service.mysql.auth.UserService;
 import com.orion.manage.service.mysql.component.RedisService;
 import com.orion.manage.service.mysql.security.SecurityService;
 import com.orion.manage.service.mysql.security.TokenService;
 import com.orion.manage.web.controller.BaseController;
 import com.orion.manage.web.vo.auth.Auth4Login;
+import com.orion.manage.web.vo.auth.Auth4Register;
 import com.orion.manage.web.vo.auth.AuthInfo;
 
 import net.sf.json.JSONObject;
@@ -66,6 +77,74 @@ public class AuthController extends BaseController {
 	@Autowired
 	private TokenService tokenService;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RoleService roleService;
+
+	@Autowired
+	private MapUserRoleService mapUserRoleService;
+
+	/**
+	 * 注册
+	 * 
+	 * @param auth4Register
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public AuthInfo register(@RequestBody @Valid Auth4Register auth4Register, HttpServletRequest request) {
+		SourceTypeEnum sourceTypeEnum = super.getSourceType(request);
+		User user = this.userService.findByUsername(auth4Register.getUsername());
+		if (user != null) {
+			throw new ApiException("auth.username.existed");
+		}
+		user = new User();
+		BeanUtil.copyProperties(auth4Register, user);
+		user.setPassword(passwordEncoder.encode(auth4Register.getUsername()));
+		User dbUser = this.userService.save(user);
+		// 设置用户角色
+		setMapUserRole(dbUser);
+		// 调用SpringSecurity认证逻辑
+		authenticate(dbUser.getUsername(), dbUser.getPassword());
+		// 生成token
+		UserDetails userDetails = getUserDetails(user, dbUser);
+		String token = generateToken(request, sourceTypeEnum, user, userDetails);
+		// 保存为source||userid = token的结构，保证一个请求源一个用户只会有一个token是有效的
+		LocalDateTime expiration = storeUserIdToken(sourceTypeEnum, user, token);
+		// 保存为source||token=userInfo结构，并设置redis的过期时间为token的过期时间
+		storeTokenUserInfo(sourceTypeEnum, user, token, expiration);
+		// 更新数据库User表的最后登录时间
+		updateLastLoginTime((SecurityUser) userDetails, user);
+		// 将token返回给前端
+		return buildAuthInfo(token);
+	}
+
+	private void setMapUserRole(User dbUser) {
+		List<String> roles = dbUser.getRoleList();
+		if (CollectionUtils.isNotEmpty(roles)) {
+			List<Role> roleList = this.roleService.findByEnableTrueAndNameIn(roles);
+			if (CollectionUtils.isNotEmpty(roleList)) {
+				Set<MapUserRole> mapUserRoles = new HashSet<>();
+				for (Role role : roleList) {
+					mapUserRoles.add(new MapUserRole(dbUser.getId(), role.getId()));
+				}
+				this.mapUserRoleService.save(mapUserRoles);
+			}
+		}
+	}
+
+	private String generateToken(HttpServletRequest request, SourceTypeEnum sourceTypeEnum, User user,
+			UserDetails userDetails) {
+		String tokenSigner = request.getRequestURL().toString();
+		String remoteHost = getRemoteHost(request);
+		String token = this.tokenService.generateToken(userDetails, tokenSigner, remoteHost, sourceTypeEnum);
+		LOGGER.info("user [" + user.getUsername() + "] register successful, token [" + token + "]");
+		return token;
+	}
+
 	/**
 	 * 登录认证
 	 * 
@@ -78,14 +157,7 @@ public class AuthController extends BaseController {
 	@ResponseStatus(HttpStatus.OK)
 	public AuthInfo login(@RequestBody @Valid Auth4Login auth4Login, HttpServletRequest request) {
 		SourceTypeEnum sourceTypeEnum = super.getSourceType(request); // 获取请求来源（Desktop/Andriod/IOS/H5）
-		if (sourceTypeEnum == null) {
-			throw new ApiException("global.source.is_null");
-		}
-		// 调用spring security认证逻辑
-		Authentication authentication = this.authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(auth4Login.getUsername(), auth4Login.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
+		authenticate(auth4Login.getUsername(), auth4Login.getPassword()); // 调用SpringSecurity认证逻辑
 		// 如果认证通过，这里为其生成token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(auth4Login.getUsername());
 		SecurityUser securityUser = (SecurityUser) userDetails;
@@ -93,26 +165,44 @@ public class AuthController extends BaseController {
 			throw new ApiException("auth.login_failed");
 		}
 		User user = securityUser.getUser();
-		String tokenSigner = request.getRequestURL().toString();
-		String remoteHost = getRemoteHost(request);
-		String token = this.tokenService.generateToken(userDetails, tokenSigner, remoteHost, sourceTypeEnum);
-		LOGGER.info("user [" + user.getUsername() + "] login successful, token [" + token + "]");
-
+		String token = generateToken(request, sourceTypeEnum, user, userDetails);
 		// 保存为source||userid = token的结构，保证一个请求源一个用户只会有一个token是有效的
-		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
-		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(sourceTypeEnum, user.getId(), token, expiration);
-
+		LocalDateTime expiration = storeUserIdToken(sourceTypeEnum, user, token);
 		// 保存为source||token=userInfo结构，并设置redis的过期时间为token的过期时间
+		storeTokenUserInfo(sourceTypeEnum, user, token, expiration);
+		// 更新数据库User表的最后登录时间
+		updateLastLoginTime(securityUser, user);
+		// 将token返回给前端
+		return buildAuthInfo(token);
+	}
+
+	private UserDetails getUserDetails(User user, User dbUser) {
+		List<SimpleGrantedAuthority> authorities = this.securityService.getAuthorities(user.getId());
+		return new SecurityUser(dbUser, authorities);
+	}
+
+	private void updateLastLoginTime(SecurityUser securityUser, User user) {
+		user.setLastLoginTime(LocalDateTime.now());
+		this.userService.modify(securityUser.getUser());
+	}
+
+	private void storeTokenUserInfo(SourceTypeEnum sourceTypeEnum, User user, String token, LocalDateTime expiration) {
 		UserInfoCache userInfoCache = new UserInfoCache();
 		BeanUtil.copyProperties(user, userInfoCache);
 		this.redisService.storeTokenUserInfo(sourceTypeEnum, token, userInfoCache, expiration);
+	}
 
-		// 更新数据库User表的最后登录时间
-		user.setLastLoginTime(LocalDateTime.now());
-		this.userService.modify(securityUser.getUser());
+	private LocalDateTime storeUserIdToken(SourceTypeEnum sourceTypeEnum, User user, String token) {
+		LocalDateTime expiration = this.tokenService.getExpirationDateFromToken(token);
+		this.redisService.storeUserIdTokenAndClearOldTokenUserInfo(sourceTypeEnum, user.getId(), token, expiration);
+		return expiration;
+	}
 
-		// 将token返回给前端
-		return buildAuthInfo(token);
+	// 调用spring security认证逻辑
+	private void authenticate(String username, String password) {
+		Authentication authentication = this.authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	/**

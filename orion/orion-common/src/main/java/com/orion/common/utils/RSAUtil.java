@@ -287,8 +287,8 @@ public class RSAUtil {
 		String publicKeyStr = CodecUtil.toBase64(publicKey.getEncoded());
 		String privateKeyStr = CodecUtil.toBase64(privateKey.getEncoded());
 		// 将密钥对写入到文件
-		writeToFile(publicKeyStr, privateKeyPath);
-		writeToFile(privateKeyStr, publicKeyPath);
+		writeToFile(privateKeyStr, privateKeyPath);
+		writeToFile(publicKeyStr, publicKeyPath);
 	}
 
 	private static void writeToFile(String publicKeyStr, String filePath) throws IOException {

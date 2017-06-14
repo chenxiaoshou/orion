@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.order.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,20 @@ public class OrderServiceImpl implements OrderService {
 			throw new AppException("目标对象的ID字段为空，无法执行数据库修改操作！[" + order.toString() + "]");
 		}
 		return this.orderDao.save(order);
+	}
+
+	@Override
+	public void save(Collection<Order> orders) {
+		if (CollectionUtils.isNotEmpty(orders)) {
+			this.orderDao.save(orders);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<Order> orders) {
+		if (CollectionUtils.isNotEmpty(orders)) {
+			this.orderDao.deleteInBatch(orders);
+		}
 	}
 
 }

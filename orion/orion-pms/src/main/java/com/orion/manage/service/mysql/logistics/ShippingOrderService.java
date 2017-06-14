@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.logistics;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -20,5 +21,9 @@ public interface ShippingOrderService {
 	List<ShippingOrder> list();
 
 	List<ShippingOrder> searchShippingOrders(QuerySupport<SearchShippingOrderCriteria> criteria);
-	
+
+	void save(Collection<ShippingOrder> shippingOrders);
+
+	void deleteInBatch(Collection<ShippingOrder> shippingOrders);
+
 }

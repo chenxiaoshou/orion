@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.auth;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -18,5 +19,11 @@ public interface RoleService {
 	List<Role> list();
 
 	List<Role> findByIdIn(List<String> roleIds);
+
+	List<Role> findByEnableTrueAndNameIn(List<String> roles);
+
+	void save(Collection<Role> roles);
+
+	void deleteInBatch(Collection<Role> roles);
 
 }

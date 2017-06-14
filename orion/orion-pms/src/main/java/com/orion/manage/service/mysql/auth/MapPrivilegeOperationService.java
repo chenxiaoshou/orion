@@ -1,5 +1,6 @@
 package com.orion.manage.service.mysql.auth;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.orion.common.exception.ApiException;
@@ -16,5 +17,9 @@ public interface MapPrivilegeOperationService {
 	MapPrivilegeOperation find(String mapPrivilegeOperationId);
 
 	List<MapPrivilegeOperation> list();
+
+	void save(Collection<MapPrivilegeOperation> mapPrivilegeOperations);
+
+	void deleteInBatch(Collection<MapPrivilegeOperation> mapPrivilegeOperations);
 
 }

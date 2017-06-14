@@ -15,7 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import com.google.gson.JsonObject;
 import com.orion.NormalBaseTest;
 import com.orion.common.constant.RabbitmqConstants;
-import com.orion.common.utils.TestUtil;
+import com.orion.common.utils.RandomUtil;
 import com.orion.manage.model.mysql.order.Order;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 
@@ -71,7 +71,7 @@ public class ConfigTest extends NormalBaseTest {
 		String redisKey = "key_key";
 		JsonObject json = new JsonObject();
 		for (int i = 0; i < 100; i++) {
-			String value = TestUtil.createStringWithLength(100);
+			String value = RandomUtil.randomString(100);
 			json.addProperty("property_" + i, value);
 			this.redisTemplate.boundHashOps(redisKey).put("property_" + i, value);
 		}

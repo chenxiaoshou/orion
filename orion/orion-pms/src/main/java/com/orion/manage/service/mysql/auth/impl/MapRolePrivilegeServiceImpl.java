@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class MapRolePrivilegeServiceImpl implements MapRolePrivilegeService {
 	@Override
 	public List<MapRolePrivilege> list() {
 		return this.mapRolePrivilegeDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<MapRolePrivilege> mapRolePrivileges) {
+		if (CollectionUtils.isNotEmpty(mapRolePrivileges)) {
+			this.mapRolePrivilegeDao.save(mapRolePrivileges);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<MapRolePrivilege> mapRolePrivileges) {
+		if (CollectionUtils.isNotEmpty(mapRolePrivileges)) {
+			this.mapRolePrivilegeDao.deleteInBatch(mapRolePrivileges);
+		}
 	}
 
 }

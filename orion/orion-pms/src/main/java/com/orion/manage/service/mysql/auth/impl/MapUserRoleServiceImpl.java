@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,20 @@ public class MapUserRoleServiceImpl implements MapUserRoleService {
 	@Override
 	public MapUserRole findByUserIdAndRoleId(String userId, String roleId) {
 		return this.mapUserRoleDao.findByUserIdAndRoleId(userId, roleId);
+	}
+
+	@Override
+	public void save(Collection<MapUserRole> mapUserRoles) {
+		if (CollectionUtils.isNotEmpty(mapUserRoles)) {
+			this.mapUserRoleDao.save(mapUserRoles);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<MapUserRole> mapUserRoles) {
+		if (CollectionUtils.isNotEmpty(mapUserRoles)) {
+			this.mapUserRoleDao.deleteInBatch(mapUserRoles);
+		}
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.orion.manage.service.mysql.auth.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,20 @@ public class ElementServiceImpl implements ElementService {
 	@Override
 	public List<Element> list() {
 		return this.elementDao.findAll();
+	}
+
+	@Override
+	public void save(Collection<Element> elements) {
+		if (CollectionUtils.isNotEmpty(elements)) {
+			this.elementDao.save(elements);
+		}
+	}
+
+	@Override
+	public void deleteInBatch(Collection<Element> elements) {
+		if (CollectionUtils.isNotEmpty(elements)) {
+			this.elementDao.deleteInBatch(elements);
+		}
 	}
 
 }
