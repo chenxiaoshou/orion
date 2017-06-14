@@ -5,13 +5,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.orion.common.exception.AppException;
+
+import net.sf.cglib.beans.BeanCopier;
 
 public final class BeanUtil {
 
@@ -28,14 +28,9 @@ public final class BeanUtil {
 	 * @throws ReflectiveOperationException
 	 */
 	public static void copyProperties(final Object source, final Object dest) throws AppException {
-		try {
-			BeanUtils.copyProperties(dest, source);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			LOGGER.error(e.getMessage());
-			throw new AppException(e.getMessage(), e);
-		}
+		BeanCopier.create(source.getClass(), dest.getClass(), false).copy(source, dest, null);
 	}
-	
+
 	/**
 	 * 深度复制，实参类必须实现Serializable接口
 	 * 

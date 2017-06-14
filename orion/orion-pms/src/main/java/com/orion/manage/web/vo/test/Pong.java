@@ -1,13 +1,13 @@
 package com.orion.manage.web.vo.test;
 
-import java.io.Serializable;
+import com.orion.common.base.BaseObject;
 
-public class Pong implements Serializable {
+public class Pong extends BaseObject {
 
 	private static final long serialVersionUID = 7451674139876680371L;
-	
+
 	private String ack;
-	
+
 	private String message;
 
 	public String getAck() {
@@ -25,5 +25,5 @@ public class Pong implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 }

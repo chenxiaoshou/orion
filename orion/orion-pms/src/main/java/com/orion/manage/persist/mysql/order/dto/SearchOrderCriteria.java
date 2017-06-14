@@ -2,10 +2,13 @@ package com.orion.manage.persist.mysql.order.dto;
 
 import java.time.LocalDateTime;
 
+import com.orion.common.base.BaseCriteria;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 import com.orion.manage.model.tools.dic.order.SaleChannelEnum;
 
-public class SearchOrderCriteria {
+public class SearchOrderCriteria extends BaseCriteria {
+
+	private static final long serialVersionUID = 310136725164532419L;
 
 	private String orderId;
 

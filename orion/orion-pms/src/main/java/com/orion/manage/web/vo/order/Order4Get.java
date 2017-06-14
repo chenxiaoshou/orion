@@ -1,21 +1,23 @@
 package com.orion.manage.web.vo.order;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.orion.common.base.BaseObject;
 import com.orion.common.constant.PatternConstants;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 import com.orion.manage.model.tools.dic.order.SaleChannelEnum;
 
-public class Order4Get implements Serializable {
+public class Order4Get extends BaseObject {
 
 	private static final long serialVersionUID = -1994953916375628438L;
 
+	@JsonProperty("orderId")
 	private String id; // 订单Id
 
 	private String orderNo;
-	
+
 	private OrderStatusEnum status; // 订单状态(默认0，代表未指定状态，不具有业务意义)
 
 	private Double totalPrice; // 订单总金额

@@ -274,7 +274,7 @@ public class RSAUtil {
 	}
 
 	/**
-	 * 生成密钥对
+	 * 生成密钥对,并保存在文件中，用于定期更换
 	 * 
 	 * @throws Exception
 	 */
@@ -293,6 +293,14 @@ public class RSAUtil {
 
 	private static void writeToFile(String publicKeyStr, String filePath) throws IOException {
 		FileUtils.write(new File(filePath), publicKeyStr, AppConstants.CHAESET_UTF_8);
+	}
+
+	public static void main(String[] args) {
+		try {
+			genKeyPair();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

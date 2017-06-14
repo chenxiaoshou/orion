@@ -1,14 +1,14 @@
 package com.orion.manage.web.vo.order;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.orion.common.base.BaseObject;
 import com.orion.common.constant.PatternConstants;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 import com.orion.manage.model.tools.dic.order.SaleChannelEnum;
 
-public class OrderQuery implements Serializable {
+public class OrderQuery extends BaseObject {
 
 	private static final long serialVersionUID = -3057402817845346655L;
 

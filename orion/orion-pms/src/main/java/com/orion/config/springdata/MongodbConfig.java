@@ -30,9 +30,9 @@ import com.mongodb.MongoClient;
 import com.orion.audit.UserAuditorAware;
 import com.orion.common.converter.DateToLocalDateConverter;
 import com.orion.common.converter.DateToLocalDateTimeConverter;
+import com.orion.common.converter.DateToTimestampConverter;
 import com.orion.common.converter.LocalDateTimeToDateConverter;
 import com.orion.common.converter.LocalDateToDateConverter;
-import com.orion.common.converter.TimestampConverter;
 import com.orion.config.datasource.DataSourceConfig;
 
 /**
@@ -74,7 +74,7 @@ public class MongodbConfig extends AbstractMongoConfiguration {
 	@Override
 	public CustomConversions customConversions() {
 		List<Converter<?, ?>> converters = new ArrayList<>();
-		converters.add(TimestampConverter.INSTANCE);
+		converters.add(DateToTimestampConverter.INSTANCE);
 		converters.add(DateToLocalDateConverter.INSTANCE);
 		converters.add(DateToLocalDateTimeConverter.INSTANCE);
 		converters.add(LocalDateTimeToDateConverter.INSTANCE);

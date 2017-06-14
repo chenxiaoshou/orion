@@ -1,7 +1,6 @@
 package com.orion.manage.web.vo.auth;
 
-import java.io.Serializable;
-
+import com.orion.common.base.BaseObject;
 import com.orion.common.dic.SourceTypeEnum;
 
 /**
@@ -10,7 +9,7 @@ import com.orion.common.dic.SourceTypeEnum;
  * @author John
  *
  */
-public class AuthInfo implements Serializable {
+public class AuthInfo extends BaseObject {
 
 	private static final long serialVersionUID = 2986080279980045525L;
 
@@ -19,7 +18,7 @@ public class AuthInfo implements Serializable {
 	private Long createTime; // token创建时间
 
 	private Long expiration; // 过期时间
-	
+
 	private Long refreshTime; // 可换取新token的截止时间
 
 	private String userId;

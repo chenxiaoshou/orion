@@ -25,6 +25,14 @@ public final class CodecUtil {
 	private CodecUtil() {
 	}
 
+	public static String toUrlSafeBase64(byte[] content) {
+		return Base64.getUrlEncoder().encodeToString(content);
+	}
+
+	public static byte[] fromUrlSafeBase64(String base64Content) {
+		return Base64.getUrlDecoder().decode(base64Content);
+	}
+	
 	public static String toBase64(byte[] content) {
 		return Base64.getEncoder().encodeToString(content);
 	}
@@ -48,7 +56,7 @@ public final class CodecUtil {
 	 */
 	public static String encodeFile(String filePath) throws Exception {
 		byte[] bytes = fileToByte(filePath);
-		return toBase64(bytes);
+		return toUrlSafeBase64(bytes);
 	}
 
 	/**
@@ -63,7 +71,7 @@ public final class CodecUtil {
 	 * @throws Exception
 	 */
 	public static void decodeToFile(String filePath, String base64) throws Exception {
-		byte[] bytes = fromBase64(base64);
+		byte[] bytes = fromUrlSafeBase64(base64);
 		byteArrayToFile(bytes, filePath);
 	}
 

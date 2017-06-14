@@ -178,7 +178,7 @@ public final class JwtUtil {
 	public static JSONObject getHeader(String jwtToken) {
 		try {
 			Jwt jwt = JwtHelper.decodeAndVerify(jwtToken, verifier);
-			String header = new String(CodecUtil.fromBase64(jwt.getEncoded().split("\\.")[0]));
+			String header = new String(CodecUtil.fromUrlSafeBase64(jwt.getEncoded().split("\\.")[0]));
 			return JsonUtil.getJSONObject(header);
 		} catch (Exception e) {
 			throw new AppException("获取JWT的header数据失败！ [" + e.getMessage() + "]", e);
@@ -188,7 +188,7 @@ public final class JwtUtil {
 	public static String getSignature(String jwtToken) {
 		try {
 			Jwt jwt = JwtHelper.decodeAndVerify(jwtToken, verifier);
-			return new String(CodecUtil.fromBase64(jwt.getEncoded().split("\\.")[2]));
+			return new String(CodecUtil.fromUrlSafeBase64(jwt.getEncoded().split("\\.")[2]));
 		} catch (Exception e) {
 			throw new AppException("获取JWT的signature数据失败！ [" + e.getMessage() + "]", e);
 		}

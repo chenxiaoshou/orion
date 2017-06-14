@@ -11,6 +11,8 @@ public class BaseCriteria implements Serializable {
 
 	private static final long serialVersionUID = 8591142014745925855L;
 
+	@Transient
+	@JsonIgnore
 	@Override
 	public String toString() {
 		return ToStringUtil.toJSON(this);
@@ -20,12 +22,6 @@ public class BaseCriteria implements Serializable {
 	@JsonIgnore
 	public String toJson() {
 		return JsonUtil.toJSON(this);
-	}
-
-	@Transient
-	@JsonIgnore
-	public BaseCriteria fromJson(String json) {
-		return JsonUtil.fromJSON(json, this.getClass());
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.orion.config.springdata;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
@@ -28,6 +27,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.orion.common.constant.PatternConstants;
 
@@ -102,11 +102,13 @@ public class RedisConfig {
 	 * @return
 	 */
 	@Bean
-	public RedisTemplate<Serializable, Serializable> redisTemplate() {
-		RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<>();
+	public <T> RedisTemplate<String, T> redisTemplate() {
+		RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(jedisConnectionFactory);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
 		return redisTemplate;
 	}
 
@@ -121,6 +123,8 @@ public class RedisConfig {
 		stringRedisTemplate.setConnectionFactory(jedisConnectionFactory);
 		stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
 		stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
+		stringRedisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		stringRedisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
 		return stringRedisTemplate;
 	}
 
@@ -137,8 +141,8 @@ public class RedisConfig {
 		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.setDateFormat(new SimpleDateFormat(PatternConstants.DATE_FORMAT_PATTERN_1));
-		JaxbAnnotationModule module = new JaxbAnnotationModule();
-		objectMapper.registerModule(module);
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.registerModule(new JaxbAnnotationModule());
 		return objectMapper;
 	}
 
@@ -149,7 +153,7 @@ public class RedisConfig {
 		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		return jackson2JsonRedisSerializer;
 	}
-	
+
 	@PreDestroy
 	public void destroy() throws Exception {
 		try {

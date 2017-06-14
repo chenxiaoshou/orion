@@ -1,11 +1,7 @@
 package com.orion.security;
 
-import java.util.Set;
-
 import org.junit.Assert;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.orion.NormalBaseTest;
 import com.orion.common.dic.SourceTypeEnum;
@@ -16,9 +12,6 @@ import com.orion.manage.service.mysql.order.OrderService;
 import com.orion.manage.service.mysql.security.SecurityService;
 
 public class SecurityTest extends NormalBaseTest {
-
-	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
 	private RedisService redisService;
@@ -45,20 +38,6 @@ public class SecurityTest extends NormalBaseTest {
 		System.out.println(androidToken);
 		UserInfoCache tokenInfo = redisService.getTokenUserInfo(SourceTypeEnum.Android, androidToken);
 		System.out.println(tokenInfo);
-	}
-
-	@Test
-	public void showRedis() {
-		Set<String> keys = stringRedisTemplate.keys("*");
-		for (String key : keys) {
-			try {
-				System.out.println(key);
-				System.out.println(stringRedisTemplate.boundValueOps(key).get());
-				System.out.println();
-			} catch (Exception e) {
-			}
-//			stringRedisTemplate.delete(key);
-		}
 	}
 
 }

@@ -2,6 +2,7 @@ package com.orion.manage.service.mysql.component.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import com.orion.common.constant.RedisConstants;
 import com.orion.common.dic.SourceTypeEnum;
 import com.orion.common.utils.DateUtil;
 import com.orion.common.utils.JsonUtil;
+import com.orion.common.utils.MapUtil;
 import com.orion.manage.service.dto.component.UserInfoCache;
 import com.orion.manage.service.mysql.component.RedisService;
 
@@ -29,14 +31,11 @@ public class RedisServiceImpl implements RedisService {
 		String key = buildTokenUserInfoKey(source, token);
 		if (expiration != null
 				&& (timeout = DateUtil.getIntervalSeconds(LocalDateTime.now(ZoneId.systemDefault()), expiration)) > 0) {
-			this.stringRedisTemplate.boundValueOps(key).set(userInfoCache.toJson(), timeout, TimeUnit.SECONDS);
+			this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
+			this.stringRedisTemplate.boundHashOps(key).expire(timeout, TimeUnit.SECONDS);
 		} else {
-			this.stringRedisTemplate.boundValueOps(key).set(userInfoCache.toJson());
+			this.stringRedisTemplate.boundHashOps(key).putAll(MapUtil.toMap(userInfoCache));
 		}
-	}
-
-	private String buildTokenUserInfoKey(SourceTypeEnum source, String token) {
-		return RedisConstants.KEY_TOKEN_USERINFO + source + "||" + token;
 	}
 
 	@Override
@@ -48,11 +47,13 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public UserInfoCache getTokenUserInfo(SourceTypeEnum source, String token) {
-		String value = this.stringRedisTemplate.boundValueOps(buildTokenUserInfoKey(source, token)).get();
-		if (value != null) {
-			return JsonUtil.fromJSON((String) value, UserInfoCache.class);
-		}
-		return null;
+		Map<Object, Object> params = this.stringRedisTemplate.boundHashOps(buildTokenUserInfoKey(source, token))
+				.entries();
+		return JsonUtil.fromJSON(JsonUtil.toJSON(params), UserInfoCache.class);
+	}
+
+	private String buildTokenUserInfoKey(SourceTypeEnum source, String token) {
+		return RedisConstants.KEY_TOKEN_USERINFO + source + "||" + token;
 	}
 
 	@Override

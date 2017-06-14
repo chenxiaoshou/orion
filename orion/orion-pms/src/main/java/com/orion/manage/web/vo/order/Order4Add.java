@@ -1,14 +1,12 @@
 package com.orion.manage.web.vo.order;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import com.orion.common.base.BaseObject;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 import com.orion.manage.model.tools.dic.order.SaleChannelEnum;
 
-public class Order4Add extends BaseObject implements Serializable {
+public class Order4Add extends BaseObject {
 
 	private static final long serialVersionUID = -1100351041463473872L;
 

@@ -1,8 +1,8 @@
 package com.orion.manage.web.vo.auth;
 
-import java.io.Serializable;
-
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.orion.common.base.BaseObject;
 
 /**
  * 传入用户登录认证信息
@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author John
  *
  */
-public class Auth4Login implements Serializable {
+public class Auth4Login extends BaseObject {
 
 	private static final long serialVersionUID = -7825879421230567483L;
 

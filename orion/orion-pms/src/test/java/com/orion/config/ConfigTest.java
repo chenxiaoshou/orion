@@ -1,5 +1,6 @@
 package com.orion.config;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -11,8 +12,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.google.gson.JsonObject;
 import com.orion.NormalBaseTest;
 import com.orion.common.constant.RabbitmqConstants;
+import com.orion.common.utils.TestUtil;
 import com.orion.manage.model.mysql.order.Order;
 import com.orion.manage.model.tools.dic.order.OrderStatusEnum;
 
@@ -64,9 +67,25 @@ public class ConfigTest extends NormalBaseTest {
 	}
 
 	@Test
-	public void testRedisTemplate() {
-		System.out.println(redisTemplate.getHashKeySerializer());
-		System.out.println(redisTemplate.getHashValueSerializer());
+	public void testRedisTemplate() throws InterruptedException {
+		String redisKey = "key_key";
+		JsonObject json = new JsonObject();
+		for (int i = 0; i < 100; i++) {
+			String value = TestUtil.createStringWithLength(100);
+			json.addProperty("property_" + i, value);
+			this.redisTemplate.boundHashOps(redisKey).put("property_" + i, value);
+		}
+		String redisKey1 = "key_key1";
+		this.redisTemplate.boundValueOps(redisKey1).set(json.toString());
+		Thread.sleep(10000L);
+		
+		long startTime = System.currentTimeMillis();
+		Map<Object, Object> values = this.redisTemplate.boundHashOps(redisKey).entries();
+		System.out.println("耗时：" + (System.currentTimeMillis() - startTime) + " valaus[" + values.size() + "]");
+		
+		startTime = System.currentTimeMillis();
+		String value = this.redisTemplate.boundValueOps(redisKey1).get();
+		System.out.println("耗时：" + (System.currentTimeMillis() - startTime) + " value [" + value + "]");
 	}
 
 }

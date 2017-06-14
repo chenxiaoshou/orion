@@ -12,7 +12,7 @@ import org.springframework.core.convert.converter.Converter;
  * @author John
  *
  */
-public enum TimestampConverter implements Converter<Date, Timestamp> {
+public enum DateToTimestampConverter implements Converter<Date, Timestamp> {
 
 	INSTANCE;
 
