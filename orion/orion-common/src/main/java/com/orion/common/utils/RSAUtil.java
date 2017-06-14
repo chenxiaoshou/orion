@@ -278,7 +278,7 @@ public class RSAUtil {
 	 * 
 	 * @throws Exception
 	 */
-	public static void genKeyPair() throws Exception {
+	public static void genKeyPair(String privateKeyPath, String publicKeyPath) throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(KEY_SIZE);
 		KeyPair keyPair = keyPairGen.generateKeyPair();
@@ -287,8 +287,8 @@ public class RSAUtil {
 		String publicKeyStr = CodecUtil.toBase64(publicKey.getEncoded());
 		String privateKeyStr = CodecUtil.toBase64(privateKey.getEncoded());
 		// 将密钥对写入到文件
-		writeToFile(publicKeyStr, PUBLIC_KEY_FILE_PATH);
-		writeToFile(privateKeyStr, PRIVATE_KEY_FILE_PATH);
+		writeToFile(publicKeyStr, privateKeyPath);
+		writeToFile(privateKeyStr, publicKeyPath);
 	}
 
 	private static void writeToFile(String publicKeyStr, String filePath) throws IOException {
@@ -297,7 +297,9 @@ public class RSAUtil {
 
 	public static void main(String[] args) {
 		try {
-			genKeyPair();
+			String privateKeyPath = "I:/git_repository/orion/orion-pms/src/main/resources/keystore/privateKey.keystore";
+			String publicKeyPath = "I:/git_repository/orion/orion-pms/src/main/resources/keystore/publicKey.keystore";
+			genKeyPair(privateKeyPath, publicKeyPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
