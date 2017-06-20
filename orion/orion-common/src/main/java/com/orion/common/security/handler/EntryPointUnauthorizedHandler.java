@@ -45,7 +45,7 @@ public class EntryPointUnauthorizedHandler implements AuthenticationEntryPoint {
 		AppMessage appMessage = JsonUtil.fromJSON(message, AppMessage.class);
 		appMessage.setMoreInfo(e.getMessage());
 		httpServletResponse.addHeader("Content-type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-		httpServletResponse.setCharacterEncoding(AppConstants.CHAESET_UTF_8);
+		httpServletResponse.setCharacterEncoding(AppConstants.CHARSET_UTF_8);
 		httpServletResponse.setStatus(appMessage.getHttpStatus());
 		PrintWriter printWriter = httpServletResponse.getWriter();
 		printWriter.write(JsonUtil.toJSON(appMessage));

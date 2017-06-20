@@ -65,17 +65,17 @@ public final class AppConstants {
 	/**
 	 * UTF-8
 	 */
-	public static final String CHAESET_UTF_8 = "UTF-8";
+	public static final String CHARSET_UTF_8 = "UTF-8";
 
 	/**
 	 * GBK
 	 */
-	public static final String CHAESET_GBK = "GBK";
+	public static final String CHARSET_GBK = "GBK";
 
 	/**
 	 * ISO8859-1
 	 */
-	public static final String CHAESET_ISO8859_1 = "ISO8859-1";
+	public static final String CHARSET_ISO8859_1 = "ISO8859-1";
 
 	/**
 	 * jsp试图解析器前缀

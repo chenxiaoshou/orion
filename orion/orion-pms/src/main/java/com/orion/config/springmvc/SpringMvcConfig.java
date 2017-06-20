@@ -116,7 +116,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 	public FreeMarkerConfigurer freeMarkerConfigurer() {
 		FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
 		freeMarkerConfigurer.setTemplateLoaderPath(AppConstants.VIEW_FREEMARKER_TEMPLATE_LOADER_PATH);
-		freeMarkerConfigurer.setDefaultEncoding(AppConstants.CHAESET_UTF_8);
+		freeMarkerConfigurer.setDefaultEncoding(AppConstants.CHARSET_UTF_8);
 		return freeMarkerConfigurer;
 	}
 

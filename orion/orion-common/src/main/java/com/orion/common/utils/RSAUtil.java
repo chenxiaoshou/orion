@@ -292,7 +292,7 @@ public class RSAUtil {
 	}
 
 	private static void writeToFile(String publicKeyStr, String filePath) throws IOException {
-		FileUtils.write(new File(filePath), publicKeyStr, AppConstants.CHAESET_UTF_8);
+		FileUtils.write(new File(filePath), publicKeyStr, AppConstants.CHARSET_UTF_8);
 	}
 
 	public static void main(String[] args) {

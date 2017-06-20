@@ -47,7 +47,7 @@ public class WebInitializer implements WebApplicationInitializer {
 		 * CharacterEncodingFilter 过滤器
 		 */
 		servletContext
-			.addFilter("characterEncodingFilter",new CharacterEncodingFilter(AppConstants.CHAESET_UTF_8, true))
+			.addFilter("characterEncodingFilter",new CharacterEncodingFilter(AppConstants.CHARSET_UTF_8, true))
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, 
 						DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR), false, AppConstants.API_MAPPING_URL_PATTERN);
 
