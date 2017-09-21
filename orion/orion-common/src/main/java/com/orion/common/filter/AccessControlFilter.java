@@ -158,6 +158,7 @@ public class AccessControlFilter implements Filter {
 		response.setHeader(HttpHeaders.PRAGMA, "no-cache");
 
 		chain.doFilter(request, resp);
+		
 	}
 
 	private String getOrigin(HttpServletRequest req) {

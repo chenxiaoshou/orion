@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 import com.orion.common.exception.AppMessage;
 import com.orion.common.utils.JsonUtil;
 
+/**
+ * 将message.properties中的文本转换成AppMessage对象
+ * @author John
+ *
+ */
 @Component
 public class AppMessageService {
 

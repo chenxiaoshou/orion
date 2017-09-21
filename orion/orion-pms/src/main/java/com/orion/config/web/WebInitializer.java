@@ -19,6 +19,7 @@ import org.springframework.web.util.IntrospectorCleanupListener;
 import com.orion.common.constant.AppConstants;
 import com.orion.common.constant.SecurityConstants;
 import com.orion.common.filter.AccessControlFilter;
+import com.orion.common.filter.HttpResponseFilter;
 import com.orion.common.listener.ContextDestroyListener;
 
 /**
@@ -82,6 +83,13 @@ public class WebInitializer implements WebApplicationInitializer {
 		accessControlFilter.addMappingForUrlPatterns(
 				EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.ASYNC,DispatcherType.ERROR),
 						true, AppConstants.API_MAPPING_URL_PATTERN);
+		
+		/**
+		 * 响应过滤器，可以对响应数据做出修改 
+		 */
+		servletContext.addFilter("httpResponseFilter",new HttpResponseFilter())
+		.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, 
+				DispatcherType.INCLUDE,DispatcherType.ASYNC, DispatcherType.ERROR), false, AppConstants.API_MAPPING_URL_PATTERN);
 	}
 
 }
