@@ -93,10 +93,7 @@ public class AppExceptionResolver extends AbstractHandlerExceptionResolver {
 			code = HttpServletResponse.SC_NOT_ACCEPTABLE;
 		} else if (ex instanceof MissingPathVariableException) {
 			code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-		} else if (ex instanceof MissingServletRequestParameterException || ex instanceof ServletRequestBindingException
-				|| ex instanceof TypeMismatchException || ex instanceof HttpMessageNotReadableException
-				|| ex instanceof MethodArgumentNotValidException || ex instanceof MissingServletRequestPartException
-				|| ex instanceof BindException) {
+		} else if (isBadRequest(ex)) {
 			code = HttpServletResponse.SC_BAD_REQUEST;
 		} else if (ex instanceof AsyncRequestTimeoutException && !response.isCommitted()) {
 			code = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
@@ -110,6 +107,13 @@ public class AppExceptionResolver extends AbstractHandlerExceptionResolver {
 			appMessage.setMoreInfo(ex.getMessage());
 		}
 		return appMessage;
+	}
+
+	private boolean isBadRequest(Exception ex) {
+		return ex instanceof MissingServletRequestParameterException || ex instanceof ServletRequestBindingException
+				|| ex instanceof TypeMismatchException || ex instanceof HttpMessageNotReadableException
+				|| ex instanceof MethodArgumentNotValidException || ex instanceof MissingServletRequestPartException
+				|| ex instanceof BindException;
 	}
 
 }

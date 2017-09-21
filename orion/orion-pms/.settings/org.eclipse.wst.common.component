@@ -7,7 +7,7 @@
         <dependent-module archiveName="orion-common-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/orion-common/orion-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="orion-pms"/>
         <property name="java-output-path" value="/orion-pms/target/classes"/>
+        <property name="context-root" value="orion-pms"/>
     </wb-module>
 </project-modules>

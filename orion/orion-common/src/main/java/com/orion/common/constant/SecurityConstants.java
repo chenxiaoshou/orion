@@ -14,7 +14,7 @@ public final class SecurityConstants {
 
 	public static final String VALUE_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,DELETE,OPTIONS,HEAD";
 
-	public static final String VALUE_ACCESS_CONTROL_ALLOW_ORIGIN = ".orion.com";
+	public static final String VALUE_ACCESS_CONTROL_ALLOW_ORIGIN = ".orion.com"; // 允许跨域请求的域名
 
 	public static final String VALUE_ACCESS_CONTROL_EXPOSE_HEADERS = "Origin,X-Requested-With,Content-Type,Accept,Cache-Control";
 
